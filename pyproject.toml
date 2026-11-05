@@ -1,0 +1,16 @@
+[project]
+name = "deep-q-learning"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "ale-py<0.12 ; platform_machine == 'x86_64' and sys_platform == 'darwin'",
+    "ale-py>=0.12 ; platform_machine != 'x86_64' or sys_platform != 'darwin'",
+    "gymnasium>=1.4.0",
+    "matplotlib>=3.11.2",
+    "numpy<2 ; platform_machine == 'x86_64' and sys_platform == 'darwin'",
+    "numpy>=2 ; platform_machine != 'x86_64' or sys_platform != 'darwin'",
+    "torch==2.2.2 ; platform_machine == 'x86_64' and sys_platform == 'darwin'",
+    "torch>=2.9 ; platform_machine != 'x86_64' or sys_platform != 'darwin'",
+]
