@@ -11,6 +11,7 @@ dependencies = [
     "matplotlib>=3.11.2",
     "numpy<2 ; platform_machine == 'x86_64' and sys_platform == 'darwin'",
     "numpy>=2 ; platform_machine != 'x86_64' or sys_platform != 'darwin'",
+    "opencv-python>=4.11.0.86",
     "torch==2.2.2 ; platform_machine == 'x86_64' and sys_platform == 'darwin'",
     "torch>=2.9 ; platform_machine != 'x86_64' or sys_platform != 'darwin'",
 ]
