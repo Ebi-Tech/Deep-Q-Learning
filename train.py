@@ -111,3 +111,196 @@ def create_networks(n_actions):
     target_net.load_state_dict(online_net.state_dict())
     target_net.eval()
     return online_net, target_net
+
+
+# =====================================================================
+# GABRIEL'S PART: replay buffer, epsilon decay, action selection, main loop
+# =====================================================================
+import random
+import numpy as np
+
+
+class ReplayBuffer:
+    """Fixed-size circular buffer of (state, action, reward, next_state, done).
+
+    States are stored as uint8 (0-255) to save memory. Once the buffer is full,
+    the oldest experience is overwritten by the newest one.
+    """
+
+    def __init__(self, capacity, obs_shape=(4, 84, 84)):
+        self.capacity = capacity
+        self.states = np.zeros((capacity, *obs_shape), dtype=np.uint8)
+        self.next_states = np.zeros((capacity, *obs_shape), dtype=np.uint8)
+        self.actions = np.zeros(capacity, dtype=np.int64)
+        self.rewards = np.zeros(capacity, dtype=np.float32)
+        self.dones = np.zeros(capacity, dtype=np.float32)
+        self.position = 0  # next slot to write
+        self.size = 0      # number of valid experiences stored
+
+    def push(self, state, action, reward, next_state, done):
+        """Store one experience."""
+        i = self.position
+        self.states[i] = state
+        self.next_states[i] = next_state
+        self.actions[i] = action
+        self.rewards[i] = reward
+        self.dones[i] = float(done)
+        self.position = (self.position + 1) % self.capacity
+        self.size = min(self.size + 1, self.capacity)
+
+    def sample(self, batch_size):
+        """Return a random batch as tensors on DEVICE.
+
+        states / next_states: float32, shape (B, 4, 84, 84), values 0-255
+        actions: int64 (B,)   rewards: float32 (B,)   dones: float32 (B,)
+        """
+        idx = np.random.randint(0, self.size, size=batch_size)
+        return (
+            torch.as_tensor(self.states[idx], dtype=torch.float32, device=DEVICE),
+            torch.as_tensor(self.actions[idx], device=DEVICE),
+            torch.as_tensor(self.rewards[idx], device=DEVICE),
+            torch.as_tensor(self.next_states[idx], dtype=torch.float32, device=DEVICE),
+            torch.as_tensor(self.dones[idx], device=DEVICE),
+        )
+
+    def __len__(self):
+        return self.size
+
+
+def get_epsilon(step, settings):
+    """Linear epsilon decay from epsilon_start to epsilon_end over epsilon_decay_steps."""
+    fraction = min(step / settings.epsilon_decay_steps, 1.0)
+    return settings.epsilon_start + fraction * (settings.epsilon_end - settings.epsilon_start)
+
+
+def select_action(online_net, state, epsilon, n_actions):
+    """Epsilon-greedy: random action with probability epsilon, else argmax Q."""
+    if random.random() < epsilon:
+        return random.randrange(n_actions)
+    with torch.no_grad():
+        state_t = torch.as_tensor(np.asarray(state), dtype=torch.float32, device=DEVICE).unsqueeze(0)
+        return int(online_net(state_t).argmax(dim=1).item())
+
+
+# =====================================================================
+# PLACEHOLDER (C's part): training step, target sync, logging, saving.
+# Samuel will replace these. The main loop below calls them exactly as
+# written, so keep these names and signatures.
+# =====================================================================
+import os
+import torch.nn.functional as F
+
+
+def train_step(online_net, target_net, optimizer, buffer, settings):
+    """One gradient update on a sampled batch. Returns the loss as a float."""
+    states, actions, rewards, next_states, dones = buffer.sample(settings.batch_size)
+    q = online_net(states).gather(1, actions.unsqueeze(1)).squeeze(1)
+    with torch.no_grad():
+        next_q = target_net(next_states).max(dim=1).values
+        target = rewards + settings.gamma * next_q * (1.0 - dones)
+    loss = F.smooth_l1_loss(q, target)
+    optimizer.zero_grad()
+    loss.backward()
+    torch.nn.utils.clip_grad_norm_(online_net.parameters(), 10.0)
+    optimizer.step()
+    return loss.item()
+
+
+def sync_target(online_net, target_net):
+    """Copy the online network weights into the target network."""
+    target_net.load_state_dict(online_net.state_dict())
+
+
+class Logger:
+    """Writes one CSV row per finished episode to logs/<member>/experiment_<n>.csv."""
+
+    def __init__(self, settings):
+        folder = os.path.join("logs", settings.member)
+        os.makedirs(folder, exist_ok=True)
+        self.path = os.path.join(folder, f"experiment_{settings.experiment}.csv")
+        with open(self.path, "w") as f:
+            f.write("episode,step,reward,length,epsilon,loss\n")
+
+    def log_episode(self, episode, step, reward, length, epsilon, loss):
+        with open(self.path, "a") as f:
+            f.write(f"{episode},{step},{reward},{length},{epsilon:.4f},{loss:.6f}\n")
+
+
+def save_model(online_net, settings, filename=None):
+    """Save the online network weights. Default path: models/<member>/experiment_<n>.pth"""
+    folder = os.path.join("models", settings.member)
+    os.makedirs(folder, exist_ok=True)
+    path = filename or os.path.join(folder, f"experiment_{settings.experiment}.pth")
+    torch.save(online_net.state_dict(), path)
+    return path
+
+
+# =====================================================================
+# GABRIEL'S PART: main training loop
+# =====================================================================
+def main():
+    settings = get_settings()
+    random.seed(0)
+    np.random.seed(0)
+    torch.manual_seed(0)
+
+    env = make_env()
+    n_actions = env.action_space.n
+
+    online_net, target_net = create_networks(n_actions)
+    optimizer = torch.optim.Adam(online_net.parameters(), lr=settings.learning_rate)
+
+    buffer = ReplayBuffer(settings.buffer_size)
+    logger = Logger(settings)
+
+    print(f"Device: {DEVICE} | Member: {settings.member} | Experiment: {settings.experiment}")
+
+    state, _ = env.reset(seed=0)
+    state = np.asarray(state)
+    episode, episode_reward, episode_length = 1, 0.0, 0
+    last_loss = 0.0
+    recent_rewards = []
+
+    for step in range(1, settings.total_steps + 1):
+        # 1. Choose an action (epsilon-greedy)
+        epsilon = get_epsilon(step, settings)
+        action = select_action(online_net, state, epsilon, n_actions)
+
+        # 2. Act in the environment and store the experience
+        next_state, reward, terminated, truncated, _ = env.step(action)
+        next_state = np.asarray(next_state)
+        # Reward is clipped to [-1, 1] for stable learning; the logged reward stays raw
+        buffer.push(state, action, np.sign(reward), next_state, terminated)
+
+        state = next_state
+        episode_reward += reward
+        episode_length += 1
+
+        # 3. Learn from a random batch
+        if step >= settings.learning_starts and step % settings.train_every == 0:
+            last_loss = train_step(online_net, target_net, optimizer, buffer, settings)
+
+        # 4. Periodically copy online weights into the target network
+        if step % settings.target_update_every == 0:
+            sync_target(online_net, target_net)
+
+        # 5. End of episode: log it and reset
+        if terminated or truncated:
+            logger.log_episode(episode, step, episode_reward, episode_length, epsilon, last_loss)
+            recent_rewards.append(episode_reward)
+            if episode % 10 == 0:
+                avg = np.mean(recent_rewards[-10:])
+                print(f"Episode {episode:4d} | step {step:7d} | avg reward (10) {avg:6.1f} "
+                      f"| epsilon {epsilon:.3f} | loss {last_loss:.4f}")
+            episode += 1
+            episode_reward, episode_length = 0.0, 0
+            state, _ = env.reset()
+            state = np.asarray(state)
+
+    path = save_model(online_net, settings)
+    print(f"Training finished. Model saved to {path}")
+    env.close()
+
+
+if __name__ == "__main__":
+    main()
