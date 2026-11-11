@@ -26,7 +26,7 @@ def main():
     parser.add_argument("--window", type=int, default=10)
     args = parser.parse_args()
 
-    data = np.genfromtxt(args.log_csv, delimiter=",", names=True)
+    data = np.genfromtxt(args.log_csv, delimiter=",", names=True, ndmin=1)
     episodes, steps = data["episode"], data["step"]
     rewards, lengths = data["reward"], data["length"]
     os.makedirs(args.out_dir, exist_ok=True)
