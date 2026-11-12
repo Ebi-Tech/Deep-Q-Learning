@@ -237,12 +237,12 @@ class Logger:
         self.path = str(folder / f"experiment_{settings.experiment}.csv")
         # Refuse to silently destroy a previous experiment's evidence.
         with open(self.path, "x", newline="", encoding="utf-8") as handle:
-            csv.writer(handle).writerow(self.fields)
+            csv.writer(handle, lineterminator="\n").writerow(self.fields)
 
     def log_episode(self, episode, step, reward, length, epsilon, loss):
         """Append raw return and the latest update loss, not an episode mean."""
         with open(self.path, "a", newline="", encoding="utf-8") as handle:
-            csv.writer(handle).writerow((episode, step, reward, length, epsilon, loss))
+            csv.writer(handle, lineterminator="\n").writerow((episode, step, reward, length, epsilon, loss))
 
 
 def save_model(online_net, settings, filename=None):

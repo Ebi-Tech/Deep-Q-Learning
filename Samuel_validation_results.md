@@ -65,3 +65,40 @@ not demonstrate a successful policy.
 Temporary logs, models, and plots were produced outside the repository at
 `/private/tmp/samuel-dqn-check-rssxe52i`. They are machine-local test artifacts,
 not committed deliverables, and may be removed by temporary-file cleanup.
+
+## Implementation follow-up — 12 November 2026
+
+The outstanding list above describes the original 10 November review. Samuel's
+implementation is now committed in `04328ef`:
+
+- `train_step` validates replay readiness, rejects non-finite loss/gradients,
+  retains vanilla DQN Bellman targets and Huber loss, and updates only the online network.
+- `sync_target` also freezes target parameters and enforces evaluation mode.
+- CSV logging retains full numeric precision and refuses to overwrite prior runs.
+- Checkpoint saving creates destination directories and atomically replaces weights;
+  a simulated failed write verified that the previous checkpoint survives.
+- `play.py` loads compatible weights, evaluates seeded episodes, reports step caps,
+  and records actual gameplay to MP4. No generated or simulated gameplay footage is used.
+- Four regression tests passed: exact terminal/nonterminal Bellman targets and
+  target isolation; non-finite update rejection; CSV schema/precision and overwrite
+  protection; atomic-save failure recovery and checkpoint reload.
+- Divine's settings/environment/CNN and Gabriel's replay/main-loop code were verified
+  unchanged. Gabriel's one-episode plotting issue remains unchanged.
+
+All ten pilot experiments completed 20,000 decisions each (200,000 total), with
+five greedy evaluation episodes each (50 total). All ten CSVs, evaluation records,
+and saved model state dictionaries were checked. Model parameters and logged
+losses were finite, and every evaluation episode completed without a step cap.
+Forty per-run plots and a comparison plot were generated.
+
+Experiment 7 had the highest measured evaluation mean (-20.4). All other models
+averaged -21. This is not evidence of a strong policy, convergence, or statistically
+reliable hyperparameter superiority. Only one training seed and a short budget
+were used; full-budget training and rubric compliance remain unverified.
+
+The selected model's recorded episode (seed 100) returned -21. Its MP4 was fully
+decoded and verified: 817 frames at 15 fps, approximately 54.47 seconds. See
+`videos/Samuel/gameplay.mp4` and its JSON episode metadata. Architecture diagrams
+are available as PNG, SVG, and Mermaid in `docs/`. The completed experiment table,
+raw metrics, configuration/source manifest, model files, and plots are stored in
+the repository rather than temporary directories.

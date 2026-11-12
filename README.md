@@ -24,13 +24,21 @@
 
 [Samuel’s measured hyperparameter experiments](SamuelHyperparameter_experiment_results.md).
 Each run stores CSV metrics and JSON configuration/evaluation evidence in `logs/Samuel/`.
+The ten completed pilots used 20,000 decisions each and five greedy evaluation
+episodes per model. Experiment 7 had the highest measured mean (-20.4); these
+short runs have not produced a strong Pong policy.
+
+![Samuel experiment comparison](plots/Samuel/experiment_comparison.png)
+
+[Selected model training plots](plots/Samuel/experiment_7/training_summary.png).
 
 ## Gameplay Demonstration
 
-[Actual pilot-model gameplay (MP4)](videos/Samuel/experiment_1_gameplay.mp4) —
-experiment 1, evaluation seed 100, greedy policy, raw return -21. This records
+[Actual pilot-model gameplay (MP4)](videos/Samuel/gameplay.mp4) —
+experiment 7 (highest pilot evaluation mean: -20.4), evaluation seed 100,
+greedy policy, recorded episode raw return -21. This records
 a complete losing episode from a short pilot, not a successful trained policy.
-[Episode metadata](videos/Samuel/experiment_1_gameplay.json).
+[Episode metadata](videos/Samuel/gameplay.json).
 
 Record actual model gameplay with the command below. Evaluation prints raw
 episode returns, termination status, and whether a step cap interrupted an episode.

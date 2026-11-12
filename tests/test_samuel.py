@@ -63,6 +63,7 @@ class SamuelTests(unittest.TestCase):
                 rows = list(csv.DictReader(handle))
             self.assertEqual(float(rows[0]['loss']), .000000123)
             self.assertEqual(tuple(rows[0]), Logger.fields)
+            self.assertNotIn(b'\r', Path(logger.path).read_bytes())
             with self.assertRaises(FileExistsError):
                 Logger(settings)
 
