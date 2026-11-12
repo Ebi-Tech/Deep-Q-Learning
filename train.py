@@ -51,7 +51,7 @@ def get_settings():
     parser.add_argument("--total_steps", type=int, default=1_000_000)
     parser.add_argument("--buffer_size", type=int, default=50_000)
     parser.add_argument("--learning_starts", type=int, default=10_000)
-    parser.add_argument("--train_every", type=int, default=4)
+    parser.add_argument("--train_every", type=int, default=1)
     parser.add_argument("--target_update_every", type=int, default=1_000)
     parser.add_argument("--save_every_episodes", type=int, default=50)
 
