@@ -9,11 +9,15 @@
 #   - All hyperparameters come from get_settings(), for example settings.learning_rate
 
 import argparse
+import os
+import random
 
 import ale_py
 import gymnasium as gym
+import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 gym.register_envs(ale_py)
 
@@ -21,10 +25,13 @@ ENV_ID = "ALE/Pong-v5"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
+# Environment and Q-network
 def get_settings():
     """Read the hyperparameters from the command line, with default values.
 
     --member and --experiment decide where the model and log are saved.
+    --model_path is optional and saves the model to that file instead,
+    for example dqn_model.pth for the final best run.
     The next six are the hyperparameters from the experiment table.
     The rest are training settings kept the same across all experiments.
     """
@@ -32,6 +39,7 @@ def get_settings():
 
     parser.add_argument("--member", type=str, required=True)
     parser.add_argument("--experiment", type=int, required=True)
+    parser.add_argument("--model_path", type=str, default=None)
 
     parser.add_argument("--learning_rate", type=float, default=1e-4)
     parser.add_argument("--gamma", type=float, default=0.99)
@@ -45,6 +53,7 @@ def get_settings():
     parser.add_argument("--learning_starts", type=int, default=10_000)
     parser.add_argument("--train_every", type=int, default=4)
     parser.add_argument("--target_update_every", type=int, default=1_000)
+    parser.add_argument("--save_every_episodes", type=int, default=50)
 
     return parser.parse_args()
 
@@ -113,18 +122,13 @@ def create_networks(n_actions):
     return online_net, target_net
 
 
-# =====================================================================
-# GABRIEL'S PART: replay buffer, epsilon decay, action selection, main loop
-# =====================================================================
-import random
-import numpy as np
-
-
+# Experience replay and exploration
 class ReplayBuffer:
     """Fixed-size circular buffer of (state, action, reward, next_state, done).
 
-    States are stored as uint8 (0-255) to save memory. Once the buffer is full,
-    the oldest experience is overwritten by the newest one.
+    States are stored as uint8 (0-255) to save memory. position is the next
+    slot to write and size is how many valid experiences are stored. Once the
+    buffer is full, the oldest experience is overwritten by the newest one.
     """
 
     def __init__(self, capacity, obs_shape=(4, 84, 84)):
@@ -134,8 +138,8 @@ class ReplayBuffer:
         self.actions = np.zeros(capacity, dtype=np.int64)
         self.rewards = np.zeros(capacity, dtype=np.float32)
         self.dones = np.zeros(capacity, dtype=np.float32)
-        self.position = 0  # next slot to write
-        self.size = 0      # number of valid experiences stored
+        self.position = 0
+        self.size = 0
 
     def push(self, state, action, reward, next_state, done):
         """Store one experience."""
@@ -149,22 +153,21 @@ class ReplayBuffer:
         self.size = min(self.size + 1, self.capacity)
 
     def sample(self, batch_size):
-        """Return a random batch as tensors on DEVICE.
+        """Return a uniformly random batch as tensors on DEVICE.
 
-        states / next_states: float32, shape (B, 4, 84, 84), values 0-255
-        actions: int64 (B,)   rewards: float32 (B,)   dones: float32 (B,)
+        states and next_states stay uint8 with shape (B, 4, 84, 84), which is
+        4 times less data to move to the GPU than float32. QNetwork.forward
+        converts them to float and scales them to 0 to 1.
+        actions are int64 with shape (B,), rewards and dones are float32 with shape (B,).
         """
         idx = np.random.randint(0, self.size, size=batch_size)
         return (
-            torch.as_tensor(self.states[idx], dtype=torch.float32, device=DEVICE),
+            torch.as_tensor(self.states[idx], device=DEVICE),
             torch.as_tensor(self.actions[idx], device=DEVICE),
             torch.as_tensor(self.rewards[idx], device=DEVICE),
-            torch.as_tensor(self.next_states[idx], dtype=torch.float32, device=DEVICE),
+            torch.as_tensor(self.next_states[idx], device=DEVICE),
             torch.as_tensor(self.dones[idx], device=DEVICE),
         )
-
-    def __len__(self):
-        return self.size
 
 
 def get_epsilon(step, settings):
@@ -178,26 +181,27 @@ def select_action(online_net, state, epsilon, n_actions):
     if random.random() < epsilon:
         return random.randrange(n_actions)
     with torch.no_grad():
-        state_t = torch.as_tensor(np.asarray(state), dtype=torch.float32, device=DEVICE).unsqueeze(0)
+        state_t = torch.as_tensor(np.asarray(state), device=DEVICE).unsqueeze(0)
         return int(online_net(state_t).argmax(dim=1).item())
 
 
-# =====================================================================
-# PLACEHOLDER (C's part): training step, target sync, logging, saving.
-# Samuel will replace these. The main loop below calls them exactly as
-# written, so keep these names and signatures.
-# =====================================================================
-import os
-import torch.nn.functional as F
+# Learning: Bellman update, target sync, logging and saving
+def train_step(online_net, target_net, optimizer, batch, gamma):
+    """Do one gradient update of the online network on a batch and return the loss.
 
-
-def train_step(online_net, target_net, optimizer, buffer, settings):
-    """One gradient update on a sampled batch. Returns the loss as a float."""
-    states, actions, rewards, next_states, dones = buffer.sample(settings.batch_size)
+    batch is (states, actions, rewards, next_states, dones) from ReplayBuffer.sample.
+    The online network predicts Q(s, a) for the actions that were actually taken,
+    picked out with gather. The target network, without gradients, gives the
+    Bellman target r + gamma * max Q_target(s', a'), where the future value is
+    set to 0 when the episode terminated. The Huber loss (smooth L1) between the
+    two is backpropagated, gradients are clipped to a norm of 10 for stability,
+    and the optimizer updates only the online network.
+    """
+    states, actions, rewards, next_states, dones = batch
     q = online_net(states).gather(1, actions.unsqueeze(1)).squeeze(1)
     with torch.no_grad():
         next_q = target_net(next_states).max(dim=1).values
-        target = rewards + settings.gamma * next_q * (1.0 - dones)
+        target = rewards + gamma * next_q * (1.0 - dones)
     loss = F.smooth_l1_loss(q, target)
     optimizer.zero_grad()
     loss.backward()
@@ -222,23 +226,46 @@ class Logger:
             f.write("episode,step,reward,length,epsilon,loss\n")
 
     def log_episode(self, episode, step, reward, length, epsilon, loss):
+        """Append one finished episode: its number, total steps so far, raw reward,
+        length in steps, the current epsilon and the most recent training loss."""
         with open(self.path, "a") as f:
             f.write(f"{episode},{step},{reward},{length},{epsilon:.4f},{loss:.6f}\n")
 
 
-def save_model(online_net, settings, filename=None):
-    """Save the online network weights. Default path: models/<member>/experiment_<n>.pth"""
-    folder = os.path.join("models", settings.member)
-    os.makedirs(folder, exist_ok=True)
-    path = filename or os.path.join(folder, f"experiment_{settings.experiment}.pth")
+def save_model(online_net, settings):
+    """Save the online network weights and return the path they were saved to.
+
+    If --model_path was given (for example dqn_model.pth), save to that file.
+    Otherwise save to models/<member>/experiment_<n>.pth.
+    It is called every save_every_episodes episodes and once at the end of
+    training, always overwriting the same file, so a cloud run that gets
+    disconnected still keeps its most recent model.
+    """
+    if settings.model_path:
+        path = settings.model_path
+    else:
+        folder = os.path.join("models", settings.member)
+        os.makedirs(folder, exist_ok=True)
+        path = os.path.join(folder, f"experiment_{settings.experiment}.pth")
     torch.save(online_net.state_dict(), path)
     return path
 
 
-# =====================================================================
-# GABRIEL'S PART: main training loop
-# =====================================================================
+# Main training loop
 def main():
+    """Train the DQN agent for total_steps environment steps.
+
+    Seeds are fixed at 0 so experiments are comparable. Every step:
+    1. Choose an action with epsilon-greedy, using the decaying epsilon.
+    2. Act in the environment and store the experience in the replay buffer.
+       Only terminated (not truncated) marks the end for the Bellman target.
+    3. After learning_starts steps, every train_every steps, sample a batch
+       and do one train_step.
+    4. Every target_update_every steps, copy the online weights into the target network.
+    5. When an episode ends, log it, print a 10-episode average every 10 episodes,
+       save the model every save_every_episodes episodes, and reset the environment.
+    The model is saved once more when training finishes.
+    """
     settings = get_settings()
     random.seed(0)
     np.random.seed(0)
@@ -262,29 +289,24 @@ def main():
     recent_rewards = []
 
     for step in range(1, settings.total_steps + 1):
-        # 1. Choose an action (epsilon-greedy)
         epsilon = get_epsilon(step, settings)
         action = select_action(online_net, state, epsilon, n_actions)
 
-        # 2. Act in the environment and store the experience
         next_state, reward, terminated, truncated, _ = env.step(action)
         next_state = np.asarray(next_state)
-        # Reward is clipped to [-1, 1] for stable learning; the logged reward stays raw
-        buffer.push(state, action, np.sign(reward), next_state, terminated)
+        buffer.push(state, action, reward, next_state, terminated)
 
         state = next_state
         episode_reward += reward
         episode_length += 1
 
-        # 3. Learn from a random batch
         if step >= settings.learning_starts and step % settings.train_every == 0:
-            last_loss = train_step(online_net, target_net, optimizer, buffer, settings)
+            batch = buffer.sample(settings.batch_size)
+            last_loss = train_step(online_net, target_net, optimizer, batch, settings.gamma)
 
-        # 4. Periodically copy online weights into the target network
         if step % settings.target_update_every == 0:
             sync_target(online_net, target_net)
 
-        # 5. End of episode: log it and reset
         if terminated or truncated:
             logger.log_episode(episode, step, episode_reward, episode_length, epsilon, last_loss)
             recent_rewards.append(episode_reward)
@@ -292,6 +314,8 @@ def main():
                 avg = np.mean(recent_rewards[-10:])
                 print(f"Episode {episode:4d} | step {step:7d} | avg reward (10) {avg:6.1f} "
                       f"| epsilon {epsilon:.3f} | loss {last_loss:.4f}")
+            if episode % settings.save_every_episodes == 0:
+                save_model(online_net, settings)
             episode += 1
             episode_reward, episode_length = 0.0, 0
             state, _ = env.reset()
