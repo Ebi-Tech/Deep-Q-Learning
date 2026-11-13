@@ -1,3 +1,5 @@
 .venv/
 __pycache__/
 .DS_Store
+Divine_kaggle_runs.ipynb
+Divine_kaggle_experiments.ipynb
