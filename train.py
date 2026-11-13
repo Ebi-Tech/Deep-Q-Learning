@@ -83,6 +83,10 @@ class QNetwork(nn.Module):
     (4, 84, 84) -> (32, 20, 20) -> (64, 9, 9) -> (64, 7, 7), flattened to 3136.
     The fully connected layers turn those features into Q-values.
     Frames are stored as uint8 (0 to 255), so forward() scales them to 0 to 1 first.
+    With PyTorch's default initialisation the input signal was so weak that early
+    updates could kill a whole layer, so every Conv2d and Linear layer uses He
+    (Kaiming) initialisation with zero biases, which keeps the signal at a healthy
+    size in ReLU networks.
     """
 
     def __init__(self, n_actions):
@@ -101,6 +105,10 @@ class QNetwork(nn.Module):
             nn.ReLU(),
             nn.Linear(512, n_actions),
         )
+        for layer in self.modules():
+            if isinstance(layer, (nn.Conv2d, nn.Linear)):
+                nn.init.kaiming_normal_(layer.weight, nonlinearity="relu")
+                nn.init.zeros_(layer.bias)
 
     def forward(self, obs):
         x = obs.float() / 255.0
@@ -265,6 +273,8 @@ def main():
     5. When an episode ends, log it, print a 10-episode average every 10 episodes,
        save the model every save_every_episodes episodes, and reset the environment.
     The model is saved once more when training finishes.
+    Adam uses eps=1.5e-4, the value used in later DQN work (Rainbow), which stops
+    tiny noisy gradients from becoming full-size updates.
     """
     settings = get_settings()
     random.seed(0)
@@ -275,7 +285,7 @@ def main():
     n_actions = env.action_space.n
 
     online_net, target_net = create_networks(n_actions)
-    optimizer = torch.optim.Adam(online_net.parameters(), lr=settings.learning_rate)
+    optimizer = torch.optim.Adam(online_net.parameters(), lr=settings.learning_rate, eps=1.5e-4)
 
     buffer = ReplayBuffer(settings.buffer_size)
     logger = Logger(settings)
