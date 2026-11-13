@@ -28,10 +28,11 @@ PARAMETERS = ("learning_rate", "gamma", "batch_size", "epsilon_start",
 
 
 def write_summary(repo, records, args):
+    folder = "Samuel" if not args.run_id else f"Samuel/{args.run_id}"
     lines = ["# Member Name: Samuel", "",
              f"Budget: {args.steps:,} environment decisions per run; replay capacity "
-             f"{args.buffer_size:,}; warm-up {args.learning_starts:,}; train every 4 "
-             "decisions; target sync every 1,000. Training seed: 0.", "",
+             f"{args.buffer_size:,}; warm-up {args.learning_starts:,}; train every {args.train_every} "
+             f"decisions; target sync every {args.target_update_every:,}. Training seed: 0.", "",
              f"Evaluation: {args.eval_episodes} greedy episodes per model, seeds starting "
              "at 100. Raw rewards are reported. No capped episodes are treated as wins.", "",
              "These single-seed pilot runs do not establish convergence or statistical "
@@ -49,8 +50,11 @@ def write_summary(repo, records, args):
         lines.append("| " + " | ".join(map(str, (*e[:7], behaviour))) + " |")
     lines += ["", "Machine-readable configurations and evaluation episodes are in "
               "`logs/Samuel/experiment_<n>.json`; raw training metrics are in the "
-              "matching CSVs. Models are in `models/Samuel/`.", ""]
-    (repo / 'SamuelHyperparameter_experiment_results.md').write_text('\n'.join(lines))
+              f"matching CSVs. Models: `models/{folder}/`. Run ID: {args.run_id or 'legacy'}.", ""]
+    content = '\n'.join(lines)
+    (repo / 'SamuelHyperparameter_experiment_results.md').write_text(content)
+    if args.run_id:
+        (repo / 'logs/Samuel' / args.run_id / 'results.md').write_text(content)
 
 
 def main():
@@ -59,35 +63,48 @@ def main():
     parser.add_argument('--buffer_size', type=int, default=2000)
     parser.add_argument('--learning_starts', type=int, default=1000)
     parser.add_argument('--eval_episodes', type=int, default=5)
+    parser.add_argument('--run_id', help='New output subfolder; previous runs are preserved')
+    parser.add_argument('--train_every', type=int, default=1)
+    parser.add_argument('--target_update_every', type=int, default=1000)
     args = parser.parse_args()
-    if min(args.steps, args.buffer_size, args.learning_starts, args.eval_episodes) <= 0:
+    if min(args.steps, args.buffer_size, args.learning_starts, args.eval_episodes, args.train_every, args.target_update_every) <= 0:
         parser.error('All budgets must be positive')
     repo = Path(__file__).resolve().parent
+    if args.steps < args.learning_starts:
+        parser.error('--steps must reach --learning_starts to test learning')
+    if args.run_id and (not args.run_id.replace('_', '').replace('-', '').isalnum()):
+        parser.error('--run_id must contain only letters, digits, underscores or hyphens')
+    member = 'Samuel' if not args.run_id else f'Samuel/{args.run_id}'
+    log_dir = repo / 'logs' / member
+    model_dir = repo / 'models' / member
     for e in EXPERIMENTS:
-        for file in (repo/'logs/Samuel'/f'experiment_{e[0]}.csv',
-                     repo/'logs/Samuel'/f'experiment_{e[0]}.json',
-                     repo/'models/Samuel'/f'experiment_{e[0]}.pth'):
+        for file in (log_dir/f'experiment_{e[0]}.csv',
+                     log_dir/f'experiment_{e[0]}.json',
+                     model_dir/f'experiment_{e[0]}.pth',
+                     log_dir/f'experiment_{e[0]}_evaluation.json'):
             if file.exists():
                 parser.error(f'Refusing to overwrite existing experiment: {file}')
     env = dict(os.environ, OMP_NUM_THREADS='2', MKL_NUM_THREADS='2')
     records = {}
     for e in EXPERIMENTS:
         config = dict(zip(PARAMETERS, e[1:7]))
-        command = [sys.executable, str(repo/'train.py'), '--member', 'Samuel',
+        command = [sys.executable, str(repo/'train.py'), '--member', member,
                    '--experiment', str(e[0]), '--total_steps', str(args.steps),
                    '--buffer_size', str(args.buffer_size),
-                   '--learning_starts', str(args.learning_starts)]
+                   '--learning_starts', str(args.learning_starts),
+                   '--train_every', str(args.train_every),
+                   '--target_update_every', str(args.target_update_every)]
         for key, value in config.items():
             command += ['--'+key, str(value)]
         print(f'Running experiment {e[0]}: {e[7]}', flush=True)
         subprocess.run(command, cwd=repo, env=env, check=True)
-        evaluation_file = repo/'logs/Samuel'/f'experiment_{e[0]}_evaluation.json'
+        evaluation_file = log_dir/f'experiment_{e[0]}_evaluation.json'
         subprocess.run([sys.executable, str(repo/'play.py'),
-                        str(repo/'models/Samuel'/f'experiment_{e[0]}.pth'),
+                        str(model_dir/f'experiment_{e[0]}.pth'),
                         '--episodes', str(args.eval_episodes), '--results', str(evaluation_file)],
                        cwd=repo, env=env, check=True)
         evaluation = json.loads(evaluation_file.read_text())['episodes']
-        with (repo/'logs/Samuel'/f'experiment_{e[0]}.csv').open() as handle:
+        with (log_dir/f'experiment_{e[0]}.csv').open() as handle:
             episodes = list(csv.DictReader(handle))
         scores = [episode['reward'] for episode in evaluation]
         record = dict(experiment=e[0], config=config, budget=vars(args), training_seed=0,
@@ -98,9 +115,11 @@ def main():
         # The documented budget should normally include finished episodes.
         if not episodes:
             raise RuntimeError('No training episodes completed; increase --steps')
-        (repo/'logs/Samuel'/f'experiment_{e[0]}.json').write_text(json.dumps(record, indent=2)+'\n')
+        (log_dir/f'experiment_{e[0]}.json').write_text(json.dumps(record, indent=2)+'\n')
         records[e[0]] = record
         write_summary(repo, records, args)
+    summary = dict(run_id=args.run_id, records=list(records.values()))
+    (log_dir/'summary.json').write_text(json.dumps(summary, indent=2)+'\n')
     best = max(records.values(), key=lambda r: r['eval_mean'])
     print(f"Best measured mean: experiment {best['experiment']} ({best['eval_mean']:.2f}); ties use first run.")
 

@@ -31,8 +31,7 @@ class SamuelTests(unittest.TestCase):
             online.weight.zero_()
             target.weight.copy_(torch.tensor([[10.], [4.]]))
         optimizer = torch.optim.SGD(online.parameters(), lr=.1)
-        loss = train_step(online, target, optimizer, Batch(),
-                          SimpleNamespace(batch_size=2, gamma=.5))
+        loss = train_step(online, target, optimizer, Batch().sample(2), .5)
         # Targets are 1 and 2 + .5*10 = 7. Huber losses .5 and 6.5.
         self.assertAlmostEqual(loss, 3.5)
         self.assertTrue(torch.equal(target.weight, torch.tensor([[10.], [4.]])))
@@ -51,7 +50,7 @@ class SamuelTests(unittest.TestCase):
         before = online.weight.detach().clone()
         with self.assertRaises(FloatingPointError):
             train_step(online, target, torch.optim.SGD(online.parameters(), lr=.1),
-                       Batch(), SimpleNamespace(batch_size=2, gamma=.5))
+                       Batch().sample(2), .5)
         self.assertTrue(torch.equal(before, online.weight))
 
     def test_log_schema_precision_and_overwrite_protection(self):
@@ -66,6 +65,13 @@ class SamuelTests(unittest.TestCase):
             self.assertNotIn(b'\r', Path(logger.path).read_bytes())
             with self.assertRaises(FileExistsError):
                 Logger(settings)
+
+    def test_model_path_from_main_is_honored(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'custom/checkpoint.pth'
+            settings = SimpleNamespace(member='Samuel', experiment=1, model_path=str(path))
+            self.assertEqual(save_model(nn.Linear(1, 2), settings), str(path))
+            self.assertTrue(path.exists())
 
     def test_atomic_save_keeps_previous_file_on_failure(self):
         with tempfile.TemporaryDirectory() as folder:

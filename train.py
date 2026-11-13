@@ -55,7 +55,18 @@ def get_settings():
     parser.add_argument("--target_update_every", type=int, default=1_000)
     parser.add_argument("--save_every_episodes", type=int, default=50)
 
-    return parser.parse_args()
+    settings = parser.parse_args()
+    for name in ("total_steps", "buffer_size", "batch_size", "epsilon_decay_steps",
+                 "train_every", "target_update_every", "save_every_episodes"):
+        if getattr(settings, name) <= 0:
+            parser.error(f"--{name} must be positive")
+    if settings.learning_starts < 0:
+        parser.error("--learning_starts must be nonnegative")
+    if not 0 <= settings.gamma <= 1 or settings.learning_rate <= 0:
+        parser.error("gamma must be in [0, 1] and learning_rate must be positive")
+    if not all(0 <= value <= 1 for value in (settings.epsilon_start, settings.epsilon_end)):
+        parser.error("epsilon values must be in [0, 1]")
+    return settings
 
 
 def make_env(render_mode=None):
