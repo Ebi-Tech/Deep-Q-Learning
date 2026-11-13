@@ -4,10 +4,12 @@ The completed `full_20261113` run reached one million decisions. The selected
 model averaged **+11.25 over 20 independent games**, winning **19 of 20**.
 [Measured results](../logs/Samuel/full_20261113/report.md).
 
-`run_long_samuel.py` runs the shared training loop with one million environment
-decisions and a gradient update every step. This is separate from the ten
+`run_long_samuel.py` runs a baseline using the shared DQN components for one
+million environment decisions and a gradient update every step. This is separate from the ten
 20,000-step pilots. The launcher chooses CUDA, Apple MPS, or CPU, without
-changing teammates' training code.
+changing teammates' training code. The current utility calls shared components
+from a plain training loop with separate status/evaluation functions; it does
+not replace shared logger or saving functions at runtime.
 
 ```bash
 uv run run_long_samuel.py --run_id full_run_02 --steps 1000000 --device auto
@@ -54,3 +56,15 @@ Regenerate the full learning/evaluation figure with:
 ```bash
 uv run plot_full_training.py --run_id full_20261113
 ```
+
+## Training provenance and submission playback
+
+The completed million-step artifacts were generated with the earlier launcher
+at commit `860ba86`, identified by their original source hashes. Later launcher
+readability changes and playback CLI corrections do not change those measured
+results. The original implementation remains available in Git history.
+
+The root `dqn_model.pth` is a byte-identical export of the selected `best.pth`.
+Run `uv run play.py` for the default greedy live demonstration, or pass
+`--headless` for automated evaluation. Use the recorded video in the README;
+use the live script for the presentation.

@@ -15,6 +15,7 @@ import torch
 from torch import nn
 
 from train import Logger, get_settings, save_model, sync_target, train_step
+import play as playback
 
 
 class Batch:
@@ -29,6 +30,34 @@ class Batch:
 
 
 class SamuelTests(unittest.TestCase):
+    def test_default_playback_loads_submission_model_greedily_and_renders(self):
+        with patch('sys.argv', ['play.py']), contextlib.redirect_stdout(io.StringIO()):
+            with patch.object(playback, 'play', return_value=[{'reward': 1.}]) as run:
+                playback.main()
+        args = run.call_args.args
+        self.assertEqual(args[0], Path(playback.__file__).resolve().parent/'dqn_model.pth')
+        self.assertEqual(args[1], 1)
+        self.assertTrue(args[3])
+        self.assertEqual(args[6], 0.)
+
+    def test_headless_evaluation_does_not_open_display(self):
+        with patch('sys.argv', ['play.py', '--headless', '--episodes', '2']):
+            with contextlib.redirect_stdout(io.StringIO()):
+                with patch.object(playback, 'play', return_value=[{'reward': 1.}]) as run:
+                    playback.main()
+        self.assertFalse(run.call_args.args[3])
+        self.assertEqual(run.call_args.args[1], 2)
+
+    def test_video_capture_automatically_disables_live_display(self):
+        with tempfile.TemporaryDirectory() as folder:
+            video = Path(folder)/'gameplay.mp4'
+            with patch('sys.argv', ['play.py', '--video', str(video)]):
+                with contextlib.redirect_stdout(io.StringIO()):
+                    with patch.object(playback, 'play', return_value=[{'reward': 1.}]) as run:
+                        playback.main()
+            self.assertFalse(run.call_args.args[3])
+            self.assertEqual(run.call_args.args[4], video)
+
     def test_bellman_targets_and_target_isolation(self):
         online = nn.Linear(1, 2, bias=False)
         target = nn.Linear(1, 2, bias=False)

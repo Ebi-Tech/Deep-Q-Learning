@@ -19,7 +19,7 @@ These single-seed pilot runs do not establish convergence or statistical superio
 | 9 | 0.0001 | 0.99 | 32 | 1.0 | 0.01 | 20000 | faster exploration decay; 22 training episodes; last-10 raw return -20.80; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
 | 10 | 0.0001 | 0.99 | 32 | 0.7 | 0.01 | 100000 | lower initial epsilon; 21 training episodes; last-10 raw return -19.80; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
 
-Machine-readable configurations and evaluation episodes are in `logs/Samuel/experiment_<n>.json`; raw training metrics are in the matching CSVs. Models: `models/Samuel/main_20261113/`. Run ID: main_20261113.
+Machine-readable configurations and evaluation episodes are in `logs/Samuel/main_20261113/experiment_<n>.json`; raw training metrics are in the matching CSVs. Models: `models/Samuel/main_20261113/`. Run ID: main_20261113.
 
 ## Integration rerun — 13 November 2026
 

@@ -153,3 +153,25 @@ model matches its numbered snapshot; latest matches final weights byte-for-byte.
 The full winning gameplay clip was decoded: 3,348 frames, 15 fps, 223.2 seconds,
 seed 1000, raw return +4. The ten pilot experiments remain separate. This is one
 training seed and a finite evaluation sample, not a guarantee of future wins.
+
+## Samuel-only submission corrections
+
+Exported the selected trained weights as root `dqn_model.pth`; its SHA-256 is
+identical to `models/Samuel/full_20261113/best.pth`. Playback now defaults to
+that checkpoint, one greedy episode and a live game window. `--headless` keeps
+automated evaluation window-free; video recording selects RGB capture without
+a live display. Existing programmatic playback defaults remain unchanged.
+
+Ten regression tests passed. A capped 150-decision live test through `uv run`
+verified the default entry point. The simplified optional long-run utility
+completed a separate 1,100-step GPU workflow check, including periodic saves,
+checkpoint selection, independent testing, video and plots. It now uses an
+explicit loop and focused helpers, without replacing shared logger/save
+functions or adding nested callback classes. The million-step measurements were
+not rerun or altered; their original code is preserved at commit `860ba86` and
+identified by the historical manifest hashes.
+
+Corrected the experiment metadata paths in both current reports and their
+renderer, and added Samuel's pilot best/worst comparisons, limitations and
+baseline justification. README additions cover his architecture diagram,
+training update, checkpoint export and live playback responsibilities.

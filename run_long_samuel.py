@@ -1,6 +1,6 @@
 """Run a full Samuel baseline with evaluated checkpoints and live status files.
 
-Uses the shared training loop unchanged. Run outside a GPU-restricted sandbox
+Reuses the shared environment, replay, action selection and training functions. Run outside a GPU-restricted sandbox
 for Apple MPS. Progress and final reports live inside the selected run folder.
 """
 import argparse
@@ -8,6 +8,7 @@ from collections import deque
 import hashlib
 import json
 import os
+import random
 from pathlib import Path
 import shutil
 import subprocess
@@ -40,7 +41,7 @@ def copy_checkpoint(source, destination):
             os.unlink(temporary)
 
 
-def main():
+def get_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run_id', required=True)
     parser.add_argument('--steps', type=int, default=1_000_000)
@@ -61,141 +62,171 @@ def main():
         parser.error('All numeric settings must be positive')
     if args.steps < args.learning_starts:
         parser.error('Training budget must reach learning_starts')
+    return args
+
+
+def baseline_settings(args, models):
+    """Keep the full baseline configuration explicit and reproducible."""
+    return argparse.Namespace(
+        member=f'Samuel/{args.run_id}', experiment=11,
+        model_path=str(models/'latest.pth'), total_steps=args.steps,
+        learning_rate=1e-4, gamma=.99, batch_size=args.batch_size,
+        epsilon_start=1.0, epsilon_end=.01, epsilon_decay_steps=100000,
+        buffer_size=args.buffer_size, learning_starts=args.learning_starts,
+        train_every=1, target_update_every=1000,
+        save_every_episodes=args.save_every_episodes)
+
+
+def publish_status(logs, state, started):
+    elapsed = time.monotonic() - started
+    speed = state['step'] / elapsed if elapsed else 0
+    state.update(elapsed_seconds=elapsed, overall_steps_per_second=speed,
+                 estimated_remaining_seconds=(state['total_steps']-state['step'])/speed if speed else None)
+    write_json(logs/'status.json', state)
+    (logs/'report.md').write_text(
+        f"# Samuel full baseline: {logs.name}\n\n"
+        f"Phase: {state['phase']}. Device: {state['device']}.\n\n"
+        f"Progress: {state['step']:,} / {state['total_steps']:,} decisions. Training interval: 1.\n\n"
+        f"Latest 100-episode training mean: {state.get('training_mean_100')}.\n\n"
+        f"Highest checkpoint selection mean: {state['best_checkpoint_mean']}.\n\n"
+        f"Final independent evaluation mean: {state.get('heldout_mean')}.\n\n"
+        "Selection uses seeds starting at 100; independent evaluation starts at 1000.\n")
+
+
+def evaluate_snapshot(path, step, args, logs, models, state, started):
+    from play import play
+    state.update(phase='evaluating_checkpoint', latest_checkpoint=str(path))
+    publish_status(logs, state, started)
+    # Evaluation must not consume the training network's initialization RNG.
+    with torch.random.fork_rng(devices=[]):
+        episodes = play(path, episodes=args.checkpoint_eval_episodes, seed=100)
+    mean = float(np.mean([row['reward'] for row in episodes]))
+    entry = dict(step=step, checkpoint=str(path), mean_reward=mean,
+                 capped=sum(row['capped'] for row in episodes), episodes=episodes)
+    history_file = logs/'checkpoint_evaluations.json'
+    history = json.loads(history_file.read_text()) if history_file.exists() else []
+    write_json(history_file, history + [entry])
+    best = state['best_checkpoint_mean']
+    if entry['capped'] == 0 and (best is None or mean > best):
+        copy_checkpoint(path, models/'best.pth')
+        state.update(best_checkpoint_mean=mean, best_checkpoint_step=step)
+    state['phase'] = 'training'
+    publish_status(logs, state, started)
+
+
+def train_agent(settings, args, logs, models, state, started):
+    """Explicit baseline loop using Divine's and Gabriel's existing interfaces."""
+    random.seed(0)
+    np.random.seed(0)
+    torch.manual_seed(0)
+    env = train.make_env()
+    try:
+        online, target = train.create_networks(env.action_space.n)
+        optimizer = torch.optim.Adam(online.parameters(), lr=settings.learning_rate, eps=1.5e-4)
+        buffer = train.ReplayBuffer(settings.buffer_size)
+        logger = train.Logger(settings)
+        observation, _ = env.reset(seed=0)
+        observation = np.asarray(observation)
+        episode, reward_sum, length, loss = 1, 0., 0, 0.
+        recent = deque(maxlen=100)
+        for step in range(1, settings.total_steps + 1):
+            epsilon = train.get_epsilon(step, settings)
+            action = train.select_action(online, observation, epsilon, env.action_space.n)
+            next_observation, reward, terminated, truncated, _ = env.step(action)
+            next_observation = np.asarray(next_observation)
+            buffer.push(observation, action, reward, next_observation, terminated)
+            observation = next_observation
+            reward_sum += reward
+            length += 1
+            if step >= settings.learning_starts:
+                loss = train.train_step(online, target, optimizer,
+                                        buffer.sample(settings.batch_size), settings.gamma)
+            if step % settings.target_update_every == 0:
+                train.sync_target(online, target)
+            if terminated or truncated:
+                logger.log_episode(episode, step, reward_sum, length, epsilon, loss)
+                recent.append(float(reward_sum))
+                state.update(step=step, episode=episode, epsilon=epsilon, latest_loss=loss,
+                             training_mean_100=float(np.mean(recent)))
+                publish_status(logs, state, started)
+                if episode % settings.save_every_episodes == 0:
+                    latest = train.save_model(online, settings)
+                    snapshot = models/f'step_{step:09d}.pth'
+                    copy_checkpoint(latest, snapshot)
+                    evaluate_snapshot(snapshot, step, args, logs, models, state, started)
+                episode += 1
+                reward_sum, length = 0., 0
+                observation, _ = env.reset()
+                observation = np.asarray(observation)
+        train.save_model(online, settings)
+    finally:
+        env.close()
+
+
+def finish_run(args, logs, models, state, started):
+    from play import play
+    state['step'] = args.steps
+    final = models/f'final_{args.steps:09d}.pth'
+    copy_checkpoint(models/'latest.pth', final)
+    evaluate_snapshot(final, args.steps, args, logs, models, state, started)
+    best = models/'best.pth'
+    if not best.exists():
+        raise RuntimeError('All checkpoint evaluations were capped; no valid selection')
+    state['phase'] = 'final_evaluation'
+    publish_status(logs, state, started)
+    with torch.random.fork_rng(devices=[]):
+        heldout = play(best, episodes=args.final_eval_episodes, seed=1000)
+    scores = [row['reward'] for row in heldout]
+    write_json(logs/'final_evaluation.json', dict(checkpoint=str(best),
+               mean_reward=float(np.mean(scores)), std_reward=float(np.std(scores)),
+               episodes=heldout, capped=sum(row['capped'] for row in heldout)))
+    state.update(phase='recording', heldout_mean=float(np.mean(scores)))
+    publish_status(logs, state, started)
+    videos = Path('videos/Samuel')/args.run_id
+    videos.mkdir(parents=True, exist_ok=True)
+    recorded = play(best, episodes=1, seed=1000, video=videos/'gameplay.mp4')
+    write_json(videos/'gameplay.json', dict(checkpoint=str(best), episodes=recorded))
+    if state['episode']:
+        env = dict(os.environ, MPLCONFIGDIR=str(Path(tempfile.gettempdir())/'samuel-mpl'))
+        subprocess.run([sys.executable, 'plot_results.py', str(logs/'experiment_11.csv'),
+                        '--out_dir', str(Path('plots/Samuel')/args.run_id)], env=env, check=True)
+    state['phase'] = 'completed'
+    publish_status(logs, state, started)
+
+
+def main():
+    args = get_args()
     repo = Path(__file__).resolve().parent
     os.chdir(repo)
-    logs = Path('logs/Samuel') / args.run_id
-    models = Path('models/Samuel') / args.run_id
+    logs, models = Path('logs/Samuel')/args.run_id, Path('models/Samuel')/args.run_id
     if logs.exists() or models.exists():
-        parser.error('Run folder already exists; choose a fresh run ID')
+        raise FileExistsError('Run folder already exists; choose a fresh run ID')
     device = args.device
     if device == 'auto':
         device = ('cuda' if torch.cuda.is_available() else
                   'mps' if torch.backends.mps.is_available() else 'cpu')
     train.DEVICE = torch.device(device)
-    # Import after selecting the device: play imports the shared DEVICE value.
-    from play import play
     torch.set_num_threads(args.threads)
     logs.mkdir(parents=True)
     models.mkdir(parents=True)
-    started = time.monotonic()
-    recent = deque(maxlen=100)
-    state = dict(phase='starting', pid=os.getpid(), device=device, step=0,
+    settings = baseline_settings(args, models)
+    state = dict(phase='training', pid=os.getpid(), device=device, step=0,
                  total_steps=args.steps, episode=0, best_checkpoint_mean=None,
                  best_checkpoint_step=None, latest_checkpoint=None)
-    status_file = logs/'status.json'
-    report = logs/'report.md'
-    original_logger = train.Logger
-    original_save = train.save_model
-    old_argv = sys.argv[:]
-    pending_checkpoint = False
-    best_mean = -float('inf')
-    best_path = models/'best.pth'
-    evaluations = []
-
-    def status(**updates):
-        state.update(updates)
-        elapsed = time.monotonic() - started
-        speed = state['step'] / elapsed if elapsed else 0
-        state.update(elapsed_seconds=elapsed, overall_steps_per_second=speed,
-                     estimated_remaining_seconds=(args.steps-state['step'])/speed if speed else None)
-        write_json(status_file, state)
-        report.write_text(
-            f"# Samuel full baseline: {args.run_id}\n\n"
-            f"Phase: {state['phase']}. Device: {device}.\n\n"
-            f"Progress: {state['step']:,} / {args.steps:,} decisions. "
-            "Training interval: 1.\n\n"
-            f"Latest 100-episode training mean: {state.get('training_mean_100')}.\n\n"
-            f"Highest checkpoint selection mean: {state['best_checkpoint_mean']}.\n\n"
-            f"Final independent evaluation mean: {state.get('heldout_mean')}.\n\n"
-            "Checkpoint selection uses seeds starting at 100; final evaluation "
-            "uses separate seeds starting at 1000. More steps do not guarantee "
-            "a strong policy. Capped evaluations are explicitly recorded.\n")
-
-    def evaluate(path, step):
-        nonlocal best_mean
-        status(phase='evaluating_checkpoint', latest_checkpoint=str(path))
-        # Keep evaluation initialization from consuming training's Torch RNG.
-        with torch.random.fork_rng(devices=[]):
-            episodes = play(path, episodes=args.checkpoint_eval_episodes, seed=100)
-        mean = float(np.mean([r['reward'] for r in episodes]))
-        entry = dict(step=step, checkpoint=str(path), mean_reward=mean,
-                     capped=sum(r['capped'] for r in episodes), episodes=episodes)
-        evaluations.append(entry)
-        write_json(logs/'checkpoint_evaluations.json', evaluations)
-        if entry['capped'] == 0 and mean > best_mean:
-            copy_checkpoint(path, best_path)
-            best_mean = mean
-            state.update(best_checkpoint_mean=mean, best_checkpoint_step=step)
-        status(phase='training')
-
-    class ProgressLogger(original_logger):
-        def log_episode(self, episode, step, reward, length, epsilon, loss):
-            nonlocal pending_checkpoint
-            super().log_episode(episode, step, reward, length, epsilon, loss)
-            recent.append(float(reward))
-            pending_checkpoint = episode % args.save_every_episodes == 0
-            status(phase='training', step=step, episode=episode, epsilon=epsilon,
-                   latest_loss=loss, training_mean_100=float(np.mean(recent)))
-
-    def save_with_evaluation(online, settings, filename=None):
-        nonlocal pending_checkpoint
-        path = original_save(online, settings, filename)
-        state['latest_checkpoint'] = path
-        if pending_checkpoint:
-            pending_checkpoint = False
-            snapshot = models / f"step_{state['step']:09d}.pth"
-            copy_checkpoint(path, snapshot)
-            evaluate(snapshot, state['step'])
-        return path
-
-    argv = ['train.py', '--member', f'Samuel/{args.run_id}', '--experiment', '11',
-            '--total_steps', str(args.steps), '--train_every', '1',
-            '--buffer_size', str(args.buffer_size), '--batch_size', str(args.batch_size),
-            '--learning_starts', str(args.learning_starts),
-            '--save_every_episodes', str(args.save_every_episodes),
-            '--model_path', str(models/'latest.pth')]
-    sys.argv = argv
-    settings = train.get_settings()
+    started = time.monotonic()
     write_json(logs/'manifest.json', dict(settings=vars(settings), device=device,
                launcher=vars(args), torch=torch.__version__, training_seed=0,
-               source_sha256={f: hashlib.sha256((repo/f).read_bytes()).hexdigest()
-                              for f in ['train.py', 'play.py', 'run_long_samuel.py']}))
+               source_sha256={file: hashlib.sha256((repo/file).read_bytes()).hexdigest()
+                              for file in ['train.py', 'play.py', 'run_long_samuel.py']}))
     try:
-        train.Logger = ProgressLogger
-        train.save_model = save_with_evaluation
-        status(phase='training')
-        train.main()
-        state['step'] = args.steps
-        final = models/f'final_{args.steps:09d}.pth'
-        copy_checkpoint(models/'latest.pth', final)
-        evaluate(final, args.steps)
-        if not best_path.exists():
-            raise RuntimeError('All checkpoint evaluations were capped; no valid selection')
-        status(phase='final_evaluation')
-        with torch.random.fork_rng(devices=[]):
-            heldout = play(best_path, episodes=args.final_eval_episodes, seed=1000)
-        mean = float(np.mean([r['reward'] for r in heldout]))
-        write_json(logs/'final_evaluation.json', dict(checkpoint=str(best_path),
-                   mean_reward=mean, std_reward=float(np.std([r['reward'] for r in heldout])),
-                   episodes=heldout, capped=sum(r['capped'] for r in heldout)))
-        status(phase='recording', heldout_mean=mean)
-        videos = Path('videos/Samuel')/args.run_id
-        videos.mkdir(parents=True, exist_ok=True)
-        recorded = play(best_path, episodes=1, seed=1000, video=videos/'gameplay.mp4')
-        write_json(videos/'gameplay.json', dict(checkpoint=str(best_path), episodes=recorded))
-        if state['episode']:
-            env = dict(os.environ, MPLCONFIGDIR=str(Path(tempfile.gettempdir())/'samuel-mpl'))
-            subprocess.run([sys.executable, 'plot_results.py', str(logs/'experiment_11.csv'),
-                            '--out_dir', str(Path('plots/Samuel')/args.run_id)], env=env, check=True)
-        status(phase='completed', heldout_mean=mean)
+        publish_status(logs, state, started)
+        train_agent(settings, args, logs, models, state, started)
+        finish_run(args, logs, models, state, started)
     except BaseException as exc:
-        status(phase='failed', error=f'{type(exc).__name__}: {exc}')
+        state.update(phase='failed', error=f'{type(exc).__name__}: {exc}')
+        publish_status(logs, state, started)
         (logs/'error.txt').write_text(traceback.format_exc())
         raise
-    finally:
-        train.Logger = original_logger
-        train.save_model = original_save
-        sys.argv = old_argv
 
 
 if __name__ == '__main__':

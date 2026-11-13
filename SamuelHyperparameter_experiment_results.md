@@ -19,7 +19,7 @@ These single-seed pilot runs do not establish convergence or statistical superio
 | 9 | 0.0001 | 0.99 | 32 | 1.0 | 0.01 | 20000 | faster exploration decay; 22 training episodes; last-10 raw return -20.80; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
 | 10 | 0.0001 | 0.99 | 32 | 0.7 | 0.01 | 100000 | lower initial epsilon; 21 training episodes; last-10 raw return -19.80; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
 
-Machine-readable configurations and evaluation episodes are in `logs/Samuel/experiment_<n>.json`; raw training metrics are in the matching CSVs. Models: `models/Samuel/main_20261113/`. Run ID: main_20261113.
+Machine-readable configurations and evaluation episodes are in `logs/Samuel/main_20261113/experiment_<n>.json`; raw training metrics are in the matching CSVs. Models: `models/Samuel/main_20261113/`. Run ID: main_20261113.
 
 ## Integration rerun — 13 November 2026
 
@@ -54,6 +54,34 @@ indicate weak gameplay, not a Python exception. More training is needed.
 
 [Original pilot report](logs/Samuel/pilot_20261112_results.md) and its raw CSVs,
 models, plots, and video were preserved rather than overwritten.
+
+## Best, worst, and interpretation of the ten pilots
+
+All comparisons below use the same 20,000-decision budget, seed and five-episode
+greedy test. **Experiment 1 was the pilot best at -20.0. Experiments 2, 4, 5,
+6, 7, 9 and 10 tied for worst at -21.0.** Experiments 3 and 8 averaged -20.8.
+Every pilot still lost its test games; small differences do not establish a
+reliable long-run ranking.
+
+| Hyperparameter investigated | Observed result | What I can conclude |
+|---|---|---|
+| Learning rate: experiments 2 and 3 | 0.0002 gave -21.0; 0.000025 gave -20.8; baseline 0.0001 gave -20.0 | Neither alternative improved this short pilot. Longer runs are needed to distinguish update speed from instability. |
+| Gamma: experiments 4 and 5 | 0.97 and 0.995 both gave -21.0 | No improvement was observed; these pilots do not establish which discount is best after learning. |
+| Batch size: experiments 6 and 7 | 16 and 64 both gave -21.0; baseline 32 gave -20.0 | Larger/smaller batches did not help at this budget; I retained 32 for the full baseline. |
+| Epsilon end: experiment 8 | 0.05 gave -20.8 versus -20.0 for baseline 0.01 | The 100,000-step schedules have not finished at 20,000 steps, so this is not a clean test of the final exploration floor. |
+| Epsilon decay: experiment 9 | Reaching 0.01 in 20,000 steps gave -21.0 | Faster decay did not help this run. Exploiting an immature policy is a plausible explanation, not a demonstrated causal effect. |
+| Epsilon start: experiment 10 | Starting at 0.7 gave -21.0 versus -20.0 at 1.0 | Lower initial exploration did not help this pilot; one seed is insufficient to generalize. |
+
+I retained experiment 1's configuration for the full baseline: learning rate
+0.0001, gamma 0.99, batch size 32, epsilon 1.0 to 0.01 over 100,000 steps. It had
+the highest measured pilot return, but the pilot gap was small. The full run
+then supplied enough training to assess whether that baseline could learn.
+
+The full run additionally changed the budget to one million, training interval
+from 4 to 1, replay capacity from 2,000 to 50,000, warm-up from 1,000 to 10,000,
+and execution device from CPU to MPS. Its improvement cannot be attributed to
+one table hyperparameter. The separate 20-game test below supports the chosen
+trained checkpoint; it does not show that this is the globally optimal setting.
 
 ## Completed full-length baseline — experiment 11
 

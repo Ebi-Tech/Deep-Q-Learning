@@ -12,6 +12,11 @@
 
 ## DQN Architecture
 
+Samuel's diagram below documents Divine's shared CNN: four 84×84 grayscale
+frames pass through three convolutional layers (32, 64, 64 filters), a 512-unit
+dense layer and six action Q-values. Pixels are normalized inside the network.
+The online and target networks have identical architecture and separate weights.
+
 ## Network Architecture Diagram
 
 ![DQN architecture](docs/Samuel_architecture.png)
@@ -19,6 +24,23 @@
 [Layer shapes and editable Mermaid diagrams](docs/Samuel_architecture.md)
 
 ## Training Process
+
+Samuel's `train_step` consumes batches supplied by Gabriel's replay buffer.
+It gathers the online value for each sampled action and computes the detached
+Bellman target `reward + gamma * (1 - terminated) * max(target(next_state))`.
+A Smooth L1 loss is backpropagated through the online network, gradients are
+clipped to norm 10, and Adam updates its weights. True termination masks the
+bootstrap; time-limit truncation does not.
+
+The shared loop schedules target synchronization every 1,000 decisions. Samuel's
+logger records raw episode return, length, cumulative decisions, epsilon and the
+latest update loss. Model saving is atomic, honors `--model_path`, and supports
+periodic and final saves. His optional full-run utility evaluates snapshots,
+retains the highest measured checkpoint, then tests it on separate seeds.
+
+The submission file `dqn_model.pth` is an exact copy of Samuel's selected
+`models/Samuel/full_20261113/best.pth` (step 974,891). The actual final million-step
+weights remain saved separately. These checkpoints contain inference weights.
 
 ## Training Results
 
@@ -55,9 +77,12 @@ The complete episode is 223.2 seconds at 15 fps.
 ```bash
 uv sync
 uv run train.py --member Samuel --experiment 11
-uv run play.py models/Samuel/full_20261113/best.pth --episodes 5
-# Interactive playback (requires a display):
-uv run play.py models/Samuel/full_20261113/best.pth --episodes 1 --render
+# Presentation: canonical model, greedy actions, live game window:
+uv run play.py
+# Automated evaluation without a window:
+uv run play.py --headless --episodes 5
+# A different checkpoint can still be supplied:
+uv run play.py models/Samuel/full_20261113/best.pth --render
 # Record one complete evaluation episode:
 uv run play.py models/Samuel/full_20261113/best.pth --episodes 1 --video videos/Samuel/new_gameplay.mp4
 # Run ten experiments in a fresh output folder (main defaults to train_every=1):
@@ -75,6 +100,11 @@ runner likewise rejects existing outputs. Save and evaluation formats remain
 compatible with Divine's network and Gabriel's main loop. Checkpoints contain
 online weights only; logging records the latest update loss, not episode mean
 loss. Partial episodes at the training budget boundary are not logged.
+
+The README video is a submission artifact. For the presentation, demonstrate
+`uv run play.py` live with a display available. Playback defaults to one greedy
+episode from `dqn_model.pth`; `--headless` is for automated evaluation and
+`--video` selects recording automatically.
 
 The single-episode plotting fix from `main` is merged and regression-tested.
 Use a separate `--out_dir` for each run. For repeat experiments, use a fresh

@@ -49,7 +49,7 @@ def write_summary(repo, records, args):
                          f"{record['capped']} evaluation episodes capped")
         lines.append("| " + " | ".join(map(str, (*e[:7], behaviour))) + " |")
     lines += ["", "Machine-readable configurations and evaluation episodes are in "
-              "`logs/Samuel/experiment_<n>.json`; raw training metrics are in the "
+              f"`logs/{folder}/experiment_<n>.json`; raw training metrics are in the "
               f"matching CSVs. Models: `models/{folder}/`. Run ID: {args.run_id or 'legacy'}.", ""]
     content = '\n'.join(lines)
     (repo / 'SamuelHyperparameter_experiment_results.md').write_text(content)
@@ -101,7 +101,7 @@ def main():
         evaluation_file = log_dir/f'experiment_{e[0]}_evaluation.json'
         subprocess.run([sys.executable, str(repo/'play.py'),
                         str(model_dir/f'experiment_{e[0]}.pth'),
-                        '--episodes', str(args.eval_episodes), '--results', str(evaluation_file)],
+                        '--episodes', str(args.eval_episodes), '--headless', '--results', str(evaluation_file)],
                        cwd=repo, env=env, check=True)
         evaluation = json.loads(evaluation_file.read_text())['episodes']
         with (log_dir/f'experiment_{e[0]}.csv').open() as handle:

@@ -70,18 +70,27 @@ def play(checkpoint, episodes=5, seed=100, render=False, video=None,
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("checkpoint", type=Path)
-    parser.add_argument("--episodes", type=int, default=5)
+    parser.add_argument("checkpoint", type=Path, nargs="?",
+                        default=Path(__file__).resolve().parent / "dqn_model.pth")
+    parser.add_argument("--episodes", type=int, default=1)
     parser.add_argument("--seed", type=int, default=100)
     parser.add_argument("--epsilon", type=float, default=0.0)
     parser.add_argument("--max_steps", type=int, default=27000)
-    parser.add_argument("--render", action="store_true")
+    display = parser.add_mutually_exclusive_group()
+    display.add_argument("--render", dest="render", action="store_true")
+    display.add_argument("--headless", dest="render", action="store_false")
+    parser.set_defaults(render=None)
     parser.add_argument("--video", type=Path)
     parser.add_argument("--results", type=Path)
     args = parser.parse_args()
+    if not args.checkpoint.is_file():
+        parser.error(f"Checkpoint not found: {args.checkpoint}")
+    if args.video and args.render is True:
+        parser.error("Choose --render or --video")
+    render = args.render if args.render is not None else args.video is None
     if args.results and args.results.exists():
         parser.error(f"Results file already exists: {args.results}")
-    results = play(args.checkpoint, args.episodes, args.seed, args.render,
+    results = play(args.checkpoint, args.episodes, args.seed, render,
                    args.video, args.max_steps, args.epsilon)
     if args.results:
         args.results.parent.mkdir(parents=True, exist_ok=True)
