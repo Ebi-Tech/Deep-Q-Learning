@@ -37,11 +37,11 @@ for (_,a),(_,b) in zip(left,left[1:]): arrow(ax,(2,a-.4),(2,b+.4))
 ax.text(7.6,9.6,'Interaction and training',ha='center',fontsize=13,weight='bold')
 right=[('Pong → grayscale 84×84 → stack 4\nAction repetition: 4 emulator frames',8.8),
        ('Online CNN → epsilon-greedy action\nAct, store transition in replay',7.65),
-       ('Replay minibatch: B transitions\nReward: sign(r); done: terminated only',6.5),
+       ('Replay minibatch: B transitions\nReward: r; done: terminated only',6.5),
        ('Online Q(s,a) + target max Q(s′,a)\nTarget branch has no gradients',5.35),
        ('Bellman target: r + γ max Q(s′) (1−done)\nHuber loss → clip norm 10 → Adam',4.2),
        ('Hard-copy online → target\nEvery 1,000 environment decisions',3.05),
-       ('Raw episode returns → CSV\nFinal weights → atomic checkpoint',1.9),
+       ('Raw episode returns → CSV\nPeriodic/final weights → atomic checkpoint',1.9),
        ('play.py: greedy evaluation and MP4 capture\nSame preprocessing and CNN',.75)]
 for label,y in right: box(ax,7.6,y,label,color='#e4f3ed',width=4.9)
 for (_,a),(_,b) in zip(right,right[1:]): arrow(ax,(7.6,a-.4),(7.6,b+.4))
@@ -51,3 +51,6 @@ fig.tight_layout()
 folder=Path(__file__).resolve().parent
 for extension in ('png','svg'):
     fig.savefig(folder/f'Samuel_architecture.{extension}',dpi=170,bbox_inches='tight')
+    if extension == 'svg':
+        path = folder / 'Samuel_architecture.svg'
+        path.write_text('\n'.join(line.rstrip() for line in path.read_text().splitlines()) + '\n')

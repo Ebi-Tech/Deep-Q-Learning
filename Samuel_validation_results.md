@@ -102,3 +102,33 @@ decoded and verified: 817 frames at 15 fps, approximately 54.47 seconds. See
 are available as PNG, SVG, and Mermaid in `docs/`. The completed experiment table,
 raw metrics, configuration/source manifest, model files, and plots are stored in
 the repository rather than temporary directories.
+
+## Merge and rerun — 13 November 2026
+
+Merged all fetched `origin/main` changes through `f6e310a` (merge `2747b8c`).
+Resolved the training-call conflict by using the new sampled-batch/gamma
+interface, and reconciled atomic saving with main's `--model_path` and periodic
+save calls. Source commit for the rerun: `a60a968`.
+
+The main environment, CNN, replay, exploration and main-loop definitions were
+checked against upstream and retain its implementation exactly. Added argument
+validation rejects zero scheduling intervals before creating the environment.
+Seven regression cases passed, including model-path handling, single-episode
+plotting and invalid scheduling arguments. A real 1,100-step Pong integration
+run exercised training every step, saving every episode, a custom model path,
+and plotting its finished episode.
+
+All ten 20,000-step reruns completed under run ID `main_20261113`, with train interval
+4 explicitly retained for comparison; main's default remains 1. All 50 greedy
+evaluations finished without step caps. Every new model reloads and has finite
+parameters and inference outputs; all logged losses are finite. Generated
+40 per-run plots plus the comparison figure. The selected experiment is 1
+with observed mean -20.00; the new recorded episode scored -21
+and was decoded fully (846 frames, 15 fps, 56.40 seconds).
+
+All original Samuel CSVs were verified byte-for-byte against the prior commit,
+and all original model hashes still match their saved summary. The previous
+results report is archived at `logs/Samuel/pilot_20261112_results.md`.
+
+The remaining limitation is training quality and budget, not a failure observed
+in these runs. These pilots do not establish convergence or rubric compliance.

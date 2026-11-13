@@ -1,5 +1,10 @@
 """Regression checks for Samuel's training and persistence contracts."""
 import csv
+import contextlib
+import io
+import os
+import subprocess
+import sys
 from pathlib import Path
 import tempfile
 from types import SimpleNamespace
@@ -9,7 +14,7 @@ from unittest.mock import patch
 import torch
 from torch import nn
 
-from train import Logger, save_model, sync_target, train_step
+from train import Logger, get_settings, save_model, sync_target, train_step
 
 
 class Batch:
@@ -66,12 +71,35 @@ class SamuelTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 Logger(settings)
 
+    def test_invalid_training_intervals_fail_before_environment_creation(self):
+        for option in ('--train_every', '--target_update_every',
+                       '--epsilon_decay_steps', '--save_every_episodes'):
+            with self.subTest(option=option):
+                with patch('sys.argv', ['train.py', '--member', 'Samuel',
+                                        '--experiment', '1', option, '0']):
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        with self.assertRaises(SystemExit) as raised:
+                            get_settings()
+                self.assertEqual(raised.exception.code, 2)
+
     def test_model_path_from_main_is_honored(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'custom/checkpoint.pth'
             settings = SimpleNamespace(member='Samuel', experiment=1, model_path=str(path))
             self.assertEqual(save_model(nn.Linear(1, 2), settings), str(path))
             self.assertTrue(path.exists())
+
+    def test_single_episode_plotting_cli(self):
+        with tempfile.TemporaryDirectory() as folder:
+            log = Path(folder) / 'single.csv'
+            log.write_text('episode,step,reward,length,epsilon,loss\n1,100,-21,100,0.5,0.01\n')
+            output = Path(folder) / 'plots'
+            script = Path(__file__).resolve().parents[1] / 'plot_results.py'
+            subprocess.run([sys.executable, str(script), str(log), '--out_dir', str(output)],
+                           env=dict(os.environ, MPLCONFIGDIR=str(Path(folder)/'mpl')),
+                           check=True, capture_output=True)
+            self.assertEqual(len(list(output.glob('*.png'))), 4)
+            self.assertTrue(all(p.stat().st_size > 0 for p in output.glob('*.png')))
 
     def test_atomic_save_keeps_previous_file_on_failure(self):
         with tempfile.TemporaryDirectory() as folder:

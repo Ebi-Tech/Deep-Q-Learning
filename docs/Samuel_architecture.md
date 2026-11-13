@@ -13,7 +13,7 @@ flowchart TD
     preprocess --> stack["FrameStackObservation: uint8, 4 x 84 x 84"]
     stack --> policy["Online CNN: epsilon-greedy action"]
     policy --> pong
-    stack --> replay["Replay: state, action, sign of reward, next state, terminated"]
+    stack --> replay["Replay: state, action, reward, next state, terminated"]
     replay --> batch["Sample B transitions on DEVICE"]
     batch --> online["Online CNN: gather Q of sampled action, shape B"]
     batch --> target["Target CNN: max over next-state actions, shape B; no gradients"]
@@ -23,7 +23,7 @@ flowchart TD
     loss --> policy
     policy -->|"Hard copy every 1000 environment decisions by default"| target
     pong --> logger["Finished episodes: raw reward, length, cumulative steps, epsilon, latest loss to CSV"]
-    policy --> save["Final online state_dict saved atomically"]
+    policy --> save["Periodic and final online state_dict saved atomically"]
     save --> play["play.py: matching CNN and preprocessing, greedy evaluation, optional MP4 capture"]
 ```
 
@@ -46,3 +46,13 @@ saving, evaluation and recording. The training loop resets on termination or
 truncation; only true termination masks the Bellman bootstrap. Replay images
 must not be normalized twice. Saved weights support inference, not exact
 training resumption.
+
+## Integration with main (13 November 2026)
+
+`ReplayBuffer.sample()` now returns uint8 images, and `train_step(online_net,
+target_net, optimizer, batch, gamma)` consumes the sampled tuple directly.
+The CNN now uses Kaiming initialization. The main loop uses Adam with
+`eps=1.5e-4`, defaults to training every decision, and saves weights periodically
+as well as at completion. `--model_path` is honored by atomic checkpoint saving.
+Pong rewards are stored as supplied by the environment; no sign conversion is
+applied by the current loop.

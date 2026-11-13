@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-13",
+  "source_commit": "a60a968",
+  "merged_main_commit": "f6e310ad7a9082448b8c5e85066bc2fdccf19e68",
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "python": "3.11.18",
+  "device": "cpu",
+  "torch": "2.15.0",
+  "gymnasium": "1.4.0",
+  "ale_py": "0.12.1",
+  "numpy": "2.4.6",
+  "source_sha256": {
+    "train.py": "ef6b8dafaf62b11928c31a4e6d737e67ee81771c4508781574e2f0b50f86e125",
+    "play.py": "345a3a011f247df34e58dfa721ea9997c0d084df1b7563c10cc1ac86f7516291",
+    "run_samuel_experiments.py": "f324836805ed86defbe28ba0e81d8e166f5b16316ca1abf3c12cd8092b909e4e"
+  },
+  "command": "python run_samuel_experiments.py --run_id main_20261113 --steps 20000 --train_every 4",
+  "threads": 2,
+  "comparison_note": "Train interval 4 explicitly preserves prior pilot cadence; upstream default interval 1 separately integration-tested. Initialization, replay dtype and Adam epsilon use merged main."
+}

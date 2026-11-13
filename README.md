@@ -22,41 +22,47 @@
 
 ## Training Results
 
-[Samuel’s measured hyperparameter experiments](SamuelHyperparameter_experiment_results.md).
-Each run stores CSV metrics and JSON configuration/evaluation evidence in `logs/Samuel/`.
-The ten completed pilots used 20,000 decisions each and five greedy evaluation
-episodes per model. Experiment 7 had the highest measured mean (-20.4); these
-short runs have not produced a strong Pong policy.
+[Samuel’s rerun results](SamuelHyperparameter_experiment_results.md) use the
+merged `main` code. All ten pilots completed 20,000 decisions each, with five
+greedy evaluation episodes per model. The highest observed mean was experiment
+1: -20.00. These short, single-seed runs do not establish convergence.
 
-![Samuel experiment comparison](plots/Samuel/experiment_comparison.png)
+New artifacts are isolated under `logs/Samuel/main_20261113/`,
+`models/Samuel/main_20261113/`, and `plots/Samuel/main_20261113/`.
+[Original pilot results](logs/Samuel/pilot_20261112_results.md) and its artifacts
+remain preserved. The rerun explicitly uses `--train_every 4` for comparison
+with that pilot; normal training from `main` defaults to every step, which was
+separately integration-tested with periodic saves and a custom model path.
 
-[Selected model training plots](plots/Samuel/experiment_7/training_summary.png).
+![Samuel rerun comparison](plots/Samuel/main_20261113/experiment_comparison.png)
+
+[Selected model training plots](plots/Samuel/main_20261113/experiment_1/training_summary.png).
 
 ## Gameplay Demonstration
 
-[Actual pilot-model gameplay (MP4)](videos/Samuel/gameplay.mp4) —
-experiment 7 (highest pilot evaluation mean: -20.4), evaluation seed 100,
-greedy policy, recorded episode raw return -21. This records
-a complete losing episode from a short pilot, not a successful trained policy.
-[Episode metadata](videos/Samuel/gameplay.json).
+[Actual rerun gameplay (MP4)](videos/Samuel/main_20261113/gameplay.mp4) —
+experiment 1, greedy policy, evaluation seed 100, episode return
+-21. This is a complete losing episode, approximately
+56.40 seconds long. [Episode metadata](videos/Samuel/main_20261113/gameplay.json).
+The model is not yet a strong Pong policy despite passing the execution checks.
 
-Record actual model gameplay with the command below. Evaluation prints raw
-episode returns, termination status, and whether a step cap interrupted an episode.
-Video is captured at 15 frames per second (one frame per four-frame action).
+Video contains one frame per four-frame action, recorded at 15 fps.
 
 ## How to Run
 
 ```bash
 uv sync
 uv run train.py --member Samuel --experiment 11
-uv run play.py models/Samuel/experiment_1.pth --episodes 5
+uv run play.py models/Samuel/main_20261113/experiment_1.pth --episodes 5
 # Interactive playback (requires a display):
-uv run play.py models/Samuel/experiment_1.pth --episodes 1 --render
+uv run play.py models/Samuel/main_20261113/experiment_1.pth --episodes 1 --render
 # Record one complete evaluation episode:
-uv run play.py models/Samuel/experiment_1.pth --episodes 1 --video videos/Samuel/gameplay.mp4
-# Ten experiments after archiving existing experiment 1–10 artifacts;
-# 500,000 decisions each (initial pilot used --steps 20000):
-uv run run_samuel_experiments.py --steps 500000
+uv run play.py models/Samuel/main_20261113/experiment_1.pth --episodes 1 --video videos/Samuel/new_gameplay.mp4
+# Run ten experiments in a fresh output folder (main defaults to train_every=1):
+uv run run_samuel_experiments.py --run_id full_run_01 --steps 500000
+# Short comparison pilot using the previous interval of 4 decisions:
+uv run run_samuel_experiments.py --run_id pilot_02 --steps 20000 --train_every 4
+uv run summarize_samuel_experiments.py --run_id pilot_02 --record
 # Samuel's regression checks:
 uv run python -m unittest discover -s tests -v
 ```
@@ -68,5 +74,6 @@ compatible with Divine's network and Gabriel's main loop. Checkpoints contain
 online weights only; logging records the latest update loss, not episode mean
 loss. Partial episodes at the training budget boundary are not logged.
 
-The known one-episode plotting issue in Gabriel's `plot_results.py` remains
-unchanged; use a multi-episode log and a separate `--out_dir` for each run.
+The single-episode plotting fix from `main` is merged and regression-tested.
+Use a separate `--out_dir` for each run. For repeat experiments, use a fresh
+`--run_id` so previous logs and models remain intact.
