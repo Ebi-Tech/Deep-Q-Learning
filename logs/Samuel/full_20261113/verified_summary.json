@@ -1,0 +1,30 @@
+{
+  "total_steps": 1000000,
+  "completed_training_episodes": 383,
+  "training_mean_last100": 6.39,
+  "selected_checkpoint_step": 974891,
+  "selection_mean_5": 13.8,
+  "independent_evaluation_episodes": 20,
+  "independent_mean": 11.25,
+  "independent_std": 4.624662149822406,
+  "wins": 19,
+  "losses": 1,
+  "capped": 0,
+  "video_frames": 3348,
+  "video_fps": 15.0,
+  "video_seconds": 223.2,
+  "checkpoints": [
+    {
+      "path": "models/Samuel/full_20261113/best.pth",
+      "sha256": "f40d8ceb18ed618d967f38fb9e1ffabfb7e5f1e84e25348945c8bdc986f3de34"
+    },
+    {
+      "path": "models/Samuel/full_20261113/latest.pth",
+      "sha256": "1d32e02e918339348310c36601a3f2779531670ec8cdc27986d9e8ddba866dcc"
+    },
+    {
+      "path": "models/Samuel/full_20261113/final_001000000.pth",
+      "sha256": "1d32e02e918339348310c36601a3f2779531670ec8cdc27986d9e8ddba866dcc"
+    }
+  ]
+}

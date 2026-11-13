@@ -55,13 +55,31 @@ indicate weak gameplay, not a Python exception. More training is needed.
 [Original pilot report](logs/Samuel/pilot_20261112_results.md) and its raw CSVs,
 models, plots, and video were preserved rather than overwritten.
 
-## Separate full-length baseline
+## Completed full-length baseline — experiment 11
 
-A separate one-million-step baseline uses run ID `full_20261113`, training every
-step on Apple MPS with the shared baseline settings. The ten rows above remain
-short pilot results. Live local progress and the eventual evaluated result are
-in `logs/Samuel/full_20261113/report.md` and `status.json`. No full-run score is
-claimed here before the independent evaluation completes.
+The separate run `full_20261113` completed **1,000,000 decisions**, training every step
+on Apple MPS. Baseline hyperparameters: learning rate 0.0001, gamma 0.99, batch
+size 32, epsilon 1.0 → 0.01 over 100,000 steps. Replay capacity was 50,000;
+warm-up 10,000; target synchronization every 1,000 decisions; training seed 0.
 
-See [full-training workflow](docs/Samuel_full_training.md) for settings,
-checkpoint selection and final evaluation details.
+| Result | Measured value |
+|---|---:|
+| Total training decisions | 1,000,000 |
+| Selected checkpoint step | 974,891 |
+| Last 100 training episodes: mean return | +6.39 |
+| Checkpoint selection mean, 5 episodes | +13.80 |
+| Independent mean return, 20 episodes | **+11.25** |
+| Independent standard deviation | 4.62 |
+| Independent wins / losses | **19 / 1** |
+| Truncated or capped independent episodes | 0 |
+
+Checkpoint selection used seeds 100–104. Independent testing used seeds
+1000–1019. The strongest checkpoint was retained at step 974,891;
+the actual million-step final weights are also saved. This single full baseline
+is separate from the ten short pilot experiments above. It is not ten full-length
+experiments. Its stronger performance does not guarantee future wins.
+
+[Full measured report](logs/Samuel/full_20261113/report.md),
+[independent evaluation](logs/Samuel/full_20261113/final_evaluation.json),
+[learning curve](plots/Samuel/full_20261113/full_training_evaluation.png), and
+[winning gameplay](videos/Samuel/full_20261113/gameplay.mp4).

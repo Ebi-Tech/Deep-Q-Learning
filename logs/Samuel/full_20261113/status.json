@@ -1,0 +1,18 @@
+{
+  "phase": "completed",
+  "pid": 71339,
+  "device": "mps",
+  "step": 1000000,
+  "total_steps": 1000000,
+  "episode": 383,
+  "best_checkpoint_mean": 13.8,
+  "best_checkpoint_step": 974891,
+  "latest_checkpoint": "models/Samuel/full_20261113/final_001000000.pth",
+  "elapsed_seconds": 9032.865562124993,
+  "overall_steps_per_second": 110.70683972016836,
+  "estimated_remaining_seconds": 0.0,
+  "epsilon": 0.010000000000000009,
+  "latest_loss": 0.0017493022605776787,
+  "training_mean_100": 6.39,
+  "heldout_mean": 11.25
+}

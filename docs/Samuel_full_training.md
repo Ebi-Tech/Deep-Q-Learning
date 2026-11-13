@@ -1,5 +1,9 @@
 # Samuel: full-length baseline
 
+The completed `full_20261113` run reached one million decisions. The selected
+model averaged **+11.25 over 20 independent games**, winning **19 of 20**.
+[Measured results](../logs/Samuel/full_20261113/report.md).
+
 `run_long_samuel.py` runs the shared training loop with one million environment
 decisions and a gradient update every step. This is separate from the ten
 20,000-step pilots. The launcher chooses CUDA, Apple MPS, or CPU, without
@@ -39,8 +43,14 @@ failure, `status.json` reports `failed` and `error.txt` contains the traceback.
 Snapshots contain inference weights, not the replay buffer and optimizer state
 needed for exact training resumption.
 
-The current local run uses `caffeinate -i` to prevent idle sleep until the job
-exits. The computer must remain powered on for local training to continue.
+The completed local run used `caffeinate -i` to prevent idle sleep until the job
+exited. The computer must remain powered on for local training to continue.
 More steps give the agent more opportunity to learn; strong performance must
 be established by evaluation, not assumed from the training budget. No full-run
 scores should be entered in the pilot table before evaluation completes.
+
+Regenerate the full learning/evaluation figure with:
+
+```bash
+uv run plot_full_training.py --run_id full_20261113
+```

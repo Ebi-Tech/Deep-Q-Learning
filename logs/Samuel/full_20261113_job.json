@@ -1,0 +1,7 @@
+{
+  "run_id": "full_20261113",
+  "supervisor_pid": 71339,
+  "command": ".venv/bin/python run_long_samuel.py --run_id full_20261113 --steps 1000000 --device mps",
+  "console_log": "logs/Samuel/full_20261113.console.log",
+  "sleep_prevention": "caffeinate -i for the duration of the training process"
+}

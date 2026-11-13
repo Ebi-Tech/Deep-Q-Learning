@@ -1,0 +1,850 @@
+[
+  {
+    "step": 22905,
+    "checkpoint": "models/Samuel/full_20261113/step_000022905.pth",
+    "mean_reward": -21.0,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": -21.0,
+        "length": 757,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": -21.0,
+        "length": 762,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": -21.0,
+        "length": 823,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": -21.0,
+        "length": 759,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -21.0,
+        "length": 822,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 46958,
+    "checkpoint": "models/Samuel/full_20261113/step_000046958.pth",
+    "mean_reward": -20.2,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": -20.0,
+        "length": 1142,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": -20.0,
+        "length": 1316,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": -20.0,
+        "length": 1052,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": -21.0,
+        "length": 1090,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -20.0,
+        "length": 1160,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 76267,
+    "checkpoint": "models/Samuel/full_20261113/step_000076267.pth",
+    "mean_reward": -17.0,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": -16.0,
+        "length": 1379,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": -15.0,
+        "length": 1658,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": -15.0,
+        "length": 1553,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": -20.0,
+        "length": 999,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -19.0,
+        "length": 1290,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 120374,
+    "checkpoint": "models/Samuel/full_20261113/step_000120374.pth",
+    "mean_reward": -12.4,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": -14.0,
+        "length": 2697,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": -14.0,
+        "length": 2660,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": -16.0,
+        "length": 2143,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": -9.0,
+        "length": 2942,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -9.0,
+        "length": 3094,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 188388,
+    "checkpoint": "models/Samuel/full_20261113/step_000188388.pth",
+    "mean_reward": -10.4,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": -9.0,
+        "length": 2643,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": -8.0,
+        "length": 3872,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": -11.0,
+        "length": 3105,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": -14.0,
+        "length": 2655,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -10.0,
+        "length": 2932,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 269490,
+    "checkpoint": "models/Samuel/full_20261113/step_000269490.pth",
+    "mean_reward": -0.8,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": -6.0,
+        "length": 3128,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": 3.0,
+        "length": 3511,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": 5.0,
+        "length": 3270,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": -4.0,
+        "length": 3048,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -2.0,
+        "length": 4154,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 354193,
+    "checkpoint": "models/Samuel/full_20261113/step_000354193.pth",
+    "mean_reward": -1.2,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": -2.0,
+        "length": 3537,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": -4.0,
+        "length": 3157,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": 9.0,
+        "length": 2911,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": -6.0,
+        "length": 3081,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -3.0,
+        "length": 3338,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 434520,
+    "checkpoint": "models/Samuel/full_20261113/step_000434520.pth",
+    "mean_reward": 0.2,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": -3.0,
+        "length": 3883,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": -1.0,
+        "length": 3633,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": 13.0,
+        "length": 2801,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": -1.0,
+        "length": 3888,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -7.0,
+        "length": 3066,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 514990,
+    "checkpoint": "models/Samuel/full_20261113/step_000514990.pth",
+    "mean_reward": 3.6,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": 4.0,
+        "length": 3360,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": 14.0,
+        "length": 2303,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": -6.0,
+        "length": 2952,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": 7.0,
+        "length": 3002,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -1.0,
+        "length": 3638,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 589218,
+    "checkpoint": "models/Samuel/full_20261113/step_000589218.pth",
+    "mean_reward": 7.2,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": 2.0,
+        "length": 4117,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": 9.0,
+        "length": 2812,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": 14.0,
+        "length": 2651,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": 12.0,
+        "length": 2469,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -1.0,
+        "length": 3821,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 663702,
+    "checkpoint": "models/Samuel/full_20261113/step_000663702.pth",
+    "mean_reward": 6.0,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": -4.0,
+        "length": 3381,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": 13.0,
+        "length": 2592,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": 14.0,
+        "length": 2325,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": 2.0,
+        "length": 3338,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": 5.0,
+        "length": 3139,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 739013,
+    "checkpoint": "models/Samuel/full_20261113/step_000739013.pth",
+    "mean_reward": 8.2,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": 4.0,
+        "length": 3316,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": 7.0,
+        "length": 2974,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": 12.0,
+        "length": 3255,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": 8.0,
+        "length": 3376,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": 10.0,
+        "length": 3064,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 820203,
+    "checkpoint": "models/Samuel/full_20261113/step_000820203.pth",
+    "mean_reward": -1.2,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": -8.0,
+        "length": 2565,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": -8.0,
+        "length": 2715,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": 10.0,
+        "length": 3075,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": 1.0,
+        "length": 3490,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": -1.0,
+        "length": 3708,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 898040,
+    "checkpoint": "models/Samuel/full_20261113/step_000898040.pth",
+    "mean_reward": 9.6,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": 9.0,
+        "length": 3429,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": 10.0,
+        "length": 2685,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": 6.0,
+        "length": 3152,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": 10.0,
+        "length": 2633,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": 13.0,
+        "length": 2921,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 974891,
+    "checkpoint": "models/Samuel/full_20261113/step_000974891.pth",
+    "mean_reward": 13.8,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": 16.0,
+        "length": 2389,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": 20.0,
+        "length": 2145,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": 7.0,
+        "length": 3182,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": 16.0,
+        "length": 2502,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": 10.0,
+        "length": 3272,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  },
+  {
+    "step": 1000000,
+    "checkpoint": "models/Samuel/full_20261113/final_001000000.pth",
+    "mean_reward": 10.2,
+    "capped": 0,
+    "episodes": [
+      {
+        "episode": 1,
+        "seed": 100,
+        "reward": 8.0,
+        "length": 3047,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 2,
+        "seed": 101,
+        "reward": 10.0,
+        "length": 2820,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 3,
+        "seed": 102,
+        "reward": 13.0,
+        "length": 2539,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 4,
+        "seed": 103,
+        "reward": 9.0,
+        "length": 2897,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      },
+      {
+        "episode": 5,
+        "seed": 104,
+        "reward": 11.0,
+        "length": 2872,
+        "terminated": true,
+        "truncated": false,
+        "capped": false
+      }
+    ]
+  }
+]

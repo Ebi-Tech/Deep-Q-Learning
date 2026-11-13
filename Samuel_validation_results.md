@@ -132,3 +132,24 @@ results report is archived at `logs/Samuel/pilot_20261112_results.md`.
 
 The remaining limitation is training quality and budget, not a failure observed
 in these runs. These pilots do not establish convergence or rubric compliance.
+
+## Full baseline completed
+
+Run `full_20261113` reached exactly 1,000,000 decisions on Apple MPS, training every
+step. The job completed all checkpoint evaluations, a 20-episode independent
+test, gameplay recording, and plotting. Total wall time was
+2.51 hours. There were 383 completed training episodes;
+a partial last episode is included in the step budget but not the episode CSV.
+
+The selected checkpoint at step 974,891 had a five-episode selection
+mean of +13.80. On separate seeds 1000–1019 it averaged
++11.25 (standard deviation 4.62), with
+19 wins and 1 loss. All 20 games terminated normally; none were
+truncated or capped. The final training mean over 100 episodes was +6.39.
+
+Selected, latest and actual million-step checkpoint weights reload and produce
+finite inference outputs. All logged training losses are finite. The selected
+model matches its numbered snapshot; latest matches final weights byte-for-byte.
+The full winning gameplay clip was decoded: 3,348 frames, 15 fps, 223.2 seconds,
+seed 1000, raw return +4. The ten pilot experiments remain separate. This is one
+training seed and a finite evaluation sample, not a guarantee of future wins.

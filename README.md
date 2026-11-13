@@ -22,46 +22,44 @@
 
 ## Training Results
 
-[Full-length GPU baseline workflow](docs/Samuel_full_training.md): a separate
-1,000,000-step run trains every step, evaluates checkpoints, and performs an
-independent final evaluation. Its results are separate from the pilots below.
+Samuel's full baseline completed **1,000,000 decisions**, training every step
+on Apple MPS. The selected checkpoint achieved **+11.25 mean raw return**
+and won **19 of 20 independent evaluation games**. One game was lost;
+this is measured improvement, not a guarantee of perfect play.
 
-[Samuel’s rerun results](SamuelHyperparameter_experiment_results.md) use the
-merged `main` code. All ten pilots completed 20,000 decisions each, with five
-greedy evaluation episodes per model. The highest observed mean was experiment
-1: -20.00. These short, single-seed runs do not establish convergence.
+[Full report](logs/Samuel/full_20261113/report.md),
+[experiment table and pilot results](SamuelHyperparameter_experiment_results.md),
+[full-training workflow](docs/Samuel_full_training.md).
 
-New artifacts are isolated under `logs/Samuel/main_20261113/`,
-`models/Samuel/main_20261113/`, and `plots/Samuel/main_20261113/`.
-[Original pilot results](logs/Samuel/pilot_20261112_results.md) and its artifacts
-remain preserved. The rerun explicitly uses `--train_every 4` for comparison
-with that pilot; normal training from `main` defaults to every step, which was
-separately integration-tested with periodic saves and a custom model path.
+![Full training and independent evaluation](plots/Samuel/full_20261113/full_training_evaluation.png)
 
-![Samuel rerun comparison](plots/Samuel/main_20261113/experiment_comparison.png)
+The run reached one million steps. Its selected checkpoint is from step
+974,891; the best model and the actual final million-step weights are
+both retained. Selection used five greedy episodes (seeds 100–104); the reported
+independent result uses 20 other episodes (seeds 1000–1019). All completed without
+truncation or step caps. See the manifest for the exact settings and source hashes.
 
-[Selected model training plots](plots/Samuel/main_20261113/experiment_1/training_summary.png).
+The ten earlier 20,000-step pilots and their artifacts remain preserved under
+`main_20261113`, with the original pilot also archived. The full baseline is an
+additional experiment.
 
 ## Gameplay Demonstration
 
-[Actual rerun gameplay (MP4)](videos/Samuel/main_20261113/gameplay.mp4) —
-experiment 1, greedy policy, evaluation seed 100, episode return
--21. This is a complete losing episode, approximately
-56.40 seconds long. [Episode metadata](videos/Samuel/main_20261113/gameplay.json).
-The model is not yet a strong Pong policy despite passing the execution checks.
-
-Video contains one frame per four-frame action, recorded at 15 fps.
+[Winning full-run gameplay (MP4)](videos/Samuel/full_20261113/gameplay.mp4) —
+selected model, greedy policy, seed 1000, raw return **+4**.
+The complete episode is 223.2 seconds at 15 fps.
+[Episode metadata](videos/Samuel/full_20261113/gameplay.json).
 
 ## How to Run
 
 ```bash
 uv sync
 uv run train.py --member Samuel --experiment 11
-uv run play.py models/Samuel/main_20261113/experiment_1.pth --episodes 5
+uv run play.py models/Samuel/full_20261113/best.pth --episodes 5
 # Interactive playback (requires a display):
-uv run play.py models/Samuel/main_20261113/experiment_1.pth --episodes 1 --render
+uv run play.py models/Samuel/full_20261113/best.pth --episodes 1 --render
 # Record one complete evaluation episode:
-uv run play.py models/Samuel/main_20261113/experiment_1.pth --episodes 1 --video videos/Samuel/new_gameplay.mp4
+uv run play.py models/Samuel/full_20261113/best.pth --episodes 1 --video videos/Samuel/new_gameplay.mp4
 # Run ten experiments in a fresh output folder (main defaults to train_every=1):
 uv run run_samuel_experiments.py --run_id full_run_01 --steps 500000
 # Short comparison pilot using the previous interval of 4 decisions:
