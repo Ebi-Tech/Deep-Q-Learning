@@ -55,7 +55,18 @@ def get_settings():
     parser.add_argument("--target_update_every", type=int, default=1_000)
     parser.add_argument("--save_every_episodes", type=int, default=50)
 
-    return parser.parse_args()
+    settings = parser.parse_args()
+    for name in ("total_steps", "buffer_size", "batch_size", "epsilon_decay_steps",
+                 "train_every", "target_update_every", "save_every_episodes"):
+        if getattr(settings, name) <= 0:
+            parser.error(f"--{name} must be positive")
+    if settings.learning_starts < 0:
+        parser.error("--learning_starts must be nonnegative")
+    if not 0 <= settings.gamma <= 1 or settings.learning_rate <= 0:
+        parser.error("gamma must be in [0, 1] and learning_rate must be positive")
+    if not all(0 <= value <= 1 for value in (settings.epsilon_start, settings.epsilon_end)):
+        parser.error("epsilon values must be in [0, 1]")
+    return settings
 
 
 def make_env(render_mode=None):
@@ -193,27 +204,33 @@ def select_action(online_net, state, epsilon, n_actions):
         return int(online_net(state_t).argmax(dim=1).item())
 
 
-# Learning: Bellman update, target sync, logging and saving
-def train_step(online_net, target_net, optimizer, batch, gamma):
-    """Do one gradient update of the online network on a batch and return the loss.
+# Samuel: learning, target synchronization, logging and checkpoint saving
+import csv
+import tempfile
+from pathlib import Path
 
-    batch is (states, actions, rewards, next_states, dones) from ReplayBuffer.sample.
-    The online network predicts Q(s, a) for the actions that were actually taken,
-    picked out with gather. The target network, without gradients, gives the
-    Bellman target r + gamma * max Q_target(s', a'), where the future value is
-    set to 0 when the episode terminated. The Huber loss (smooth L1) between the
-    two is backpropagated, gradients are clipped to a norm of 10 for stability,
-    and the optimizer updates only the online network.
+
+def train_step(online_net, target_net, optimizer, batch, gamma):
+    """Update vanilla DQN from Gabriel's sampled-batch interface.
+
+    Replay now returns uint8 images; the CNN normalizes them internally.
+    Terminations mask bootstrapping; time-limit truncations do not.
     """
     states, actions, rewards, next_states, dones = batch
+    if states.shape[0] == 0:
+        raise ValueError("Training requires a nonempty batch")
+    online_net.train()
+    target_net.eval()
     q = online_net(states).gather(1, actions.unsqueeze(1)).squeeze(1)
     with torch.no_grad():
         next_q = target_net(next_states).max(dim=1).values
         target = rewards + gamma * next_q * (1.0 - dones)
     loss = F.smooth_l1_loss(q, target)
-    optimizer.zero_grad()
+    if not torch.isfinite(loss):
+        raise FloatingPointError("Non-finite DQN loss; optimizer update skipped")
+    optimizer.zero_grad(set_to_none=True)
     loss.backward()
-    torch.nn.utils.clip_grad_norm_(online_net.parameters(), 10.0)
+    torch.nn.utils.clip_grad_norm_(online_net.parameters(), 10.0, error_if_nonfinite=True)
     optimizer.step()
     return loss.item()
 
@@ -221,42 +238,50 @@ def train_step(online_net, target_net, optimizer, batch, gamma):
 def sync_target(online_net, target_net):
     """Copy the online network weights into the target network."""
     target_net.load_state_dict(online_net.state_dict())
+    target_net.requires_grad_(False)
+    target_net.eval()
 
 
 class Logger:
     """Writes one CSV row per finished episode to logs/<member>/experiment_<n>.csv."""
 
+    fields = ("episode", "step", "reward", "length", "epsilon", "loss")
+
     def __init__(self, settings):
-        folder = os.path.join("logs", settings.member)
-        os.makedirs(folder, exist_ok=True)
-        self.path = os.path.join(folder, f"experiment_{settings.experiment}.csv")
-        with open(self.path, "w") as f:
-            f.write("episode,step,reward,length,epsilon,loss\n")
+        folder = Path("logs") / settings.member
+        folder.mkdir(parents=True, exist_ok=True)
+        self.path = str(folder / f"experiment_{settings.experiment}.csv")
+        # Refuse to silently destroy a previous experiment's evidence.
+        with open(self.path, "x", newline="", encoding="utf-8") as handle:
+            csv.writer(handle, lineterminator="\n").writerow(self.fields)
 
     def log_episode(self, episode, step, reward, length, epsilon, loss):
-        """Append one finished episode: its number, total steps so far, raw reward,
-        length in steps, the current epsilon and the most recent training loss."""
-        with open(self.path, "a") as f:
-            f.write(f"{episode},{step},{reward},{length},{epsilon:.4f},{loss:.6f}\n")
+        """Append raw return and the latest update loss, not an episode mean."""
+        with open(self.path, "a", newline="", encoding="utf-8") as handle:
+            csv.writer(handle, lineterminator="\n").writerow((episode, step, reward, length, epsilon, loss))
 
 
-def save_model(online_net, settings):
-    """Save the online network weights and return the path they were saved to.
+def save_model(online_net, settings, filename=None):
+    """Atomically save inference weights; return a path compatible with play.py.
 
-    If --model_path was given (for example dqn_model.pth), save to that file.
-    Otherwise save to models/<member>/experiment_<n>.pth.
-    It is called every save_every_episodes episodes and once at the end of
-    training, always overwriting the same file, so a cloud run that gets
-    disconnected still keeps its most recent model.
+    This is a weights checkpoint, not an exact training-resume snapshot.
+    Custom destination directories are created automatically.
     """
-    if settings.model_path:
-        path = settings.model_path
-    else:
-        folder = os.path.join("models", settings.member)
-        os.makedirs(folder, exist_ok=True)
-        path = os.path.join(folder, f"experiment_{settings.experiment}.pth")
-    torch.save(online_net.state_dict(), path)
-    return path
+    destination = filename if filename is not None else getattr(settings, "model_path", None)
+    path = Path(destination) if destination is not None else (
+        Path("models") / settings.member / f"experiment_{settings.experiment}.pth"
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(dir=path.parent, prefix=path.name, suffix=".tmp")
+    os.close(descriptor)
+    try:
+        torch.save(online_net.state_dict(), temporary)
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+    return str(path)
+
 
 
 # Main training loop

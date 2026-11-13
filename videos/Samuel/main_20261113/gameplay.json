@@ -1,0 +1,15 @@
+{
+  "checkpoint": "models/Samuel/main_20261113/experiment_1.pth",
+  "epsilon": 0.0,
+  "episodes": [
+    {
+      "episode": 1,
+      "seed": 100,
+      "reward": -21.0,
+      "length": 846,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    }
+  ]
+}

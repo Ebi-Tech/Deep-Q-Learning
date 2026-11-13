@@ -1,0 +1,73 @@
+{
+  "experiment": 3,
+  "config": {
+    "learning_rate": 2.5e-05,
+    "gamma": 0.99,
+    "batch_size": 32,
+    "epsilon_start": 1.0,
+    "epsilon_end": 0.01,
+    "epsilon_decay_steps": 100000
+  },
+  "budget": {
+    "steps": 20000,
+    "buffer_size": 2000,
+    "learning_starts": 1000,
+    "eval_episodes": 5,
+    "run_id": "main_20261113",
+    "train_every": 4,
+    "target_update_every": 1000
+  },
+  "training_seed": 0,
+  "episodes": 22,
+  "evaluation": [
+    {
+      "episode": 1,
+      "seed": 100,
+      "reward": -21.0,
+      "length": 903,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 2,
+      "seed": 101,
+      "reward": -21.0,
+      "length": 824,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 3,
+      "seed": 102,
+      "reward": -21.0,
+      "length": 763,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 4,
+      "seed": 103,
+      "reward": -20.0,
+      "length": 906,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 5,
+      "seed": 104,
+      "reward": -21.0,
+      "length": 837,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    }
+  ],
+  "last10_mean": -20.1,
+  "eval_mean": -20.8,
+  "eval_std": 0.39999999999999997,
+  "capped": 0
+}

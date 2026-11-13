@@ -1,0 +1,723 @@
+{
+  "training_steps_per_run": 20000,
+  "total_training_steps": 200000,
+  "total_evaluation_episodes": 50,
+  "best_evaluation_mean": -20.4,
+  "tied_experiments": [
+    7
+  ],
+  "selected_experiment": 7,
+  "selection_note": "Highest measured mean; first experiment breaks ties. Single-seed pilot results do not establish superiority.",
+  "records": [
+    {
+      "experiment": 1,
+      "config": {
+        "learning_rate": 0.0001,
+        "gamma": 0.99,
+        "batch_size": 32,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.01,
+        "epsilon_decay_steps": 100000
+      },
+      "budget": {
+        "steps": 20000,
+        "buffer_size": 2000,
+        "learning_starts": 1000,
+        "eval_episodes": 5
+      },
+      "training_seed": 0,
+      "episodes": 21,
+      "evaluation": [
+        {
+          "episode": 1,
+          "seed": 100,
+          "reward": -21.0,
+          "length": 757,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 2,
+          "seed": 101,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 3,
+          "seed": 102,
+          "reward": -21.0,
+          "length": 763,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 4,
+          "seed": 103,
+          "reward": -21.0,
+          "length": 759,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 5,
+          "seed": 104,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ],
+      "last10_mean": -20.3,
+      "eval_mean": -21.0,
+      "eval_std": 0.0,
+      "capped": 0,
+      "model_sha256": "83490e39f181febd37eb4d8a919501a31425a26f58648355f67e568efc3c0495"
+    },
+    {
+      "experiment": 2,
+      "config": {
+        "learning_rate": 0.0002,
+        "gamma": 0.99,
+        "batch_size": 32,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.01,
+        "epsilon_decay_steps": 100000
+      },
+      "budget": {
+        "steps": 20000,
+        "buffer_size": 2000,
+        "learning_starts": 1000,
+        "eval_episodes": 5
+      },
+      "training_seed": 0,
+      "episodes": 21,
+      "evaluation": [
+        {
+          "episode": 1,
+          "seed": 100,
+          "reward": -21.0,
+          "length": 757,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 2,
+          "seed": 101,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 3,
+          "seed": 102,
+          "reward": -21.0,
+          "length": 763,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 4,
+          "seed": 103,
+          "reward": -21.0,
+          "length": 759,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 5,
+          "seed": 104,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ],
+      "last10_mean": -20.2,
+      "eval_mean": -21.0,
+      "eval_std": 0.0,
+      "capped": 0,
+      "model_sha256": "082170b361d608fa52f56c1562f35c533a8395d378b1fe5253409801e5a665e2"
+    },
+    {
+      "experiment": 3,
+      "config": {
+        "learning_rate": 2.5e-05,
+        "gamma": 0.99,
+        "batch_size": 32,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.01,
+        "epsilon_decay_steps": 100000
+      },
+      "budget": {
+        "steps": 20000,
+        "buffer_size": 2000,
+        "learning_starts": 1000,
+        "eval_episodes": 5
+      },
+      "training_seed": 0,
+      "episodes": 22,
+      "evaluation": [
+        {
+          "episode": 1,
+          "seed": 100,
+          "reward": -21.0,
+          "length": 757,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 2,
+          "seed": 101,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 3,
+          "seed": 102,
+          "reward": -21.0,
+          "length": 763,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 4,
+          "seed": 103,
+          "reward": -21.0,
+          "length": 759,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 5,
+          "seed": 104,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ],
+      "last10_mean": -20.3,
+      "eval_mean": -21.0,
+      "eval_std": 0.0,
+      "capped": 0,
+      "model_sha256": "0cf786071d09cb2b36e74bd659107a75ae1fa94695366f4cad8ce86d79d192fe"
+    },
+    {
+      "experiment": 4,
+      "config": {
+        "learning_rate": 0.0001,
+        "gamma": 0.97,
+        "batch_size": 32,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.01,
+        "epsilon_decay_steps": 100000
+      },
+      "budget": {
+        "steps": 20000,
+        "buffer_size": 2000,
+        "learning_starts": 1000,
+        "eval_episodes": 5
+      },
+      "training_seed": 0,
+      "episodes": 22,
+      "evaluation": [
+        {
+          "episode": 1,
+          "seed": 100,
+          "reward": -21.0,
+          "length": 757,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 2,
+          "seed": 101,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 3,
+          "seed": 102,
+          "reward": -21.0,
+          "length": 763,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 4,
+          "seed": 103,
+          "reward": -21.0,
+          "length": 759,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 5,
+          "seed": 104,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ],
+      "last10_mean": -20.5,
+      "eval_mean": -21.0,
+      "eval_std": 0.0,
+      "capped": 0,
+      "model_sha256": "6e7e694e176e785ce2dcb06617f81e3a1f51d775fcdac9e0dd5931c0935e7591"
+    },
+    {
+      "experiment": 5,
+      "config": {
+        "learning_rate": 0.0001,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.01,
+        "epsilon_decay_steps": 100000
+      },
+      "budget": {
+        "steps": 20000,
+        "buffer_size": 2000,
+        "learning_starts": 1000,
+        "eval_episodes": 5
+      },
+      "training_seed": 0,
+      "episodes": 21,
+      "evaluation": [
+        {
+          "episode": 1,
+          "seed": 100,
+          "reward": -21.0,
+          "length": 757,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 2,
+          "seed": 101,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 3,
+          "seed": 102,
+          "reward": -21.0,
+          "length": 763,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 4,
+          "seed": 103,
+          "reward": -21.0,
+          "length": 759,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 5,
+          "seed": 104,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ],
+      "last10_mean": -19.8,
+      "eval_mean": -21.0,
+      "eval_std": 0.0,
+      "capped": 0,
+      "model_sha256": "400f16f1799fb9e1650f43f38233e61b7b97313981d505aa589642c67f836ec7"
+    },
+    {
+      "experiment": 6,
+      "config": {
+        "learning_rate": 0.0001,
+        "gamma": 0.99,
+        "batch_size": 16,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.01,
+        "epsilon_decay_steps": 100000
+      },
+      "budget": {
+        "steps": 20000,
+        "buffer_size": 2000,
+        "learning_starts": 1000,
+        "eval_episodes": 5
+      },
+      "training_seed": 0,
+      "episodes": 22,
+      "evaluation": [
+        {
+          "episode": 1,
+          "seed": 100,
+          "reward": -21.0,
+          "length": 757,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 2,
+          "seed": 101,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 3,
+          "seed": 102,
+          "reward": -21.0,
+          "length": 763,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 4,
+          "seed": 103,
+          "reward": -21.0,
+          "length": 759,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 5,
+          "seed": 104,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ],
+      "last10_mean": -20.5,
+      "eval_mean": -21.0,
+      "eval_std": 0.0,
+      "capped": 0,
+      "model_sha256": "7c4d47c5d05af70db47ced9c18b92518195bd86bd2e207a964aeeab4042e1043"
+    },
+    {
+      "experiment": 7,
+      "config": {
+        "learning_rate": 0.0001,
+        "gamma": 0.99,
+        "batch_size": 64,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.01,
+        "epsilon_decay_steps": 100000
+      },
+      "budget": {
+        "steps": 20000,
+        "buffer_size": 2000,
+        "learning_starts": 1000,
+        "eval_episodes": 5
+      },
+      "training_seed": 0,
+      "episodes": 22,
+      "evaluation": [
+        {
+          "episode": 1,
+          "seed": 100,
+          "reward": -21.0,
+          "length": 817,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 2,
+          "seed": 101,
+          "reward": -20.0,
+          "length": 919,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 3,
+          "seed": 102,
+          "reward": -20.0,
+          "length": 1591,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 4,
+          "seed": 103,
+          "reward": -20.0,
+          "length": 1160,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 5,
+          "seed": 104,
+          "reward": -21.0,
+          "length": 822,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ],
+      "last10_mean": -20.6,
+      "eval_mean": -20.4,
+      "eval_std": 0.4898979485566356,
+      "capped": 0,
+      "model_sha256": "7bc8dee4a9398ab213e90abc593dc42e6f08def41536f004c2a3c447365efa42"
+    },
+    {
+      "experiment": 8,
+      "config": {
+        "learning_rate": 0.0001,
+        "gamma": 0.99,
+        "batch_size": 32,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.05,
+        "epsilon_decay_steps": 100000
+      },
+      "budget": {
+        "steps": 20000,
+        "buffer_size": 2000,
+        "learning_starts": 1000,
+        "eval_episodes": 5
+      },
+      "training_seed": 0,
+      "episodes": 21,
+      "evaluation": [
+        {
+          "episode": 1,
+          "seed": 100,
+          "reward": -21.0,
+          "length": 757,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 2,
+          "seed": 101,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 3,
+          "seed": 102,
+          "reward": -21.0,
+          "length": 763,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 4,
+          "seed": 103,
+          "reward": -21.0,
+          "length": 759,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 5,
+          "seed": 104,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ],
+      "last10_mean": -20.3,
+      "eval_mean": -21.0,
+      "eval_std": 0.0,
+      "capped": 0,
+      "model_sha256": "bc7b20a6c9240a013b78ce72ec3b80cea8e51064aa987911a7ccf045d3ebba68"
+    },
+    {
+      "experiment": 9,
+      "config": {
+        "learning_rate": 0.0001,
+        "gamma": 0.99,
+        "batch_size": 32,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.01,
+        "epsilon_decay_steps": 20000
+      },
+      "budget": {
+        "steps": 20000,
+        "buffer_size": 2000,
+        "learning_starts": 1000,
+        "eval_episodes": 5
+      },
+      "training_seed": 0,
+      "episodes": 23,
+      "evaluation": [
+        {
+          "episode": 1,
+          "seed": 100,
+          "reward": -21.0,
+          "length": 757,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 2,
+          "seed": 101,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 3,
+          "seed": 102,
+          "reward": -21.0,
+          "length": 763,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 4,
+          "seed": 103,
+          "reward": -21.0,
+          "length": 759,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 5,
+          "seed": 104,
+          "reward": -21.0,
+          "length": 762,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ],
+      "last10_mean": -20.7,
+      "eval_mean": -21.0,
+      "eval_std": 0.0,
+      "capped": 0,
+      "model_sha256": "afff3a48b82863465bbf4d0cfd1fcf95105926870beac0e92e620a4611a87281"
+    },
+    {
+      "experiment": 10,
+      "config": {
+        "learning_rate": 0.0001,
+        "gamma": 0.99,
+        "batch_size": 32,
+        "epsilon_start": 0.7,
+        "epsilon_end": 0.01,
+        "epsilon_decay_steps": 100000
+      },
+      "budget": {
+        "steps": 20000,
+        "buffer_size": 2000,
+        "learning_starts": 1000,
+        "eval_episodes": 5
+      },
+      "training_seed": 0,
+      "episodes": 22,
+      "evaluation": [
+        {
+          "episode": 1,
+          "seed": 100,
+          "reward": -21.0,
+          "length": 813,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 2,
+          "seed": 101,
+          "reward": -21.0,
+          "length": 973,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 3,
+          "seed": 102,
+          "reward": -21.0,
+          "length": 791,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 4,
+          "seed": 103,
+          "reward": -21.0,
+          "length": 815,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "episode": 5,
+          "seed": 104,
+          "reward": -21.0,
+          "length": 850,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ],
+      "last10_mean": -20.3,
+      "eval_mean": -21.0,
+      "eval_std": 0.0,
+      "capped": 0,
+      "model_sha256": "2dac7b329925ae9034d6d18283693211148f576d68cc7fe44646e05f81997e8a"
+    }
+  ]
+}

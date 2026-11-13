@@ -1,0 +1,51 @@
+{
+  "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/models/Samuel/experiment_6.pth",
+  "epsilon": 0.0,
+  "episodes": [
+    {
+      "episode": 1,
+      "seed": 100,
+      "reward": -21.0,
+      "length": 757,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 2,
+      "seed": 101,
+      "reward": -21.0,
+      "length": 762,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 3,
+      "seed": 102,
+      "reward": -21.0,
+      "length": 763,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 4,
+      "seed": 103,
+      "reward": -21.0,
+      "length": 759,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 5,
+      "seed": 104,
+      "reward": -21.0,
+      "length": 762,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    }
+  ]
+}

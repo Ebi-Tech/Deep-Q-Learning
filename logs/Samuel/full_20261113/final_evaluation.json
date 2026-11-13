@@ -1,0 +1,188 @@
+{
+  "checkpoint": "models/Samuel/full_20261113/best.pth",
+  "mean_reward": 11.25,
+  "std_reward": 4.624662149822406,
+  "episodes": [
+    {
+      "episode": 1,
+      "seed": 1000,
+      "reward": 4.0,
+      "length": 3348,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 2,
+      "seed": 1001,
+      "reward": 13.0,
+      "length": 2819,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 3,
+      "seed": 1002,
+      "reward": 14.0,
+      "length": 2707,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 4,
+      "seed": 1003,
+      "reward": 7.0,
+      "length": 3255,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 5,
+      "seed": 1004,
+      "reward": 13.0,
+      "length": 2526,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 6,
+      "seed": 1005,
+      "reward": 9.0,
+      "length": 3002,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 7,
+      "seed": 1006,
+      "reward": 17.0,
+      "length": 2178,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 8,
+      "seed": 1007,
+      "reward": 15.0,
+      "length": 3033,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 9,
+      "seed": 1008,
+      "reward": 9.0,
+      "length": 3174,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 10,
+      "seed": 1009,
+      "reward": 12.0,
+      "length": 2822,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 11,
+      "seed": 1010,
+      "reward": 16.0,
+      "length": 2478,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 12,
+      "seed": 1011,
+      "reward": 7.0,
+      "length": 3010,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 13,
+      "seed": 1012,
+      "reward": 17.0,
+      "length": 2385,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 14,
+      "seed": 1013,
+      "reward": 11.0,
+      "length": 3013,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 15,
+      "seed": 1014,
+      "reward": 11.0,
+      "length": 3348,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 16,
+      "seed": 1015,
+      "reward": 15.0,
+      "length": 2548,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 17,
+      "seed": 1016,
+      "reward": -2.0,
+      "length": 3549,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 18,
+      "seed": 1017,
+      "reward": 13.0,
+      "length": 3119,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 19,
+      "seed": 1018,
+      "reward": 9.0,
+      "length": 3196,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    },
+    {
+      "episode": 20,
+      "seed": 1019,
+      "reward": 15.0,
+      "length": 2410,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    }
+  ],
+  "capped": 0
+}

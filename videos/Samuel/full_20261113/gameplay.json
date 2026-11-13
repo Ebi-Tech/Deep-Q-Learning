@@ -1,0 +1,14 @@
+{
+  "checkpoint": "models/Samuel/full_20261113/best.pth",
+  "episodes": [
+    {
+      "episode": 1,
+      "seed": 1000,
+      "reward": 4.0,
+      "length": 3348,
+      "terminated": true,
+      "truncated": false,
+      "capped": false
+    }
+  ]
+}

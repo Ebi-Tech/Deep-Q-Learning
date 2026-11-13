@@ -1,0 +1,144 @@
+A.L.E: Arcade Learning Environment (version 0.12.1+8a8fafb)
+[Powered by Stella]
+Device: mps | Member: Samuel/full_20261113 | Experiment: 11
+Episode   10 | step    9310 | avg reward (10)  -20.1 | epsilon 0.908 | loss 0.0000
+Episode   20 | step   18173 | avg reward (10)  -20.7 | epsilon 0.820 | loss 0.0029
+{"episode": 1, "seed": 100, "reward": -21.0, "length": 757, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": -21.0, "length": 762, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": -21.0, "length": 823, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": -21.0, "length": 759, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -21.0, "length": 822, "terminated": true, "truncated": false, "capped": false}
+Episode   30 | step   27592 | avg reward (10)  -20.2 | epsilon 0.727 | loss 0.0015
+Episode   40 | step   36743 | avg reward (10)  -20.2 | epsilon 0.636 | loss 0.0064
+Episode   50 | step   46958 | avg reward (10)  -20.0 | epsilon 0.535 | loss 0.0070
+{"episode": 1, "seed": 100, "reward": -20.0, "length": 1142, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": -20.0, "length": 1316, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": -20.0, "length": 1052, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": -21.0, "length": 1090, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -20.0, "length": 1160, "terminated": true, "truncated": false, "capped": false}
+Episode   60 | step   57255 | avg reward (10)  -20.3 | epsilon 0.433 | loss 0.0032
+Episode   70 | step   69361 | avg reward (10)  -19.0 | epsilon 0.313 | loss 0.0092
+{"episode": 1, "seed": 100, "reward": -16.0, "length": 1379, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": -15.0, "length": 1658, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": -15.0, "length": 1553, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": -20.0, "length": 999, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -19.0, "length": 1290, "terminated": true, "truncated": false, "capped": false}
+Episode   80 | step   83425 | avg reward (10)  -18.1 | epsilon 0.174 | loss 0.0043
+Episode   90 | step  100729 | avg reward (10)  -16.3 | epsilon 0.010 | loss 0.0030
+Episode  100 | step  120374 | avg reward (10)  -16.0 | epsilon 0.010 | loss 0.0030
+{"episode": 1, "seed": 100, "reward": -14.0, "length": 2697, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": -14.0, "length": 2660, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": -16.0, "length": 2143, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": -9.0, "length": 2942, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -9.0, "length": 3094, "terminated": true, "truncated": false, "capped": false}
+Episode  110 | step  147041 | avg reward (10)  -13.3 | epsilon 0.010 | loss 0.0022
+Episode  120 | step  173266 | avg reward (10)  -11.5 | epsilon 0.010 | loss 0.0017
+{"episode": 1, "seed": 100, "reward": -9.0, "length": 2643, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": -8.0, "length": 3872, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": -11.0, "length": 3105, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": -14.0, "length": 2655, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -10.0, "length": 2932, "terminated": true, "truncated": false, "capped": false}
+Episode  130 | step  202613 | avg reward (10)  -10.5 | epsilon 0.010 | loss 0.0016
+Episode  140 | step  234099 | avg reward (10)   -8.5 | epsilon 0.010 | loss 0.0021
+Episode  150 | step  269490 | avg reward (10)   -4.3 | epsilon 0.010 | loss 0.0008
+{"episode": 1, "seed": 100, "reward": -6.0, "length": 3128, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": 3.0, "length": 3511, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": 5.0, "length": 3270, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": -4.0, "length": 3048, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -2.0, "length": 4154, "terminated": true, "truncated": false, "capped": false}
+Episode  160 | step  306664 | avg reward (10)   -3.0 | epsilon 0.010 | loss 0.0018
+Episode  170 | step  338013 | avg reward (10)   -4.7 | epsilon 0.010 | loss 0.0037
+{"episode": 1, "seed": 100, "reward": -2.0, "length": 3537, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": -4.0, "length": 3157, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": 9.0, "length": 2911, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": -6.0, "length": 3081, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -3.0, "length": 3338, "terminated": true, "truncated": false, "capped": false}
+Episode  180 | step  370800 | avg reward (10)   -2.1 | epsilon 0.010 | loss 0.0011
+Episode  190 | step  401927 | avg reward (10)   -3.4 | epsilon 0.010 | loss 0.0013
+Episode  200 | step  434520 | avg reward (10)    2.5 | epsilon 0.010 | loss 0.0078
+{"episode": 1, "seed": 100, "reward": -3.0, "length": 3883, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": -1.0, "length": 3633, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": 13.0, "length": 2801, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": -1.0, "length": 3888, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -7.0, "length": 3066, "terminated": true, "truncated": false, "capped": false}
+Episode  210 | step  467503 | avg reward (10)    3.4 | epsilon 0.010 | loss 0.0027
+Episode  220 | step  499147 | avg reward (10)    4.3 | epsilon 0.010 | loss 0.0026
+{"episode": 1, "seed": 100, "reward": 4.0, "length": 3360, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": 14.0, "length": 2303, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": -6.0, "length": 2952, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": 7.0, "length": 3002, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -1.0, "length": 3638, "terminated": true, "truncated": false, "capped": false}
+Episode  230 | step  527320 | avg reward (10)    6.9 | epsilon 0.010 | loss 0.0024
+Episode  240 | step  556996 | avg reward (10)   -0.1 | epsilon 0.010 | loss 0.0015
+Episode  250 | step  589218 | avg reward (10)   -1.9 | epsilon 0.010 | loss 0.0128
+{"episode": 1, "seed": 100, "reward": 2.0, "length": 4117, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": 9.0, "length": 2812, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": 14.0, "length": 2651, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": 12.0, "length": 2469, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -1.0, "length": 3821, "terminated": true, "truncated": false, "capped": false}
+Episode  260 | step  619164 | avg reward (10)    3.6 | epsilon 0.010 | loss 0.0030
+Episode  270 | step  648192 | avg reward (10)    3.1 | epsilon 0.010 | loss 0.0049
+{"episode": 1, "seed": 100, "reward": -4.0, "length": 3381, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": 13.0, "length": 2592, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": 14.0, "length": 2325, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": 2.0, "length": 3338, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": 5.0, "length": 3139, "terminated": true, "truncated": false, "capped": false}
+Episode  280 | step  678449 | avg reward (10)    4.0 | epsilon 0.010 | loss 0.0011
+Episode  290 | step  707568 | avg reward (10)    8.6 | epsilon 0.010 | loss 0.0061
+Episode  300 | step  739013 | avg reward (10)    7.5 | epsilon 0.010 | loss 0.0033
+{"episode": 1, "seed": 100, "reward": 4.0, "length": 3316, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": 7.0, "length": 2974, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": 12.0, "length": 3255, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": 8.0, "length": 3376, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": 10.0, "length": 3064, "terminated": true, "truncated": false, "capped": false}
+Episode  310 | step  771246 | avg reward (10)    6.9 | epsilon 0.010 | loss 0.0005
+Episode  320 | step  804591 | avg reward (10)    4.5 | epsilon 0.010 | loss 0.0008
+{"episode": 1, "seed": 100, "reward": -8.0, "length": 2565, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": -8.0, "length": 2715, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": 10.0, "length": 3075, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": 1.0, "length": 3490, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": -1.0, "length": 3708, "terminated": true, "truncated": false, "capped": false}
+Episode  330 | step  836339 | avg reward (10)   -0.4 | epsilon 0.010 | loss 0.0021
+Episode  340 | step  868769 | avg reward (10)    5.4 | epsilon 0.010 | loss 0.0013
+Episode  350 | step  898040 | avg reward (10)   10.1 | epsilon 0.010 | loss 0.0008
+{"episode": 1, "seed": 100, "reward": 9.0, "length": 3429, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": 10.0, "length": 2685, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": 6.0, "length": 3152, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": 10.0, "length": 2633, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": 13.0, "length": 2921, "terminated": true, "truncated": false, "capped": false}
+Episode  360 | step  930495 | avg reward (10)    2.6 | epsilon 0.010 | loss 0.0013
+Episode  370 | step  960047 | avg reward (10)    7.9 | epsilon 0.010 | loss 0.0017
+{"episode": 1, "seed": 100, "reward": 16.0, "length": 2389, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": 20.0, "length": 2145, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": 7.0, "length": 3182, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": 16.0, "length": 2502, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": 10.0, "length": 3272, "terminated": true, "truncated": false, "capped": false}
+Episode  380 | step  990349 | avg reward (10)    9.9 | epsilon 0.010 | loss 0.0027
+Training finished. Model saved to models/Samuel/full_20261113/latest.pth
+{"episode": 1, "seed": 100, "reward": 8.0, "length": 3047, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 101, "reward": 10.0, "length": 2820, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 102, "reward": 13.0, "length": 2539, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 103, "reward": 9.0, "length": 2897, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 104, "reward": 11.0, "length": 2872, "terminated": true, "truncated": false, "capped": false}
+{"episode": 1, "seed": 1000, "reward": 4.0, "length": 3348, "terminated": true, "truncated": false, "capped": false}
+{"episode": 2, "seed": 1001, "reward": 13.0, "length": 2819, "terminated": true, "truncated": false, "capped": false}
+{"episode": 3, "seed": 1002, "reward": 14.0, "length": 2707, "terminated": true, "truncated": false, "capped": false}
+{"episode": 4, "seed": 1003, "reward": 7.0, "length": 3255, "terminated": true, "truncated": false, "capped": false}
+{"episode": 5, "seed": 1004, "reward": 13.0, "length": 2526, "terminated": true, "truncated": false, "capped": false}
+{"episode": 6, "seed": 1005, "reward": 9.0, "length": 3002, "terminated": true, "truncated": false, "capped": false}
+{"episode": 7, "seed": 1006, "reward": 17.0, "length": 2178, "terminated": true, "truncated": false, "capped": false}
+{"episode": 8, "seed": 1007, "reward": 15.0, "length": 3033, "terminated": true, "truncated": false, "capped": false}
+{"episode": 9, "seed": 1008, "reward": 9.0, "length": 3174, "terminated": true, "truncated": false, "capped": false}
+{"episode": 10, "seed": 1009, "reward": 12.0, "length": 2822, "terminated": true, "truncated": false, "capped": false}
+{"episode": 11, "seed": 1010, "reward": 16.0, "length": 2478, "terminated": true, "truncated": false, "capped": false}
+{"episode": 12, "seed": 1011, "reward": 7.0, "length": 3010, "terminated": true, "truncated": false, "capped": false}
+{"episode": 13, "seed": 1012, "reward": 17.0, "length": 2385, "terminated": true, "truncated": false, "capped": false}
+{"episode": 14, "seed": 1013, "reward": 11.0, "length": 3013, "terminated": true, "truncated": false, "capped": false}
+{"episode": 15, "seed": 1014, "reward": 11.0, "length": 3348, "terminated": true, "truncated": false, "capped": false}
+{"episode": 16, "seed": 1015, "reward": 15.0, "length": 2548, "terminated": true, "truncated": false, "capped": false}
+{"episode": 17, "seed": 1016, "reward": -2.0, "length": 3549, "terminated": true, "truncated": false, "capped": false}
+{"episode": 18, "seed": 1017, "reward": 13.0, "length": 3119, "terminated": true, "truncated": false, "capped": false}
+{"episode": 19, "seed": 1018, "reward": 9.0, "length": 3196, "terminated": true, "truncated": false, "capped": false}
+{"episode": 20, "seed": 1019, "reward": 15.0, "length": 2410, "terminated": true, "truncated": false, "capped": false}
+{"episode": 1, "seed": 1000, "reward": 4.0, "length": 3348, "terminated": true, "truncated": false, "capped": false}
+Saved plots to plots/Samuel/full_20261113/

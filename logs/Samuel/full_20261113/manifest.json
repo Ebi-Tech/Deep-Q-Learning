@@ -1,0 +1,39 @@
+{
+  "settings": {
+    "member": "Samuel/full_20261113",
+    "experiment": 11,
+    "model_path": "models/Samuel/full_20261113/latest.pth",
+    "learning_rate": 0.0001,
+    "gamma": 0.99,
+    "batch_size": 32,
+    "epsilon_start": 1.0,
+    "epsilon_end": 0.01,
+    "epsilon_decay_steps": 100000,
+    "total_steps": 1000000,
+    "buffer_size": 50000,
+    "learning_starts": 10000,
+    "train_every": 1,
+    "target_update_every": 1000,
+    "save_every_episodes": 25
+  },
+  "device": "mps",
+  "launcher": {
+    "run_id": "full_20261113",
+    "steps": 1000000,
+    "device": "mps",
+    "buffer_size": 50000,
+    "batch_size": 32,
+    "learning_starts": 10000,
+    "save_every_episodes": 25,
+    "checkpoint_eval_episodes": 5,
+    "final_eval_episodes": 20,
+    "threads": 2
+  },
+  "torch": "2.15.0",
+  "training_seed": 0,
+  "source_sha256": {
+    "train.py": "ef6b8dafaf62b11928c31a4e6d737e67ee81771c4508781574e2f0b50f86e125",
+    "play.py": "345a3a011f247df34e58dfa721ea9997c0d084df1b7563c10cc1ac86f7516291",
+    "run_long_samuel.py": "4df94008400267b06d70d204706f2d3796d1f4bba744dc9db76575d627cdb003"
+  }
+}
