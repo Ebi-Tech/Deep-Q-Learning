@@ -22,6 +22,10 @@
 
 ## Training Results
 
+[Full-length GPU baseline workflow](docs/Samuel_full_training.md): a separate
+1,000,000-step run trains every step, evaluates checkpoints, and performs an
+independent final evaluation. Its results are separate from the pilots below.
+
 [Samuel’s rerun results](SamuelHyperparameter_experiment_results.md) use the
 merged `main` code. All ten pilots completed 20,000 decisions each, with five
 greedy evaluation episodes per model. The highest observed mean was experiment

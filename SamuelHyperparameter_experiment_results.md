@@ -54,3 +54,14 @@ indicate weak gameplay, not a Python exception. More training is needed.
 
 [Original pilot report](logs/Samuel/pilot_20261112_results.md) and its raw CSVs,
 models, plots, and video were preserved rather than overwritten.
+
+## Separate full-length baseline
+
+A separate one-million-step baseline uses run ID `full_20261113`, training every
+step on Apple MPS with the shared baseline settings. The ten rows above remain
+short pilot results. Live local progress and the eventual evaluated result are
+in `logs/Samuel/full_20261113/report.md` and `status.json`. No full-run score is
+claimed here before the independent evaluation completes.
+
+See [full-training workflow](docs/Samuel_full_training.md) for settings,
+checkpoint selection and final evaluation details.
