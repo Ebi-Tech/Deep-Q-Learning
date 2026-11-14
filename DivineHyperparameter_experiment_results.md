@@ -8,8 +8,8 @@
 | 4 | 0.0005 | 0.99 | 32 | 1.0 | 0.01 | 100000 | Same unstable pattern as Exp 3, slightly better on average. It reached +19 in single episodes but also dropped to -11 in the same period. Last 100 episodes average: +5.52. Still far below the baseline, and too noisy to be reliable. |
 | 5 | 0.001 | 0.99 | 32 | 1.0 | 0.01 | 100000 | Worst run. Training loss was 5 to 10 times higher than the other runs, and the agent stayed between about -15 and -5 for most of training. It won its first game only at 725k steps. Last 100 episodes average: -8.04. The learning rate was too high, so training was unstable from the start. |
 | 6 | 0.0001 | 0.95 | 32 | 1.0 | 0.01 | 100000 | Learned, but slower than the baseline. It became positive around 500k steps and only reached +5 to +13 in the last 200k. Last 100 episodes average: +2.77. With gamma 0.95 the agent only values rewards about 20 steps ahead, which is shorter than a rally, so linking a hit to a point was harder. |
-| 7 | | | | | | | |
-| 8 | | | | | | | |
+| 7 | 0.0001 | 0.9 | 32 | 1.0 | 0.01 | 100000 | Slowest run of the set. It stayed below -10 until about 500k steps and won its first game only at 668k. Last 100 episodes average: -4.52. With gamma 0.9 the agent only values about 10 steps ahead, far less than one rally, so it almost cannot connect hitting the ball with scoring. |
+| 8 | 0.0001 | 0.999 | 32 | 1.0 | 0.01 | 100000 | Learned faster than the baseline at first, positive by 290k steps and often scoring +10 to +17 between 450k and 650k. Then it slipped back, ending with many games near 0. Last 100 episodes average: +3.84. A very long horizon speeds up early learning but makes the targets noisier, so the policy was less stable late in training. |
 | 9 | | | | | | | |
 | 10 | | | | | | | |
 

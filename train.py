@@ -90,6 +90,7 @@ class QNetwork(nn.Module):
     """
 
     def __init__(self, n_actions):
+        # Help identify patterns in the input images, like the ball and paddles, and their movement
         super().__init__()
         self.conv = nn.Sequential(
             nn.Conv2d(4, 32, kernel_size=8, stride=4),
@@ -100,18 +101,21 @@ class QNetwork(nn.Module):
             nn.ReLU(),
             nn.Flatten(),
         )
+        # Helps at decision stage, connecting every input number to every output number, allowing for more complex decision making
         self.fc = nn.Sequential(
             nn.Linear(3136, 512),
             nn.ReLU(),
             nn.Linear(512, n_actions),
+            # No activation here, because we want the raw Q-values for each action. Using Relu here, our agent can't tell bad from very bad
         )
+        # He init added here, to keep our weight from disappearing . For us, it was was diappearing, so this helped us increase the difference between good and bad actions, between two screens, allowing our agent to learn faster
         for layer in self.modules():
             if isinstance(layer, (nn.Conv2d, nn.Linear)):
-                nn.init.kaiming_normal_(layer.weight, nonlinearity="relu")
+                nn.init.kaiming_normal_(layer.weight, nonlinearity="relu") # Tahn works as well, just not better than relu, so we use relu. We can also use leaky relu, but that is more complex and not needed for our case
                 nn.init.zeros_(layer.bias)
 
     def forward(self, obs):
-        x = obs.float() / 255.0
+        x = obs.float() / 255.0 # Our network will train better with samll inputs. This makes it between 0 and 1.
         return self.fc(self.conv(x))
 
 
@@ -126,7 +130,7 @@ def create_networks(n_actions):
     online_net = QNetwork(n_actions).to(DEVICE)
     target_net = QNetwork(n_actions).to(DEVICE)
     target_net.load_state_dict(online_net.state_dict())
-    target_net.eval()
+    target_net.eval() 
     return online_net, target_net
 
 
