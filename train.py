@@ -213,7 +213,7 @@ def train_step(online_net, target_net, optimizer, batch, gamma):
     q = online_net(states).gather(1, actions.unsqueeze(1)).squeeze(1)
     with torch.no_grad():
         next_q = target_net(next_states).max(dim=1).values
-        target = rewards + gamma * next_q * (1.0 - dones)
+        target = rewards + gamma * next_q * (1.0 - dones) # game ends, agent need to know.
     loss = F.smooth_l1_loss(q, target)
     optimizer.zero_grad()
     loss.backward()
