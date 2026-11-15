@@ -1,3 +1,9 @@
 .venv/
 __pycache__/
 .DS_Store
+.samuel-runtime/
+
+# Local notebook execution state and duplicate download archive
+notebooks/Samuel_notebook_execution.log
+notebooks/Samuel_notebook_execution.json
+Samuel_results_*.zip

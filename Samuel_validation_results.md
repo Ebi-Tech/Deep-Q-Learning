@@ -1,5 +1,29 @@
 # Samuel: DQN integration validation
 
+## Current status — 15 November 2026
+
+All ten 1,000,000-step experiments in the [presentation notebook](notebooks/Samuel_DQN_experiments.ipynb)
+are complete, and the notebook runs end to end. The best model (experiment 8) is
+exported as the root `dqn_model.pth`. The dated sections further below are the
+earlier validation history.
+
+| Samuel responsibility | Current evidence |
+|---|---|
+| DQN training step and target synchronization | Sampled-batch interface, detached Bellman targets, Huber loss, gradient clipping and frozen target network; regression checks recorded below |
+| Logging and checkpoint saving | Episode CSVs, atomic weight saving, selected and final checkpoints; root `dqn_model.pth` exports the selected model |
+| Playback | `uv run play.py` loads the selected model for one greedy live episode; `--headless` supports automated evaluation |
+| Architecture diagram | [Shapes, ownership and diagram](docs/Samuel_architecture.md), with PNG and SVG exports |
+| Gameplay video | [Experiment 8 episode](Samuel_outputs_notebook_batch_epsilon_01/gameplay.mp4): seed 2000, return +13 |
+| Ten hyperparameter experiments | Ten configurations, 1,000,000 steps each; best (experiment 8) independent mean +15.25, 20/20 wins; [results and interpretation](SamuelHyperparameter_experiment_results.md) |
+
+The latest recorded validation includes ten passing regression tests and a
+separate 1,100-step MPS workflow check. These are previous measured checks,
+not new training runs performed for this documentation update. Live presentation,
+individual explanation and any team submission paperwork still require the
+team's participation; saved artifacts do not establish those requirements.
+
+## Historical initial validation — 10 November 2026
+
 Validated on 10 November 2026 on branch `samuel`, against source commit
 `e6f77f8`. These are smoke tests of the existing implementation, not the
 ten hyperparameter experiments or evidence of a trained Pong policy.
@@ -51,7 +75,7 @@ Training completed and saved its final model. All four plot outputs were
 successfully generated from this five-episode CSV. The negative rewards do
 not demonstrate a successful policy.
 
-## Outstanding work and observed issue
+## Historical outstanding work and observed issue (resolved below)
 
 - `plot_results.py` fails on a one-episode CSV with
   `TypeError: len() of unsized object`. Multi-episode plotting passed.
@@ -65,3 +89,32 @@ not demonstrate a successful policy.
 Temporary logs, models, and plots were produced outside the repository at
 `/private/tmp/samuel-dqn-check-rssxe52i`. They are machine-local test artifacts,
 not committed deliverables, and may be removed by temporary-file cleanup.
+
+## Implementation follow-up — 12 November 2026
+
+The outstanding list above describes the original 10 November review. Samuel's
+implementation is now committed in `04328ef`:
+
+- `train_step` validates replay readiness, rejects non-finite loss/gradients,
+  retains vanilla DQN Bellman targets and Huber loss, and updates only the online network.
+- `sync_target` also freezes target parameters and enforces evaluation mode.
+- CSV logging retains full numeric precision and refuses to overwrite prior runs.
+- Checkpoint saving creates destination directories and atomically replaces weights;
+  a simulated failed write verified that the previous checkpoint survives.
+- `play.py` loads compatible weights, evaluates seeded episodes, reports step caps,
+  and records actual gameplay to MP4. No generated or simulated gameplay footage is used.
+- Four regression tests passed: exact terminal/nonterminal Bellman targets and
+  target isolation; non-finite update rejection; CSV schema/precision and overwrite
+  protection; atomic-save failure recovery and checkpoint reload.
+- Divine's settings/environment/CNN and Gabriel's replay/main-loop code were verified
+  unchanged. Gabriel's one-episode plotting issue remains unchanged.
+
+## Current code validation — 15 November 2026
+
+Samuel's training step uses main's sampled-batch and gamma interface, and atomic
+saving honors `--model_path`. All ten regression tests in `tests/test_samuel.py`
+pass. `uv run play.py` loads the root `dqn_model.pth` (experiment 8) and plays one
+greedy episode with a live window; `--headless` evaluates without a window and
+`--video` records an MP4. A headless check on seed 1000 returned +16, matching the
+independent test. Results for the ten experiments are in
+[SamuelHyperparameter_experiment_results.md](SamuelHyperparameter_experiment_results.md).

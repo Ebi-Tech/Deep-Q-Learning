@@ -1,0 +1,24 @@
+{
+  "status": "provisional",
+  "combined": {
+    "batch_size": 8,
+    "epsilon_start": 0.5
+  },
+  "rule": "best batch size and best epsilon start by last-100 training mean",
+  "started_before": [
+    "experiment 5 finished (62%, last-10 -5.8)",
+    "experiment 8 finished (70%)",
+    "experiment 9 finished (3%, paused)"
+  ],
+  "batch_evidence": {
+    "exp1 (32)": 6.39,
+    "exp2 (8)": 6.73,
+    "exp3 (16)": 1.87,
+    "exp4 (64)": 3.91
+  },
+  "epsilon_evidence": {
+    "exp1 (1.0)": 6.39,
+    "exp8 (0.5)": "last-10 training mean +12.9 at 70%"
+  },
+  "note": "Chosen at 13:12 on 15 Nov 2026 to meet a deadline; rerun if exp 5 or exp 9 changes the ranking."
+}
