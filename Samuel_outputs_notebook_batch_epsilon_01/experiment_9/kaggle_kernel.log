@@ -1,0 +1,178 @@
+[{"stream_name":"stdout","time":6.77195388,"data":"Kaggle GPU: Tesla T4\n"}
+,{"stream_name":"stdout","time":6.772003882,"data":"$ pip -q install uv\n"}
+,{"stream_name":"stdout","time":10.855847924,"data":"$ rm -rf /kaggle/working/Deep-Q-Learning \u0026\u0026 git clone -q --branch samuel https://github.com/Ebi-Tech/Deep-Q-Learning /kaggle/working/Deep-Q-Learning\n"}
+,{"stream_name":"stdout","time":25.598185491,"data":"$ git checkout -q b09aa8fb96c24f14830507bbc93cf2d4bf57dffa \u0026\u0026 git log -1 --oneline\n"}
+,{"stream_name":"stdout","time":26.008473908,"data":"b09aa8f Correct Samuel submission export, live playback, and experiment documentation\n"}
+,{"stream_name":"stdout","time":26.008835576,"data":"$ uv sync --locked\n"}
+,{"stream_name":"stderr","time":26.370181475,"data":"Downloading cpython-3.11.18-linux-x86_64-gnu (download) (29.4MiB)\n"}
+,{"stream_name":"stderr","time":27.323038060000002,"data":" Downloaded cpython-3.11.18-linux-x86_64-gnu (download)\n"}
+,{"stream_name":"stderr","time":27.484310665,"data":"Using CPython 3.11.18\n"}
+,{"stream_name":"stderr","time":27.484337482,"data":"Creating virtual environment at: .venv\n"}
+,{"stream_name":"stderr","time":27.488662635,"data":"Resolved 51 packages in 1ms\n"}
+,{"stream_name":"stderr","time":27.539923124,"data":"Downloading numpy (16.1MiB)\n"}
+,{"stream_name":"stderr","time":27.540382423,"data":"Downloading pillow (6.8MiB)\n"}
+,{"stream_name":"stderr","time":27.556396092,"data":"Downloading nvidia-cuda-runtime (2.2MiB)\n"}
+,{"stream_name":"stderr","time":27.556654571,"data":"Downloading nvidia-cublas (386.1MiB)\n"}
+,{"stream_name":"stderr","time":27.556924891,"data":"Downloading kiwisolver (1.4MiB)\n"}
+,{"stream_name":"stderr","time":27.557185795,"data":"Downloading nvidia-nccl-cu13 (206.0MiB)\n"}
+,{"stream_name":"stderr","time":27.557421914,"data":"Downloading sympy (6.0MiB)\n"}
+,{"stream_name":"stderr","time":27.557888092,"data":"Downloading ale-py (3.0MiB)\n"}
+,{"stream_name":"stderr","time":27.557989175,"data":"Downloading matplotlib (9.4MiB)\n"}
+,{"stream_name":"stderr","time":27.558836483,"data":"Downloading nvidia-cudnn-cu13 (495.1MiB)\n"}
+,{"stream_name":"stderr","time":27.558941924,"data":"Downloading nvidia-cufft (208.1MiB)\n"}
+,{"stream_name":"stderr","time":27.559504637,"data":"Downloading fonttools (5.2MiB)\n"}
+,{"stream_name":"stderr","time":27.559819822,"data":"Downloading nvidia-cusparse (144.0MiB)\n"}
+,{"stream_name":"stderr","time":27.560225639,"data":"Downloading nvidia-cuda-cupti (11.4MiB)\n"}
+,{"stream_name":"stderr","time":27.560598507999998,"data":"Downloading nvidia-cuda-nvrtc (44.8MiB)\n"}
+,{"stream_name":"stderr","time":27.560964241,"data":"Downloading networkx (2.0MiB)\n"}
+,{"stream_name":"stderr","time":27.561307043,"data":"Downloading nvidia-cuda-cccl (3.9MiB)\n"}
+,{"stream_name":"stderr","time":27.561603035,"data":"Downloading nvidia-cusolver (217.4MiB)\n"}
+,{"stream_name":"stderr","time":27.561904124,"data":"Downloading cuda-bindings (8.0MiB)\n"}
+,{"stream_name":"stderr","time":27.562242664,"data":"Downloading nvidia-nvshmem-cu13 (129.1MiB)\n"}
+,{"stream_name":"stderr","time":27.562547747,"data":"Downloading torch (514.2MiB)\n"}
+,{"stream_name":"stderr","time":27.562825487,"data":"Downloading opencv-python (60.1MiB)\n"}
+,{"stream_name":"stderr","time":27.563352849,"data":"Downloading nvidia-nvjitlink (44.5MiB)\n"}
+,{"stream_name":"stderr","time":27.563664095,"data":"Downloading nvidia-cusparselt-cu13 (162.3MiB)\n"}
+,{"stream_name":"stderr","time":27.564136495,"data":"Downloading nvidia-cufile (1.3MiB)\n"}
+,{"stream_name":"stderr","time":27.565553302,"data":"Downloading triton (272.5MiB)\n"}
+,{"stream_name":"stderr","time":28.050256799,"data":" Downloaded nvidia-cufile\n"}
+,{"stream_name":"stderr","time":28.076210611,"data":" Downloaded kiwisolver\n"}
+,{"stream_name":"stderr","time":28.218220143,"data":" Downloaded networkx\n"}
+,{"stream_name":"stderr","time":28.286655513,"data":" Downloaded nvidia-cuda-runtime\n"}
+,{"stream_name":"stderr","time":28.492941462,"data":" Downloaded ale-py\n"}
+,{"stream_name":"stderr","time":28.713876671,"data":" Downloaded nvidia-cuda-cccl\n"}
+,{"stream_name":"stderr","time":29.00467099,"data":" Downloaded fonttools\n"}
+,{"stream_name":"stderr","time":29.187922857,"data":" Downloaded sympy\n"}
+,{"stream_name":"stderr","time":29.355263956,"data":" Downloaded pillow\n"}
+,{"stream_name":"stderr","time":29.592436988,"data":" Downloaded cuda-bindings\n"}
+,{"stream_name":"stderr","time":29.822034617,"data":" Downloaded matplotlib\n"}
+,{"stream_name":"stderr","time":30.15146591,"data":" Downloaded nvidia-cuda-cupti\n"}
+,{"stream_name":"stderr","time":32.394379743,"data":" Downloaded numpy\n"}
+,{"stream_name":"stderr","time":35.223743278,"data":" Downloaded nvidia-nvjitlink\n"}
+,{"stream_name":"stderr","time":35.238697031,"data":" Downloaded nvidia-cuda-nvrtc\n"}
+,{"stream_name":"stderr","time":39.09417337,"data":" Downloaded opencv-python\n"}
+,{"stream_name":"stderr","time":46.526203099,"data":" Downloaded nvidia-nvshmem-cu13\n"}
+,{"stream_name":"stderr","time":48.008284207,"data":" Downloaded nvidia-cusparse\n"}
+,{"stream_name":"stderr","time":49.711012493,"data":" Downloaded nvidia-cusparselt-cu13\n"}
+,{"stream_name":"stderr","time":52.960183765,"data":" Downloaded nvidia-nccl-cu13\n"}
+,{"stream_name":"stderr","time":53.088368412,"data":" Downloaded nvidia-cufft\n"}
+,{"stream_name":"stderr","time":53.544946167,"data":" Downloaded nvidia-cusolver\n"}
+,{"stream_name":"stderr","time":57.390638432,"data":" Downloaded triton\n"}
+,{"stream_name":"stderr","time":63.12134692,"data":" Downloaded nvidia-cublas\n"}
+,{"stream_name":"stderr","time":65.227513037,"data":" Downloaded nvidia-cudnn-cu13\n"}
+,{"stream_name":"stderr","time":65.681153348,"data":" Downloaded torch\n"}
+,{"stream_name":"stderr","time":65.681543232,"data":"Prepared 45 packages in 38.19s\n"}
+,{"stream_name":"stderr","time":65.685181576,"data":"warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.\n"}
+,{"stream_name":"stderr","time":65.685197134,"data":"         If the cache and target directories are on different filesystems, hardlinking may not be supported.\n"}
+,{"stream_name":"stderr","time":65.685202876,"data":"         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.\n"}
+,{"stream_name":"stderr","time":83.346153491,"data":"Installed 45 packages in 17.66s\n"}
+,{"stream_name":"stderr","time":83.346291448,"data":" + ale-py==0.12.1\n"}
+,{"stream_name":"stderr","time":83.34638481,"data":" + cloudpickle==3.1.2\n"}
+,{"stream_name":"stderr","time":83.34823117,"data":" + contourpy==1.3.3\n"}
+,{"stream_name":"stderr","time":83.34825739,"data":" + cuda-bindings==13.5.0\n"}
+,{"stream_name":"stderr","time":83.348264657,"data":" + cuda-pathfinder==1.8.5\n"}
+,{"stream_name":"stderr","time":83.348284356,"data":" + cuda-toolkit==13.2.2\n"}
+,{"stream_name":"stderr","time":83.34829037,"data":" + cycler==0.12.1\n"}
+,{"stream_name":"stderr","time":83.348295748,"data":" + farama-notifications==0.0.6\n"}
+,{"stream_name":"stderr","time":83.348301095,"data":" + filelock==4.2.9\n"}
+,{"stream_name":"stderr","time":83.348306065,"data":" + fonttools==4.68.0\n"}
+,{"stream_name":"stderr","time":83.34832092,"data":" + fsspec==2026.9.0\n"}
+,{"stream_name":"stderr","time":83.348325218,"data":" + gymnasium==1.4.0\n"}
+,{"stream_name":"stderr","time":83.348329282,"data":" + jinja2==3.1.6\n"}
+,{"stream_name":"stderr","time":83.348333346,"data":" + kiwisolver==1.5.1\n"}
+,{"stream_name":"stderr","time":83.348337431,"data":" + markupsafe==3.0.4\n"}
+,{"stream_name":"stderr","time":83.348341087,"data":" + matplotlib==3.11.2\n"}
+,{"stream_name":"stderr","time":83.348344441,"data":" + mpmath==1.3.0\n"}
+,{"stream_name":"stderr","time":83.348348928,"data":" + networkx==3.6.1\n"}
+,{"stream_name":"stderr","time":83.348352973,"data":" + numpy==2.4.6\n"}
+,{"stream_name":"stderr","time":83.348356891,"data":" + nvidia-cublas==13.4.1.3\n"}
+,{"stream_name":"stderr","time":83.34836094,"data":" + nvidia-cuda-cccl==13.3.5.0.6\n"}
+,{"stream_name":"stderr","time":83.348365544,"data":" + nvidia-cuda-cupti==13.2.86\n"}
+,{"stream_name":"stderr","time":83.348369671,"data":" + nvidia-cuda-nvrtc==13.2.86\n"}
+,{"stream_name":"stderr","time":83.348373723,"data":" + nvidia-cuda-runtime==13.2.86\n"}
+,{"stream_name":"stderr","time":83.348378011,"data":" + nvidia-cudnn-cu13==9.26.0.51\n"}
+,{"stream_name":"stderr","time":83.34838194700001,"data":" + nvidia-cufft==12.2.0.57\n"}
+,{"stream_name":"stderr","time":83.348386143,"data":" + nvidia-cufile==1.17.1.22\n"}
+,{"stream_name":"stderr","time":83.348390693,"data":" + nvidia-cusolver==12.2.0.11\n"}
+,{"stream_name":"stderr","time":83.348394592,"data":" + nvidia-cusparse==12.7.10.12\n"}
+,{"stream_name":"stderr","time":83.348398519,"data":" + nvidia-cusparselt-cu13==0.8.1\n"}
+,{"stream_name":"stderr","time":83.348405819,"data":" + nvidia-nccl-cu13==2.30.7\n"}
+,{"stream_name":"stderr","time":83.348409624,"data":" + nvidia-nvjitlink==13.5.37\n"}
+,{"stream_name":"stderr","time":83.348413791,"data":" + nvidia-nvshmem-cu13==3.7.2\n"}
+,{"stream_name":"stderr","time":83.348418274,"data":" + nvidia-nvtx==13.2.86\n"}
+,{"stream_name":"stderr","time":83.348422478,"data":" + opencv-python==4.11.0.86\n"}
+,{"stream_name":"stderr","time":83.348426604,"data":" + packaging==26.3\n"}
+,{"stream_name":"stderr","time":83.348430885,"data":" + pillow==13.0.0\n"}
+,{"stream_name":"stderr","time":83.348436542,"data":" + pyparsing==3.3.3\n"}
+,{"stream_name":"stderr","time":83.34845489,"data":" + python-dateutil==4.0.0\n"}
+,{"stream_name":"stderr","time":83.348459636,"data":" + setuptools==84.2.1\n"}
+,{"stream_name":"stderr","time":83.348474309,"data":" + sympy==1.14.0\n"}
+,{"stream_name":"stderr","time":83.348561396,"data":" + torch==2.15.0\n"}
+,{"stream_name":"stderr","time":83.348643427,"data":" + triton==3.9.0\n"}
+,{"stream_name":"stderr","time":83.3487546,"data":" + typing-extensions==4.16.0\n"}
+,{"stream_name":"stderr","time":83.348771816,"data":" + tzdata==2026.6\n"}
+,{"stream_name":"stdout","time":83.353431238,"data":"$ uv run python -c \"import torch; assert torch.cuda.is_available(); torch.zeros(1).cuda(); print('uv torch', torch.__version__, 'GPU OK', torch.cuda.get_device_name(0))\"\n"}
+,{"stream_name":"stdout","time":88.91719534,"data":"uv torch 2.15.0+cu132 GPU OK Tesla T4\n"}
+,{"stream_name":"stdout","time":89.994547583,"data":"$ uv run train.py --member Samuel/notebook_batch_epsilon_01 --experiment 9 --total_steps 1000000 --buffer_size 50000 --learning_starts 10000 --train_every 1 --target_update_every 1000 --learning_rate 0.0001 --gamma 0.99 --batch_size 32 --epsilon_start 0.75 --epsilon_end 0.01 --epsilon_decay_steps 100000 2\u003e\u00261 | tee /kaggle/working/training_console_exp9.log; test ${PIPESTATUS[0]} -eq 0\n"}
+,{"stream_name":"stdout","time":92.178111499,"data":"A.L.E: Arcade Learning Environment (version 0.12.1+8a8fafb)\n"}
+,{"stream_name":"stdout","time":92.178139308,"data":"[Powered by Stella]\n"}
+,{"stream_name":"stdout","time":6600.240581128,"data":"Device: cuda | Member: Samuel/notebook_batch_epsilon_01 | Experiment: 9\n"}
+,{"stream_name":"stdout","time":6600.240625663,"data":"Episode   10 | step    8524 | avg reward (10)  -20.7 | epsilon 0.687 | loss 0.0000\n"}
+,{"stream_name":"stdout","time":6600.240631243,"data":"Episode   20 | step   17080 | avg reward (10)  -20.6 | epsilon 0.624 | loss 0.0030\n"}
+,{"stream_name":"stdout","time":6600.24063582,"data":"Episode   30 | step   26364 | avg reward (10)  -20.8 | epsilon 0.555 | loss 0.0011\n"}
+,{"stream_name":"stdout","time":6600.240640415,"data":"Episode   40 | step   36035 | avg reward (10)  -19.9 | epsilon 0.483 | loss 0.0032\n"}
+,{"stream_name":"stdout","time":6600.240645534,"data":"Episode   50 | step   46299 | avg reward (10)  -19.7 | epsilon 0.407 | loss 0.0025\n"}
+,{"stream_name":"stdout","time":6600.240649539,"data":"Episode   60 | step   57457 | avg reward (10)  -20.2 | epsilon 0.325 | loss 0.0048\n"}
+,{"stream_name":"stdout","time":6600.240653743,"data":"Episode   70 | step   71597 | avg reward (10)  -18.1 | epsilon 0.220 | loss 0.0020\n"}
+,{"stream_name":"stdout","time":6600.240658028,"data":"Episode   80 | step   88631 | avg reward (10)  -17.0 | epsilon 0.094 | loss 0.0035\n"}
+,{"stream_name":"stdout","time":6600.240662377,"data":"Episode   90 | step  109545 | avg reward (10)  -15.4 | epsilon 0.010 | loss 0.0044\n"}
+,{"stream_name":"stdout","time":6600.240666709,"data":"Episode  100 | step  130041 | avg reward (10)  -15.2 | epsilon 0.010 | loss 0.0070\n"}
+,{"stream_name":"stdout","time":6600.240671503,"data":"Episode  110 | step  153832 | avg reward (10)  -12.1 | epsilon 0.010 | loss 0.0024\n"}
+,{"stream_name":"stdout","time":6600.240675812,"data":"Episode  120 | step  177640 | avg reward (10)  -11.5 | epsilon 0.010 | loss 0.0018\n"}
+,{"stream_name":"stdout","time":6600.24068031,"data":"Episode  130 | step  204258 | avg reward (10)   -8.8 | epsilon 0.010 | loss 0.0021\n"}
+,{"stream_name":"stdout","time":6600.240684741,"data":"Episode  140 | step  231030 | avg reward (10)   -9.0 | epsilon 0.010 | loss 0.0057\n"}
+,{"stream_name":"stdout","time":6600.240689166,"data":"Episode  150 | step  261102 | avg reward (10)   -3.1 | epsilon 0.010 | loss 0.0060\n"}
+,{"stream_name":"stdout","time":6600.240693449,"data":"Episode  160 | step  292625 | avg reward (10)   -3.0 | epsilon 0.010 | loss 0.0042\n"}
+,{"stream_name":"stdout","time":6600.240697939,"data":"Episode  170 | step  326233 | avg reward (10)    2.8 | epsilon 0.010 | loss 0.0015\n"}
+,{"stream_name":"stdout","time":6600.240702175,"data":"Episode  180 | step  356028 | avg reward (10)    5.8 | epsilon 0.010 | loss 0.0027\n"}
+,{"stream_name":"stdout","time":6600.240706709,"data":"Episode  190 | step  385132 | avg reward (10)    7.3 | epsilon 0.010 | loss 0.0014\n"}
+,{"stream_name":"stdout","time":6600.240711113,"data":"Episode  200 | step  415314 | avg reward (10)    7.9 | epsilon 0.010 | loss 0.0007\n"}
+,{"stream_name":"stdout","time":6600.240715215,"data":"Episode  210 | step  441462 | avg reward (10)   10.4 | epsilon 0.010 | loss 0.0018\n"}
+,{"stream_name":"stdout","time":6600.240719287,"data":"Episode  220 | step  467112 | avg reward (10)   11.3 | epsilon 0.010 | loss 0.0011\n"}
+,{"stream_name":"stdout","time":6600.240723664,"data":"Episode  230 | step  495257 | avg reward (10)    9.4 | epsilon 0.010 | loss 0.0016\n"}
+,{"stream_name":"stdout","time":6600.240729825,"data":"Episode  240 | step  521697 | avg reward (10)    8.4 | epsilon 0.010 | loss 0.0016\n"}
+,{"stream_name":"stdout","time":6600.240744619,"data":"Episode  250 | step  547583 | avg reward (10)    9.8 | epsilon 0.010 | loss 0.0011\n"}
+,{"stream_name":"stdout","time":6600.240748336,"data":"Episode  260 | step  572675 | avg reward (10)   10.2 | epsilon 0.010 | loss 0.0012\n"}
+,{"stream_name":"stdout","time":6600.240751662,"data":"Episode  270 | step  598916 | avg reward (10)   10.1 | epsilon 0.010 | loss 0.0017\n"}
+,{"stream_name":"stdout","time":6600.240755074,"data":"Episode  280 | step  624634 | avg reward (10)    9.2 | epsilon 0.010 | loss 0.0015\n"}
+,{"stream_name":"stdout","time":6600.240758529,"data":"Episode  290 | step  647153 | avg reward (10)   13.7 | epsilon 0.010 | loss 0.0017\n"}
+,{"stream_name":"stdout","time":6600.240761826,"data":"Episode  300 | step  668956 | avg reward (10)   14.8 | epsilon 0.010 | loss 0.0004\n"}
+,{"stream_name":"stdout","time":6600.240765897,"data":"Episode  310 | step  692760 | avg reward (10)   13.1 | epsilon 0.010 | loss 0.0013\n"}
+,{"stream_name":"stdout","time":6600.24076928,"data":"Episode  320 | step  714389 | avg reward (10)   15.7 | epsilon 0.010 | loss 0.0021\n"}
+,{"stream_name":"stdout","time":6600.240773061,"data":"Episode  330 | step  736628 | avg reward (10)   14.4 | epsilon 0.010 | loss 0.0009\n"}
+,{"stream_name":"stdout","time":6600.24077685,"data":"Episode  340 | step  759966 | avg reward (10)   12.9 | epsilon 0.010 | loss 0.0004\n"}
+,{"stream_name":"stdout","time":6600.240780795,"data":"Episode  350 | step  782952 | avg reward (10)   13.0 | epsilon 0.010 | loss 0.0006\n"}
+,{"stream_name":"stdout","time":6600.240784223,"data":"Episode  360 | step  807090 | avg reward (10)   12.7 | epsilon 0.010 | loss 0.0009\n"}
+,{"stream_name":"stdout","time":6600.240787576,"data":"Episode  370 | step  830880 | avg reward (10)   10.4 | epsilon 0.010 | loss 0.0015\n"}
+,{"stream_name":"stdout","time":6600.240791027,"data":"Episode  380 | step  853884 | avg reward (10)   13.1 | epsilon 0.010 | loss 0.0007\n"}
+,{"stream_name":"stdout","time":6600.240794441,"data":"Episode  390 | step  876367 | avg reward (10)   14.4 | epsilon 0.010 | loss 0.0022\n"}
+,{"stream_name":"stdout","time":6600.240797711,"data":"Episode  400 | step  899287 | avg reward (10)   14.1 | epsilon 0.010 | loss 0.0034\n"}
+,{"stream_name":"stdout","time":6600.240801215,"data":"Episode  410 | step  923365 | avg reward (10)   12.7 | epsilon 0.010 | loss 0.0010\n"}
+,{"stream_name":"stdout","time":6600.240804417,"data":"Episode  420 | step  945588 | avg reward (10)   13.9 | epsilon 0.010 | loss 0.0006\n"}
+,{"stream_name":"stdout","time":6600.240807819,"data":"Episode  430 | step  970185 | avg reward (10)   11.0 | epsilon 0.010 | loss 0.0005\n"}
+,{"stream_name":"stdout","time":6600.240811259,"data":"Episode  440 | step  992537 | avg reward (10)   14.0 | epsilon 0.010 | loss 0.0017\n"}
+,{"stream_name":"stdout","time":6600.240814447,"data":"Training finished. Model saved to models/Samuel/notebook_batch_epsilon_01/experiment_9.pth\n"}
+,{"stream_name":"stdout","time":6601.161870353,"data":"$ zip -qr /kaggle/working/Samuel_exp9.zip logs/Samuel/notebook_batch_epsilon_01/experiment_9.csv models/Samuel/notebook_batch_epsilon_01/experiment_9.pth /kaggle/working/training_console_exp9.log\n"}
+,{"stream_name":"stdout","time":6601.519813263,"data":"$ rm -rf /kaggle/working/Deep-Q-Learning \u0026\u0026 ls -la /kaggle/working\n"}
+,{"stream_name":"stdout","time":6602.427431581,"data":"total 6144\n"}
+,{"stream_name":"stdout","time":6602.42746041,"data":"drwxr-xr-x 2 root root    4096 Nov 15 13:20 .\n"}
+,{"stream_name":"stdout","time":6602.427470171,"data":"drwxr-xr-x 8 root root    4096 Nov 15 11:30 ..\n"}
+,{"stream_name":"stdout","time":6602.427473472,"data":"-rw-r--r-- 1 root root 6279115 Nov 15 13:20 Samuel_exp9.zip\n"}
+,{"stream_name":"stdout","time":6602.427476083,"data":"-rw-r--r-- 1 root root    3895 Nov 15 13:20 training_console_exp9.log\n"}
+,{"stream_name":"stderr","time":6606.658250609,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":6606.658304781,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":6606.917790514,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":6606.917818645,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":6607.807991861,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":6608.707997607,"data":"[NbConvertApp] Writing 276641 bytes to __results__.html\n"}
+]

@@ -1,0 +1,652 @@
+[
+  {
+    "experiment": 1,
+    "config": {
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 32,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.01,
+      "epsilon_decay_steps": 100000
+    },
+    "steps": 1000000,
+    "last_logged_step": 998198,
+    "completed_episodes": 383,
+    "last100_training_mean": 6.39,
+    "evaluation": {
+      "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/Samuel_outputs_notebook_batch_epsilon_01/experiment_1/model.pth",
+      "mean_reward": 10.2,
+      "std_reward": 1.7204650534085253,
+      "wins": 5,
+      "episodes": [
+        {
+          "seed": 100,
+          "reward": 8.0,
+          "length": 3047,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 101,
+          "reward": 10.0,
+          "length": 2820,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 102,
+          "reward": 13.0,
+          "length": 2539,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 103,
+          "reward": 9.0,
+          "length": 2897,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 104,
+          "reward": 11.0,
+          "length": 2872,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ]
+    },
+    "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+    "model_sha256": "67c055d8daac534bef18645524a552e028402bf279e275b1abfa3545ad77578b"
+  },
+  {
+    "experiment": 2,
+    "config": {
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 8,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.01,
+      "epsilon_decay_steps": 100000
+    },
+    "steps": 1000000,
+    "last_logged_step": 998995,
+    "completed_episodes": 438,
+    "last100_training_mean": 6.73,
+    "evaluation": {
+      "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/Samuel_outputs_notebook_batch_epsilon_01/experiment_2/model.pth",
+      "mean_reward": 8.0,
+      "std_reward": 5.366563145999495,
+      "wins": 4,
+      "episodes": [
+        {
+          "seed": 100,
+          "reward": 9.0,
+          "length": 3302,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 101,
+          "reward": 15.0,
+          "length": 2364,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 102,
+          "reward": 6.0,
+          "length": 2896,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 103,
+          "reward": 11.0,
+          "length": 2419,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 104,
+          "reward": -1.0,
+          "length": 3137,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ]
+    },
+    "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+    "model_sha256": "cd98b336aadd11c0904ded4486b3402292a3661635768cd2d74cc862f6eb8a95"
+  },
+  {
+    "experiment": 3,
+    "config": {
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 16,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.01,
+      "epsilon_decay_steps": 100000
+    },
+    "steps": 1000000,
+    "last_logged_step": 998000,
+    "completed_episodes": 394,
+    "last100_training_mean": 1.87,
+    "evaluation": {
+      "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/Samuel_outputs_notebook_batch_epsilon_01/experiment_3/model.pth",
+      "mean_reward": 10.0,
+      "std_reward": 3.63318042491699,
+      "wins": 5,
+      "episodes": [
+        {
+          "seed": 100,
+          "reward": 5.0,
+          "length": 2951,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 101,
+          "reward": 16.0,
+          "length": 2127,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 102,
+          "reward": 10.0,
+          "length": 2728,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 103,
+          "reward": 8.0,
+          "length": 2562,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 104,
+          "reward": 11.0,
+          "length": 2959,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ]
+    },
+    "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+    "model_sha256": "312f1c9ac17d5fda3f3ef5e4b5e4b1f5bd06ecca95b1f6ac868701e067e5da31"
+  },
+  {
+    "experiment": 4,
+    "config": {
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.01,
+      "epsilon_decay_steps": 100000
+    },
+    "steps": 1000000,
+    "last_logged_step": 998888,
+    "completed_episodes": 392,
+    "last100_training_mean": 3.91,
+    "evaluation": {
+      "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/Samuel_outputs_notebook_batch_epsilon_01/experiment_4/model.pth",
+      "mean_reward": 9.8,
+      "std_reward": 5.230678732248808,
+      "wins": 5,
+      "episodes": [
+        {
+          "seed": 100,
+          "reward": 5.0,
+          "length": 3508,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 101,
+          "reward": 14.0,
+          "length": 2615,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 102,
+          "reward": 6.0,
+          "length": 3331,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 103,
+          "reward": 18.0,
+          "length": 2073,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 104,
+          "reward": 6.0,
+          "length": 3493,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ]
+    },
+    "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+    "model_sha256": "9cfc9630bc96b33f81f848b3ade4295428921a1b26900389362d48d6578b0b20"
+  },
+  {
+    "experiment": 5,
+    "config": {
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 128,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.01,
+      "epsilon_decay_steps": 100000
+    },
+    "steps": 1000000,
+    "last_logged_step": 998819,
+    "completed_episodes": 391,
+    "last100_training_mean": 3.28,
+    "evaluation": {
+      "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/Samuel_outputs_notebook_batch_epsilon_01/experiment_5/model.pth",
+      "mean_reward": 2.6,
+      "std_reward": 5.0039984012787215,
+      "wins": 4,
+      "episodes": [
+        {
+          "seed": 100,
+          "reward": 4.0,
+          "length": 3125,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 101,
+          "reward": 7.0,
+          "length": 2968,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 102,
+          "reward": 6.0,
+          "length": 2839,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 103,
+          "reward": 3.0,
+          "length": 2840,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 104,
+          "reward": -7.0,
+          "length": 2957,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ]
+    },
+    "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+    "model_sha256": "2850c6f60e0c88a610f08f8fd722632d50a1dc08e03cb45586be3ae39b86b1c3"
+  },
+  {
+    "experiment": 6,
+    "config": {
+      "learning_rate": 0.0002,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.01,
+      "epsilon_decay_steps": 100000
+    },
+    "steps": 1000000,
+    "last_logged_step": 998264,
+    "completed_episodes": 418,
+    "last100_training_mean": 9.08,
+    "evaluation": {
+      "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/Samuel_outputs_notebook_batch_epsilon_01/experiment_6/model.pth",
+      "mean_reward": 11.2,
+      "std_reward": 3.249615361854384,
+      "wins": 5,
+      "episodes": [
+        {
+          "seed": 100,
+          "reward": 6.0,
+          "length": 2929,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 101,
+          "reward": 13.0,
+          "length": 2287,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 102,
+          "reward": 15.0,
+          "length": 2051,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 103,
+          "reward": 13.0,
+          "length": 2244,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 104,
+          "reward": 9.0,
+          "length": 2404,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ]
+    },
+    "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+    "model_sha256": "f9b612581b71efa94923f2942d30146f407580934b4935b3de9a6ed8f32c6c66"
+  },
+  {
+    "experiment": 7,
+    "config": {
+      "learning_rate": 0.0004,
+      "gamma": 0.99,
+      "batch_size": 128,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.01,
+      "epsilon_decay_steps": 100000
+    },
+    "steps": 1000000,
+    "last_logged_step": 997796,
+    "completed_episodes": 430,
+    "last100_training_mean": 4.4,
+    "evaluation": {
+      "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/Samuel_outputs_notebook_batch_epsilon_01/experiment_7/model.pth",
+      "mean_reward": 10.2,
+      "std_reward": 4.354308211415448,
+      "wins": 5,
+      "episodes": [
+        {
+          "seed": 100,
+          "reward": 6.0,
+          "length": 2734,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 101,
+          "reward": 5.0,
+          "length": 2744,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 102,
+          "reward": 11.0,
+          "length": 2300,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 103,
+          "reward": 12.0,
+          "length": 2253,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 104,
+          "reward": 17.0,
+          "length": 1895,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ]
+    },
+    "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+    "model_sha256": "c11a883a8d5b67d119e61ad88457ba2508a6087943aa4f196fc5d28e34c2b58d"
+  },
+  {
+    "experiment": 8,
+    "config": {
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 32,
+      "epsilon_start": 0.5,
+      "epsilon_end": 0.01,
+      "epsilon_decay_steps": 100000
+    },
+    "steps": 1000000,
+    "last_logged_step": 998821,
+    "completed_episodes": 448,
+    "last100_training_mean": 14.6,
+    "evaluation": {
+      "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/Samuel_outputs_notebook_batch_epsilon_01/experiment_8/model.pth",
+      "mean_reward": 15.4,
+      "std_reward": 1.7435595774162693,
+      "wins": 5,
+      "episodes": [
+        {
+          "seed": 100,
+          "reward": 13.0,
+          "length": 2322,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 101,
+          "reward": 16.0,
+          "length": 2096,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 102,
+          "reward": 16.0,
+          "length": 2101,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 103,
+          "reward": 18.0,
+          "length": 1954,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 104,
+          "reward": 14.0,
+          "length": 2116,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ]
+    },
+    "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+    "model_sha256": "bd29be1ebbe0ea4e225bb4c4274b65957238049db4db073a3dbd74b83207e7d8"
+  },
+  {
+    "experiment": 9,
+    "config": {
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 32,
+      "epsilon_start": 0.75,
+      "epsilon_end": 0.01,
+      "epsilon_decay_steps": 100000
+    },
+    "steps": 1000000,
+    "last_logged_step": 999007,
+    "completed_episodes": 443,
+    "last100_training_mean": 12.92,
+    "evaluation": {
+      "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/Samuel_outputs_notebook_batch_epsilon_01/experiment_9/model.pth",
+      "mean_reward": 14.8,
+      "std_reward": 3.7629775444453557,
+      "wins": 5,
+      "episodes": [
+        {
+          "seed": 100,
+          "reward": 17.0,
+          "length": 2049,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 101,
+          "reward": 19.0,
+          "length": 1797,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 102,
+          "reward": 8.0,
+          "length": 2926,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 103,
+          "reward": 14.0,
+          "length": 2309,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 104,
+          "reward": 16.0,
+          "length": 2314,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ]
+    },
+    "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+    "model_sha256": "bfc40bbb7210f1794e7d3b61563c5d1dff60d541c6950301f7a0bbe3eda2532a"
+  },
+  {
+    "experiment": 10,
+    "config": {
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 8,
+      "epsilon_start": 0.5,
+      "epsilon_end": 0.01,
+      "epsilon_decay_steps": 100000
+    },
+    "steps": 1000000,
+    "last_logged_step": 996382,
+    "completed_episodes": 403,
+    "last100_training_mean": -4.02,
+    "evaluation": {
+      "checkpoint": "/Users/wiseking/ALU Projects/Deep-Q-Learning/Samuel_outputs_notebook_batch_epsilon_01/experiment_10/model.pth",
+      "mean_reward": 0.2,
+      "std_reward": 4.069397989875161,
+      "wins": 3,
+      "episodes": [
+        {
+          "seed": 100,
+          "reward": 2.0,
+          "length": 4111,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 101,
+          "reward": -3.0,
+          "length": 3772,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 102,
+          "reward": -6.0,
+          "length": 3464,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 103,
+          "reward": 3.0,
+          "length": 4588,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        },
+        {
+          "seed": 104,
+          "reward": 5.0,
+          "length": 3829,
+          "terminated": true,
+          "truncated": false,
+          "capped": false
+        }
+      ]
+    },
+    "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+    "model_sha256": "e96bd56f2eaee712c0f5d77e6be863d16ad5fd3b7d10fe3d7aadc8aa841c19ea"
+  }
+]
