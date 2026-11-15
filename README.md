@@ -1,6 +1,8 @@
-# Deep-Q-Learning
+# Deep Q-Learning for Pong
 
 ## Project Introduction
+
+We built a Deep Q-Network that learns to play Atari Pong from screen images. Divine worked on settings, the environment, the network, and this README. Gabriel worked on the replay buffer, epsilon schedule, action selection, training loop, and plots. Samuel worked on the training update, target network sync, logging, saving, and playback. Each member ran ten hyperparameter experiments.
 
 ## Group Members
 
@@ -10,106 +12,92 @@
 
 ## Selected Atari Environment
 
+We use Pong (`ALE/Pong-v5`). The agent moves its paddle to return the ball and score more points than the opponent. The six actions are NOOP, FIRE, RIGHT, LEFT, RIGHTFIRE, and LEFTFIRE.
+
+The environment gives a reward of -1, 0, or +1 on each step. A game's score ranges from -21 to +21. We convert each screen to grayscale at 84 by 84 pixels, skip four frames per action, allow up to 30 no-op actions at reset, and stack four frames as one observation.
+
 ## DQN Architecture
 
-Samuel's diagram below documents Divine's shared CNN: four 84×84 grayscale
-frames pass through three convolutional layers (32, 64, 64 filters), a 512-unit
-dense layer and six action Q-values. Pixels are normalized inside the network.
-The online and target networks have identical architecture and separate weights.
+The network has five weighted layers. The layers are Conv2d 4 to 32 with output shape 32 by 20 by 20 and kernel 8, stride 4; Conv2d 32 to 64 with output 64 by 9 by 9 and kernel 4, stride 2; Conv2d 64 to 64 with output 64 by 7 by 7 and kernel 3, stride 1; Linear 3136 to 512; and Linear 512 to 6 action values. Flattening the last convolution output gives 3136 inputs to the first linear layer. ReLU follows each convolution and the 512-unit layer. The output has no activation so Q-values can be positive or negative. The CNN follows the DQN approach described by Mnih et al. [1].
+
+All convolutional and linear weights use He initialization. It keeps signals at a useful scale in layers followed by ReLU and helped prevent dead ReLU layers [3]. The online network learns from sampled transitions. The target network supplies steadier future values and copies the online weights every 1,000 steps. A replay buffer stores 50,000 transitions and provides random batches, which reduces dependence between nearby frames. The agent chooses a random action with probability epsilon and otherwise chooses the action with the highest Q-value. Epsilon decreases linearly during training.
+
+For each transition, the target is `reward + gamma * (1 - done) * max Q_target(next_state)`. The done mask prevents bootstrapping after a game ends. We use Huber loss, clip gradients to 10, and train with Adam using epsilon 1.5e-4, as in Rainbow [2].
 
 ## Network Architecture Diagram
 
-![DQN architecture](docs/Samuel_architecture.png)
-
-[Layer shapes and editable Mermaid diagrams](docs/Samuel_architecture.md)
+![Network and training flow](plots/architecture.png)
 
 ## Training Process
 
-Samuel's `train_step` consumes batches supplied by Gabriel's replay buffer.
-It gathers the online value for each sampled action and computes the detached
-Bellman target `reward + gamma * (1 - terminated) * max(target(next_state))`.
-A Smooth L1 loss is backpropagated through the online network, gradients are
-clipped to norm 10, and Adam updates its weights. True termination masks the
-bootstrap; time-limit truncation does not.
+At each step, the agent selects an action, receives the next screen and reward, and stores the transition in replay memory. After 10,000 warm-up steps, it samples a batch and updates the online network every step. Every 1,000 steps, it copies the online weights to the target network. It logs each finished episode and saves model checkpoints during and after training.
 
-The shared loop schedules target synchronization every 1,000 decisions. Samuel's
-logger records raw episode return, length, cumulative decisions, epsilon and the
-latest update loss. Model saving is atomic, honors `--model_path`, and supports
-periodic and final saves.
+All experiments used 1,000,000 environment steps, a replay buffer of 50,000, 10,000 warm-up steps, one update per step, target sync every 1,000 steps, and seed 0. The experiments changed selected hyperparameters such as learning rate, gamma, batch size, and epsilon settings.
 
-The submission file `dqn_model.pth` is an exact copy of the best model from
-Samuel's ten-experiment study (experiment 8,
-`Samuel_outputs_notebook_batch_epsilon_01/dqn_model.pth`). It contains inference weights.
+Some early runs stayed at -21 because ReLU layers died and produced constant Q-values for different screens. He initialization and Adam epsilon 1.5e-4 fixed this problem. The agent then learned from changing Q-values instead of remaining stuck.
 
 ## Training Results
 
-Samuel ran ten experiments of **1,000,000 training steps** each, varying batch size,
-learning rate and starting epsilon. Lowering the starting epsilon helped most:
-experiment 8 (epsilon start **0.5**) reached a last-100 training average of **+14.60**
-and won 99 of its last 100 training games. On 20 independent test games (seeds
-1000–1019) it scored a mean **+15.25** and won **20 of 20**, with no capped or
-truncated games.
+Samuel's experiment 8 is the best run. It used learning rate 0.0001, gamma 0.99, batch size 32, epsilon start 0.5, epsilon end 0.01, and epsilon decay over 100,000 steps. Its last-100 training average was +14.60.
 
-| Exp | Change from baseline | Last-100 training avg | Test (5 games) |
-|---|---|---|---|
-| 1 | baseline (lr 1e-4, batch 32, epsilon 1.0) | +6.39 | +10.2, 5/5 wins |
-| 2 | batch 8 | +6.73 | +8.0, 4/5 |
-| 3 | batch 16 | +1.87 | +10.0, 5/5 |
-| 4 | batch 64 | +3.91 | +9.8, 5/5 |
-| 5 | batch 128 | +3.28 | +2.6, 4/5 |
-| 6 | batch 64, lr 2e-4 | +9.08 | +11.2, 5/5 |
-| 7 | batch 128, lr 4e-4 | +4.40 | +10.2, 5/5 |
-| **8** | **epsilon start 0.5** | **+14.60** | **+15.4, 5/5** |
-| 9 | epsilon start 0.75 | +12.92 | +14.8, 5/5 |
-| 10 | batch 8 + epsilon start 0.5 (best of each) | −4.02 | +0.2, 3/5 |
+### Best run plots
 
-[Full experiment table with observed behaviour](SamuelHyperparameter_experiment_results.md).
+![Episode reward and 20-episode moving average](plots/best_episode_rewards.png)
 
-![Experiment 8 training curves](Samuel_outputs_notebook_batch_epsilon_01/plots/training_summary.png)
+Individual episode rewards vary, but the 20-episode average rises from about -20 to positive rewards. It stays mostly between +12 and +16 near the end of training.
+
+![Episode length](plots/best_episode_lengths.png)
+
+Episode length grows as training begins, which means rallies last longer. Later episodes vary, but usually last around 2,000 to 2,500 steps.
+
+![Training loss and epsilon](plots/best_loss_epsilon.png)
+
+Epsilon falls from 0.5 to 0.01 during the first 100,000 steps and stays there. Training loss has early spikes, then remains small with occasional increases as updates continue.
+
+### Best and worst experiment by member
+
+| Member | Best experiment | Last-100 average | Worst experiment | Last-100 average |
+|---|---:|---:|---:|---:|
+| Divine | 1 | +12.87 | 5 | -8.04 |
+| Gabriel | 3 | +13.79 | 8 | -0.17 |
+| Samuel | 8 | +14.60 | 10 | -4.02 |
+
+### Member comparisons
+
+![Divine experiment comparison](plots/divine_comparison.png)
+
+Divine's experiments 1 and 2 finish highest in the comparison. Experiments 5, 7, and 10 remain below zero, while the other settings end between those groups.
+
+![Gabriel experiment comparison](plots/gabriel_comparison.png)
+
+Gabriel's experiments 3, 5, and 10 finish with the strongest moving averages. Experiment 8 ends near zero, while the other runs finish between about +1 and +14.
+
+![Samuel experiment comparison](plots/samuel_comparison.png)
+
+Samuel's experiment 8 finishes highest, with experiment 9 also reaching a high positive average. Experiment 10 ends below zero, and the remaining runs finish lower than experiment 8.
+
+Results tables: [Divine](DivineHyperparameter_experiment_results.md), [Gabriel](GabrielHyperparameter_experiment_results.md), and [Samuel](SamuelHyperparameter_experiment_results.md).
 
 ## Gameplay Demonstration
 
-[Experiment 8 gameplay (MP4)](Samuel_outputs_notebook_batch_epsilon_01/gameplay.mp4) —
-greedy policy, seed 2000, raw return **+13**.
-[Episode metadata](Samuel_outputs_notebook_batch_epsilon_01/gameplay.json).
+Five greedy CPU games with Samuel experiment 8 scored +13, +16, +16, +18, and +14. The average was +15.40, and all five scores were positive.
+
+<video controls width="480"><source src="plots/gameplay.mp4" type="video/mp4">Pong gameplay video</video>
 
 ## How to Run
 
-Samuel's notebook workflow is [Samuel_DQN_experiments.ipynb](notebooks/Samuel_DQN_experiments.ipynb).
-It follows the supplied notebook's Setup → Experiments → Save structure and
-configures ten **1,000,000-step** runs focused on batch size and starting epsilon.
-It includes automatic experiment-10 selection, measured result tables, training
-plots, independent testing, gameplay recording and an embedded architecture diagram.
-Run it locally in VS Code or Jupyter; it uses CUDA, Apple MPS or CPU automatically.
-All ten runs are complete (run ID `notebook_batch_epsilon_01`); rerunning the
-notebook verifies and reuses them instead of retraining.
+Install the project dependencies with `uv sync`.
 
-```bash
-uv sync
-uv run train.py --member Samuel/new_run --experiment 1 --epsilon_start 0.5
-# Presentation: canonical model, greedy actions, live game window:
-uv run play.py
-# Automated evaluation without a window:
-uv run play.py --headless --episodes 5
-# A different checkpoint can still be supplied:
-uv run play.py models/Samuel/notebook_batch_epsilon_01/experiment_9.pth --render
-# Record one complete evaluation episode:
-uv run play.py dqn_model.pth --episodes 1 --video videos/Samuel/new_gameplay.mp4
-# Samuel's regression checks:
-uv run python -m unittest discover -s tests -v
-```
+Train one experiment with `uv run train.py --member Divine --experiment 1`.
 
-Training logs refuse to overwrite an existing member/experiment CSV. Use a fresh
-experiment ID or archive previous artifacts before rerunning. Save and evaluation formats remain
-compatible with Divine's network and Gabriel's main loop. Checkpoints contain
-online weights only; logging records the latest update loss, not episode mean
-loss. Partial episodes at the training budget boundary are not logged.
+To change a hyperparameter, add an option such as `--learning_rate 0.0002`.
 
-The README video is a submission artifact. For the presentation, demonstrate
-`uv run play.py` live with a display available. Playback defaults to one greedy
-episode from `dqn_model.pth`; `--headless` is for automated evaluation and
-`--video` selects recording automatically.
+Play the saved model with `uv run play.py`. Make plots with `uv run plots.py`.
 
-The single-episode plotting fix from `main` is merged and regression-tested.
-Use a separate `--out_dir` for each run. For a new study, change `RUN_ID` in the
-notebook so previous logs and models remain intact.
+## References
+
+[1] V. Mnih et al., “Human-level control through deep reinforcement learning,” *Nature*, vol. 518, pp. 529-533, 2015. [Article](https://www.nature.com/articles/nature14236).
+
+[2] M. Hessel et al., “Rainbow: Combining Improvements in Deep Reinforcement Learning,” *Proceedings of the AAAI Conference on Artificial Intelligence*, 2018. [Paper](https://arxiv.org/abs/1710.02298).
+
+[3] K. He, X. Zhang, S. Ren, and J. Sun, “Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification,” *Proceedings of the IEEE International Conference on Computer Vision*, 2015. [Paper](https://arxiv.org/abs/1502.01852).
