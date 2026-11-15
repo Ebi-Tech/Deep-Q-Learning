@@ -1,0 +1,14 @@
+{
+  "steps": 1000000,
+  "config": {
+    "learning_rate": 0.0002,
+    "gamma": 0.99,
+    "batch_size": 64,
+    "epsilon_start": 1.0,
+    "epsilon_end": 0.01,
+    "epsilon_decay_steps": 100000
+  },
+  "source_commit": "b09aa8fb96c24f14830507bbc93cf2d4bf57dffa",
+  "returncode": 0,
+  "trained_on": "Kaggle Tesla T4 GPU (kernel samuelrurangamirwa/samuel-dqn-experiment-6, torch 2.15.0+cu132)"
+}

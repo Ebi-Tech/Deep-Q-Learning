@@ -56,3 +56,18 @@ The CNN now uses Kaiming initialization. The main loop uses Adam with
 as well as at completion. `--model_path` is honored by atomic checkpoint saving.
 Pong rewards are stored as supplied by the environment; no sign conversion is
 applied by the current loop.
+
+## Samuel's selected trained model
+
+The diagram describes the shared CNN used in Samuel's ten million-step
+experiments. The selected model is experiment 8: batch size 32, learning rate
+0.0001, gamma 0.99, and epsilon 0.5 to 0.01 over 100,000 decisions. It trains
+every decision after a 10,000-step warm-up with a 50,000-entry replay buffer
+and synchronizes the target every 1,000 decisions.
+
+`dqn_model.pth` exports experiment 8's final 1,000,000-step weights.
+`uv run play.py` displays one greedy episode; evaluation uses epsilon 0 rather
+than the training exploration floor of 0.01. The selected model averaged
++15.25 and won 20/20 independent games on seeds 1000–1019.
+See [Samuel's results](../SamuelHyperparameter_experiment_results.md) for all
+ten configurations, their observed results and evaluation limitations.

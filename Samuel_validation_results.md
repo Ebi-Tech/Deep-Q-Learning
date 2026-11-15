@@ -1,5 +1,29 @@
 # Samuel: DQN integration validation
 
+## Current status — 15 November 2026
+
+All ten 1,000,000-step experiments in the [presentation notebook](notebooks/Samuel_DQN_experiments.ipynb)
+are complete, and the notebook runs end to end. The best model (experiment 8) is
+exported as the root `dqn_model.pth`. The dated sections further below are the
+earlier validation history.
+
+| Samuel responsibility | Current evidence |
+|---|---|
+| DQN training step and target synchronization | Sampled-batch interface, detached Bellman targets, Huber loss, gradient clipping and frozen target network; regression checks recorded below |
+| Logging and checkpoint saving | Episode CSVs, atomic weight saving, selected and final checkpoints; root `dqn_model.pth` exports the selected model |
+| Playback | `uv run play.py` loads the selected model for one greedy live episode; `--headless` supports automated evaluation |
+| Architecture diagram | [Shapes, ownership and diagram](docs/Samuel_architecture.md), with PNG and SVG exports |
+| Gameplay video | [Experiment 8 episode](Samuel_outputs_notebook_batch_epsilon_01/gameplay.mp4): seed 2000, return +13 |
+| Ten hyperparameter experiments | Ten configurations, 1,000,000 steps each; best (experiment 8) independent mean +15.25, 20/20 wins; [results and interpretation](SamuelHyperparameter_experiment_results.md) |
+
+The latest recorded validation includes ten passing regression tests and a
+separate 1,100-step MPS workflow check. These are previous measured checks,
+not new training runs performed for this documentation update. Live presentation,
+individual explanation and any team submission paperwork still require the
+team's participation; saved artifacts do not establish those requirements.
+
+## Historical initial validation — 10 November 2026
+
 Validated on 10 November 2026 on branch `samuel`, against source commit
 `e6f77f8`. These are smoke tests of the existing implementation, not the
 ten hyperparameter experiments or evidence of a trained Pong policy.
@@ -51,7 +75,7 @@ Training completed and saved its final model. All four plot outputs were
 successfully generated from this five-episode CSV. The negative rewards do
 not demonstrate a successful policy.
 
-## Outstanding work and observed issue
+## Historical outstanding work and observed issue (resolved below)
 
 - `plot_results.py` fails on a one-episode CSV with
   `TypeError: len() of unsized object`. Multi-episode plotting passed.
@@ -85,93 +109,12 @@ implementation is now committed in `04328ef`:
 - Divine's settings/environment/CNN and Gabriel's replay/main-loop code were verified
   unchanged. Gabriel's one-episode plotting issue remains unchanged.
 
-All ten pilot experiments completed 20,000 decisions each (200,000 total), with
-five greedy evaluation episodes each (50 total). All ten CSVs, evaluation records,
-and saved model state dictionaries were checked. Model parameters and logged
-losses were finite, and every evaluation episode completed without a step cap.
-Forty per-run plots and a comparison plot were generated.
+## Current code validation — 15 November 2026
 
-Experiment 7 had the highest measured evaluation mean (-20.4). All other models
-averaged -21. This is not evidence of a strong policy, convergence, or statistically
-reliable hyperparameter superiority. Only one training seed and a short budget
-were used; full-budget training and rubric compliance remain unverified.
-
-The selected model's recorded episode (seed 100) returned -21. Its MP4 was fully
-decoded and verified: 817 frames at 15 fps, approximately 54.47 seconds. See
-`videos/Samuel/gameplay.mp4` and its JSON episode metadata. Architecture diagrams
-are available as PNG, SVG, and Mermaid in `docs/`. The completed experiment table,
-raw metrics, configuration/source manifest, model files, and plots are stored in
-the repository rather than temporary directories.
-
-## Merge and rerun — 13 November 2026
-
-Merged all fetched `origin/main` changes through `f6e310a` (merge `2747b8c`).
-Resolved the training-call conflict by using the new sampled-batch/gamma
-interface, and reconciled atomic saving with main's `--model_path` and periodic
-save calls. Source commit for the rerun: `a60a968`.
-
-The main environment, CNN, replay, exploration and main-loop definitions were
-checked against upstream and retain its implementation exactly. Added argument
-validation rejects zero scheduling intervals before creating the environment.
-Seven regression cases passed, including model-path handling, single-episode
-plotting and invalid scheduling arguments. A real 1,100-step Pong integration
-run exercised training every step, saving every episode, a custom model path,
-and plotting its finished episode.
-
-All ten 20,000-step reruns completed under run ID `main_20261113`, with train interval
-4 explicitly retained for comparison; main's default remains 1. All 50 greedy
-evaluations finished without step caps. Every new model reloads and has finite
-parameters and inference outputs; all logged losses are finite. Generated
-40 per-run plots plus the comparison figure. The selected experiment is 1
-with observed mean -20.00; the new recorded episode scored -21
-and was decoded fully (846 frames, 15 fps, 56.40 seconds).
-
-All original Samuel CSVs were verified byte-for-byte against the prior commit,
-and all original model hashes still match their saved summary. The previous
-results report is archived at `logs/Samuel/pilot_20261112_results.md`.
-
-The remaining limitation is training quality and budget, not a failure observed
-in these runs. These pilots do not establish convergence or rubric compliance.
-
-## Full baseline completed
-
-Run `full_20261113` reached exactly 1,000,000 decisions on Apple MPS, training every
-step. The job completed all checkpoint evaluations, a 20-episode independent
-test, gameplay recording, and plotting. Total wall time was
-2.51 hours. There were 383 completed training episodes;
-a partial last episode is included in the step budget but not the episode CSV.
-
-The selected checkpoint at step 974,891 had a five-episode selection
-mean of +13.80. On separate seeds 1000–1019 it averaged
-+11.25 (standard deviation 4.62), with
-19 wins and 1 loss. All 20 games terminated normally; none were
-truncated or capped. The final training mean over 100 episodes was +6.39.
-
-Selected, latest and actual million-step checkpoint weights reload and produce
-finite inference outputs. All logged training losses are finite. The selected
-model matches its numbered snapshot; latest matches final weights byte-for-byte.
-The full winning gameplay clip was decoded: 3,348 frames, 15 fps, 223.2 seconds,
-seed 1000, raw return +4. The ten pilot experiments remain separate. This is one
-training seed and a finite evaluation sample, not a guarantee of future wins.
-
-## Samuel-only submission corrections
-
-Exported the selected trained weights as root `dqn_model.pth`; its SHA-256 is
-identical to `models/Samuel/full_20261113/best.pth`. Playback now defaults to
-that checkpoint, one greedy episode and a live game window. `--headless` keeps
-automated evaluation window-free; video recording selects RGB capture without
-a live display. Existing programmatic playback defaults remain unchanged.
-
-Ten regression tests passed. A capped 150-decision live test through `uv run`
-verified the default entry point. The simplified optional long-run utility
-completed a separate 1,100-step GPU workflow check, including periodic saves,
-checkpoint selection, independent testing, video and plots. It now uses an
-explicit loop and focused helpers, without replacing shared logger/save
-functions or adding nested callback classes. The million-step measurements were
-not rerun or altered; their original code is preserved at commit `860ba86` and
-identified by the historical manifest hashes.
-
-Corrected the experiment metadata paths in both current reports and their
-renderer, and added Samuel's pilot best/worst comparisons, limitations and
-baseline justification. README additions cover his architecture diagram,
-training update, checkpoint export and live playback responsibilities.
+Samuel's training step uses main's sampled-batch and gamma interface, and atomic
+saving honors `--model_path`. All ten regression tests in `tests/test_samuel.py`
+pass. `uv run play.py` loads the root `dqn_model.pth` (experiment 8) and plays one
+greedy episode with a live window; `--headless` evaluates without a window and
+`--video` records an MP4. A headless check on seed 1000 returned +16, matching the
+independent test. Results for the ten experiments are in
+[SamuelHyperparameter_experiment_results.md](SamuelHyperparameter_experiment_results.md).

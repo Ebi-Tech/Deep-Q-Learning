@@ -1,113 +1,41 @@
 # Member Name: Samuel
 
-Budget: 20,000 environment decisions per run; replay capacity 2,000; warm-up 1,000; train every 4 decisions; target sync every 1,000. Training seed: 0.
+## Notebook study: batch size and starting epsilon (completed 15 November 2026)
 
-Evaluation: 5 greedy episodes per model, seeds starting at 100. Raw rewards are reported. No capped episodes are treated as wins.
+Ten full runs from [Samuel_DQN_experiments.ipynb](notebooks/Samuel_DQN_experiments.ipynb), run ID
+`notebook_batch_epsilon_01`, source commit `b09aa8f`. Each run: 1,000,000 training steps, replay buffer
+50,000, warm-up 10,000, train every step, target sync every 1,000, training seed 0. "Won a game" means an
+episode reward above 0. "Test" means 5 greedy games on seeds 100-104; none was capped or truncated.
+Experiments 6 and 9 were trained on a Kaggle Tesla T4 GPU with the same commit, settings and seed, then
+evaluated on this Mac like the others; all other runs were trained on Apple MPS.
 
-These single-seed pilot runs do not establish convergence or statistical superiority. Epsilon schedules longer than the budget do not reach their endpoint.
-
-| Experiment | Learning rate | Gamma | Batch size | Epsilon start | Epsilon end | Epsilon decay | Observed behaviour |
+| Exp | Learning rate | Gamma | Batch | Epsilon start | Epsilon end | Epsilon decay | Observed behaviour |
 |---|---|---|---|---|---|---|---|
-| 1 | 0.0001 | 0.99 | 32 | 1.0 | 0.01 | 100000 | baseline; 20 training episodes; last-10 raw return -20.20; evaluation mean -20.00, std 0.63; 0 evaluation episodes capped |
-| 2 | 0.0002 | 0.99 | 32 | 1.0 | 0.01 | 100000 | higher learning rate; 21 training episodes; last-10 raw return -20.00; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
-| 3 | 2.5e-05 | 0.99 | 32 | 1.0 | 0.01 | 100000 | lower learning rate; 22 training episodes; last-10 raw return -20.10; evaluation mean -20.80, std 0.40; 0 evaluation episodes capped |
-| 4 | 0.0001 | 0.97 | 32 | 1.0 | 0.01 | 100000 | lower discount; 21 training episodes; last-10 raw return -20.70; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
-| 5 | 0.0001 | 0.995 | 32 | 1.0 | 0.01 | 100000 | higher discount; 21 training episodes; last-10 raw return -20.40; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
-| 6 | 0.0001 | 0.99 | 16 | 1.0 | 0.01 | 100000 | smaller batch; 21 training episodes; last-10 raw return -20.30; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
-| 7 | 0.0001 | 0.99 | 64 | 1.0 | 0.01 | 100000 | larger batch; 22 training episodes; last-10 raw return -20.50; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
-| 8 | 0.0001 | 0.99 | 32 | 1.0 | 0.05 | 100000 | higher final epsilon; 21 training episodes; last-10 raw return -20.20; evaluation mean -20.80, std 0.40; 0 evaluation episodes capped |
-| 9 | 0.0001 | 0.99 | 32 | 1.0 | 0.01 | 20000 | faster exploration decay; 22 training episodes; last-10 raw return -20.80; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
-| 10 | 0.0001 | 0.99 | 32 | 0.7 | 0.01 | 100000 | lower initial epsilon; 21 training episodes; last-10 raw return -19.80; evaluation mean -21.00, std 0.00; 0 evaluation episodes capped |
+| 1 | 0.0001 | 0.99 | 32 | 1.0 | 0.01 | 100000 | Baseline. First won a game at ~231k steps; its 10-game average became positive at ~417k and passed +10 at ~722k. Fairly stable at the end: won 82 of the last 100 games (scores -11 to +21). **Last-100 average +6.39**; test +10.2 (5/5 wins). Full exploration from 1.0 fills the early replay buffer with random play, so learning starts later, but the standard batch gives steady updates. |
+| 2 | 0.0001 | 0.99 | **8** | 1.0 | 0.01 | 100000 | Slowest to take off: first win at ~358k, average positive only at ~731k, above +10 at ~865k. Won 87 of the last 100 (-14 to +17). **Last-100 average +6.73**; test +8.0 (4/5 wins). Very small batches give noisy gradient estimates, so learning started late, but once it caught on it improved quickly in the final 250k steps. |
+| 3 | 0.0001 | 0.99 | **16** | 1.0 | 0.01 | 100000 | First win at ~284k, average positive at ~648k, never stayed above +10. Won 65 of the last 100 (-14 to +15). **Last-100 average +1.87**; test +10.0 (5/5 wins). Still-noisy updates slowed learning, and it was still improving when the budget ran out. |
+| 4 | 0.0001 | 0.99 | **64** | 1.0 | 0.01 | 100000 | First win at ~455k, average positive at ~648k, never stayed above +10. Won 70 of the last 100 (-17 to +16). **Last-100 average +3.91**; test +9.8 (5/5 wins). With the same learning rate, larger batches average out the gradient and make smaller effective progress per step, so it learned more slowly than the baseline. |
+| 5 | 0.0001 | 0.99 | **128** | 1.0 | 0.01 | 100000 | Slow and late: first win at ~331k, average positive only at ~717k, never stayed above +10. Won 69 of the last 100 (-13 to +16). **Last-100 average +3.28**; test +2.6 (4/5 wins, one game lost -7). The largest batch at the base learning rate makes the smoothest but smallest effective updates, so it was still catching up when the budget ended. |
+| 6 | **0.0002** | 0.99 | **64** | 1.0 | 0.01 | 100000 | Learned quickly: first win at ~287k, average positive at ~338k, above +10 at ~647k. Very consistent: won 94 of the last 100 (-7 to +17). **Last-100 average +9.08**; test +11.2 (5/5 wins). Trained on a Kaggle T4 GPU. Doubling the learning rate compensated for the larger batch's smoother, smaller steps, so it far outperformed batch 64 at the base rate (exp 4). |
+| 7 | **0.0004** | 0.99 | **128** | 1.0 | 0.01 | 100000 | First win at ~418k, average positive at ~687k, never stayed above +10 but was still rising at the end. Won 70 of the last 100 (-10 to +17). **Last-100 average +4.40**; test +10.2 (5/5 wins). Quadrupling the learning rate helped the largest batch (vs +3.28 for exp 5 at the base rate), but each 128-sample update still moves slowly, so it learned later than the smaller-batch runs. |
+| 8 | 0.0001 | 0.99 | 32 | **0.5** | 0.01 | 100000 | Best run. First win at ~236k, average positive at ~310k, above +10 already at ~394k. Most stable: won 99 of the last 100 (-6 to +21). **Last-100 average +14.60**; test +15.4 (5/5 wins, std 1.7). Starting with less random play meant more early experience came from the agent's own policy, so useful rallies reached the replay buffer sooner. |
+| 9 | 0.0001 | 0.99 | 32 | **0.75** | 0.01 | 100000 | First win at ~234k, average positive at ~320k, above +10 at ~428k. Won 98 of the last 100 (-13 to +20). **Last-100 average +12.92**; test +14.8 (5/5 wins). Trained on a Kaggle T4 GPU. Same effect as exp 8 but slightly weaker, consistent with more random play at the start. |
+| 10 | 0.0001 | 0.99 | **8** | **0.5** | 0.01 | 100000 | Weakest of the full runs: first won a game only at ~582k steps and its 10-game average never became positive. Won just 15 of the last 100 games (-15 to +5), though still improving at the end. **Last-100 average -4.02**; test +0.2 (3/5 wins, scores -6 to +5). The two individually best settings did not combine well: batch 8's noisy, slow-starting updates (exp 2 only turned positive at ~731k) dominated, and the head start from epsilon 0.5 could not make up for them within one million steps. Chosen by the rule: best batch size by last-100 average among exps 1-5 is 8 (exp 2, +6.73; exp 1 +6.39, exp 4 +3.91, exp 5 +3.28, exp 3 +1.87); best epsilon start among exps 1, 8, 9 is 0.5 (exp 8, +14.60). Not a repeat of the baseline. |
 
-Machine-readable configurations and evaluation episodes are in `logs/Samuel/main_20261113/experiment_<n>.json`; raw training metrics are in the matching CSVs. Models: `models/Samuel/main_20261113/`. Run ID: main_20261113.
+Experiment 10's settings were chosen by the instructor's rule (highest last-100 training average for batch
+size among experiments 1-5 and for starting epsilon among experiments 1, 8 and 9). It was started once
+experiment 8 clearly led and was confirmed after experiments 5 and 9 finished. Single training seed per
+configuration, so differences of a few points may be noise.
 
-## Integration rerun — 13 November 2026
+### Best model from this study: experiment 8
 
-Merged `origin/main` at `f6e310a` into `samuel`; the training source for this
-rerun is `a60a968`. This includes the colleagues' Kaiming initialization,
-uint8 replay sampling, adjusted Adam epsilon, periodic model saving, and the
-single-episode plotting fix. Samuel's training function now accepts a sampled
-batch and gamma, matching the new main-loop call. Atomic saving honors
-`--model_path`.
+Chosen by the highest five-game selection score (+15.4). Independent test on 20 new seeds (1000-1019),
+which did not influence the choice: **mean +15.25**, std 2.70, **20/20 wins** (scores +10 to +20), no
+capped or truncated games. Weights: `Samuel_outputs_notebook_batch_epsilon_01/dqn_model.pth`; plots in
+`plots/`; one recorded game (+13) in `gameplay.mp4`.
 
-All ten runs completed (200,000 total training decisions). All 50 evaluation
-episodes finished without a step cap. All saved checkpoints reload, contain
-finite parameters, and produce finite inference outputs. All logged losses
-are finite. Seven regression cases passed, and a separate real Pong smoke run
-tested main's default training interval of 1, periodic saving, and a custom
-checkpoint path. The former single-episode plotting failure also passed.
+These weights are also the submitted root `dqn_model.pth`, which `uv run play.py` loads by default.
 
-The explicitly selected interval of 4 preserves the previous pilot's cadence;
-normal training still defaults to interval 1. Other shared budgets are shown
-above. This is a controlled short pilot, not a full million-step run.
-
-Experiment 1 had the highest observed greedy mean, -20.00. The original
-pilot selected experiment 7 at -20.4. Multiple implementation details changed
-and only one training seed was used; this comparison does not isolate a causal
-effect or establish statistically reliable superiority. Negative episode returns
-indicate weak gameplay, not a Python exception. More training is needed.
-
-[New comparison plot](plots/Samuel/main_20261113/experiment_comparison.png),
-[full summary](logs/Samuel/main_20261113/summary.json),
-[source/environment manifest](logs/Samuel/main_20261113/run_manifest.json), and
-[gameplay](videos/Samuel/main_20261113/gameplay.mp4).
-
-[Original pilot report](logs/Samuel/pilot_20261112_results.md) and its raw CSVs,
-models, plots, and video were preserved rather than overwritten.
-
-## Best, worst, and interpretation of the ten pilots
-
-All comparisons below use the same 20,000-decision budget, seed and five-episode
-greedy test. **Experiment 1 was the pilot best at -20.0. Experiments 2, 4, 5,
-6, 7, 9 and 10 tied for worst at -21.0.** Experiments 3 and 8 averaged -20.8.
-Every pilot still lost its test games; small differences do not establish a
-reliable long-run ranking.
-
-| Hyperparameter investigated | Observed result | What I can conclude |
-|---|---|---|
-| Learning rate: experiments 2 and 3 | 0.0002 gave -21.0; 0.000025 gave -20.8; baseline 0.0001 gave -20.0 | Neither alternative improved this short pilot. Longer runs are needed to distinguish update speed from instability. |
-| Gamma: experiments 4 and 5 | 0.97 and 0.995 both gave -21.0 | No improvement was observed; these pilots do not establish which discount is best after learning. |
-| Batch size: experiments 6 and 7 | 16 and 64 both gave -21.0; baseline 32 gave -20.0 | Larger/smaller batches did not help at this budget; I retained 32 for the full baseline. |
-| Epsilon end: experiment 8 | 0.05 gave -20.8 versus -20.0 for baseline 0.01 | The 100,000-step schedules have not finished at 20,000 steps, so this is not a clean test of the final exploration floor. |
-| Epsilon decay: experiment 9 | Reaching 0.01 in 20,000 steps gave -21.0 | Faster decay did not help this run. Exploiting an immature policy is a plausible explanation, not a demonstrated causal effect. |
-| Epsilon start: experiment 10 | Starting at 0.7 gave -21.0 versus -20.0 at 1.0 | Lower initial exploration did not help this pilot; one seed is insufficient to generalize. |
-
-I retained experiment 1's configuration for the full baseline: learning rate
-0.0001, gamma 0.99, batch size 32, epsilon 1.0 to 0.01 over 100,000 steps. It had
-the highest measured pilot return, but the pilot gap was small. The full run
-then supplied enough training to assess whether that baseline could learn.
-
-The full run additionally changed the budget to one million, training interval
-from 4 to 1, replay capacity from 2,000 to 50,000, warm-up from 1,000 to 10,000,
-and execution device from CPU to MPS. Its improvement cannot be attributed to
-one table hyperparameter. The separate 20-game test below supports the chosen
-trained checkpoint; it does not show that this is the globally optimal setting.
-
-## Completed full-length baseline — experiment 11
-
-The separate run `full_20261113` completed **1,000,000 decisions**, training every step
-on Apple MPS. Baseline hyperparameters: learning rate 0.0001, gamma 0.99, batch
-size 32, epsilon 1.0 → 0.01 over 100,000 steps. Replay capacity was 50,000;
-warm-up 10,000; target synchronization every 1,000 decisions; training seed 0.
-
-| Result | Measured value |
-|---|---:|
-| Total training decisions | 1,000,000 |
-| Selected checkpoint step | 974,891 |
-| Last 100 training episodes: mean return | +6.39 |
-| Checkpoint selection mean, 5 episodes | +13.80 |
-| Independent mean return, 20 episodes | **+11.25** |
-| Independent standard deviation | 4.62 |
-| Independent wins / losses | **19 / 1** |
-| Truncated or capped independent episodes | 0 |
-
-Checkpoint selection used seeds 100–104. Independent testing used seeds
-1000–1019. The strongest checkpoint was retained at step 974,891;
-the actual million-step final weights are also saved. This single full baseline
-is separate from the ten short pilot experiments above. It is not ten full-length
-experiments. Its stronger performance does not guarantee future wins.
-
-[Full measured report](logs/Samuel/full_20261113/report.md),
-[independent evaluation](logs/Samuel/full_20261113/final_evaluation.json),
-[learning curve](plots/Samuel/full_20261113/full_training_evaluation.png), and
-[winning gameplay](videos/Samuel/full_20261113/gameplay.mp4).
+Sources: `Samuel_outputs_notebook_batch_epsilon_01/experiment_<n>/record.json`, `summary.json`,
+`experiment_10_selection.json`, `independent_evaluation.json`; training CSVs in
+`logs/Samuel/notebook_batch_epsilon_01/`; models in `models/Samuel/notebook_batch_epsilon_01/`.

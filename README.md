@@ -35,68 +35,72 @@ bootstrap; time-limit truncation does not.
 The shared loop schedules target synchronization every 1,000 decisions. Samuel's
 logger records raw episode return, length, cumulative decisions, epsilon and the
 latest update loss. Model saving is atomic, honors `--model_path`, and supports
-periodic and final saves. His optional full-run utility evaluates snapshots,
-retains the highest measured checkpoint, then tests it on separate seeds.
+periodic and final saves.
 
-The submission file `dqn_model.pth` is an exact copy of Samuel's selected
-`models/Samuel/full_20261113/best.pth` (step 974,891). The actual final million-step
-weights remain saved separately. These checkpoints contain inference weights.
+The submission file `dqn_model.pth` is an exact copy of the best model from
+Samuel's ten-experiment study (experiment 8,
+`Samuel_outputs_notebook_batch_epsilon_01/dqn_model.pth`). It contains inference weights.
 
 ## Training Results
 
-Samuel's full baseline completed **1,000,000 decisions**, training every step
-on Apple MPS. The selected checkpoint achieved **+11.25 mean raw return**
-and won **19 of 20 independent evaluation games**. One game was lost;
-this is measured improvement, not a guarantee of perfect play.
+Samuel ran ten experiments of **1,000,000 training steps** each, varying batch size,
+learning rate and starting epsilon. Lowering the starting epsilon helped most:
+experiment 8 (epsilon start **0.5**) reached a last-100 training average of **+14.60**
+and won 99 of its last 100 training games. On 20 independent test games (seeds
+1000–1019) it scored a mean **+15.25** and won **20 of 20**, with no capped or
+truncated games.
 
-[Full report](logs/Samuel/full_20261113/report.md),
-[experiment table and pilot results](SamuelHyperparameter_experiment_results.md),
-[full-training workflow](docs/Samuel_full_training.md).
+| Exp | Change from baseline | Last-100 training avg | Test (5 games) |
+|---|---|---|---|
+| 1 | baseline (lr 1e-4, batch 32, epsilon 1.0) | +6.39 | +10.2, 5/5 wins |
+| 2 | batch 8 | +6.73 | +8.0, 4/5 |
+| 3 | batch 16 | +1.87 | +10.0, 5/5 |
+| 4 | batch 64 | +3.91 | +9.8, 5/5 |
+| 5 | batch 128 | +3.28 | +2.6, 4/5 |
+| 6 | batch 64, lr 2e-4 | +9.08 | +11.2, 5/5 |
+| 7 | batch 128, lr 4e-4 | +4.40 | +10.2, 5/5 |
+| **8** | **epsilon start 0.5** | **+14.60** | **+15.4, 5/5** |
+| 9 | epsilon start 0.75 | +12.92 | +14.8, 5/5 |
+| 10 | batch 8 + epsilon start 0.5 (best of each) | −4.02 | +0.2, 3/5 |
 
-![Full training and independent evaluation](plots/Samuel/full_20261113/full_training_evaluation.png)
+[Full experiment table with observed behaviour](SamuelHyperparameter_experiment_results.md).
 
-The run reached one million steps. Its selected checkpoint is from step
-974,891; the best model and the actual final million-step weights are
-both retained. Selection used five greedy episodes (seeds 100–104); the reported
-independent result uses 20 other episodes (seeds 1000–1019). All completed without
-truncation or step caps. See the manifest for the exact settings and source hashes.
-
-The ten earlier 20,000-step pilots and their artifacts remain preserved under
-`main_20261113`, with the original pilot also archived. The full baseline is an
-additional experiment.
+![Experiment 8 training curves](Samuel_outputs_notebook_batch_epsilon_01/plots/training_summary.png)
 
 ## Gameplay Demonstration
 
-[Winning full-run gameplay (MP4)](videos/Samuel/full_20261113/gameplay.mp4) —
-selected model, greedy policy, seed 1000, raw return **+4**.
-The complete episode is 223.2 seconds at 15 fps.
-[Episode metadata](videos/Samuel/full_20261113/gameplay.json).
+[Experiment 8 gameplay (MP4)](Samuel_outputs_notebook_batch_epsilon_01/gameplay.mp4) —
+greedy policy, seed 2000, raw return **+13**.
+[Episode metadata](Samuel_outputs_notebook_batch_epsilon_01/gameplay.json).
 
 ## How to Run
 
+Samuel's notebook workflow is [Samuel_DQN_experiments.ipynb](notebooks/Samuel_DQN_experiments.ipynb).
+It follows the supplied notebook's Setup → Experiments → Save structure and
+configures ten **1,000,000-step** runs focused on batch size and starting epsilon.
+It includes automatic experiment-10 selection, measured result tables, training
+plots, independent testing, gameplay recording and an embedded architecture diagram.
+Run it locally in VS Code or Jupyter; it uses CUDA, Apple MPS or CPU automatically.
+All ten runs are complete (run ID `notebook_batch_epsilon_01`); rerunning the
+notebook verifies and reuses them instead of retraining.
+
 ```bash
 uv sync
-uv run train.py --member Samuel --experiment 11
+uv run train.py --member Samuel/new_run --experiment 1 --epsilon_start 0.5
 # Presentation: canonical model, greedy actions, live game window:
 uv run play.py
 # Automated evaluation without a window:
 uv run play.py --headless --episodes 5
 # A different checkpoint can still be supplied:
-uv run play.py models/Samuel/full_20261113/best.pth --render
+uv run play.py models/Samuel/notebook_batch_epsilon_01/experiment_9.pth --render
 # Record one complete evaluation episode:
-uv run play.py models/Samuel/full_20261113/best.pth --episodes 1 --video videos/Samuel/new_gameplay.mp4
-# Run ten experiments in a fresh output folder (main defaults to train_every=1):
-uv run run_samuel_experiments.py --run_id full_run_01 --steps 500000
-# Short comparison pilot using the previous interval of 4 decisions:
-uv run run_samuel_experiments.py --run_id pilot_02 --steps 20000 --train_every 4
-uv run summarize_samuel_experiments.py --run_id pilot_02 --record
+uv run play.py dqn_model.pth --episodes 1 --video videos/Samuel/new_gameplay.mp4
 # Samuel's regression checks:
 uv run python -m unittest discover -s tests -v
 ```
 
 Training logs refuse to overwrite an existing member/experiment CSV. Use a fresh
-experiment ID or archive previous artifacts before rerunning. The experiment
-runner likewise rejects existing outputs. Save and evaluation formats remain
+experiment ID or archive previous artifacts before rerunning. Save and evaluation formats remain
 compatible with Divine's network and Gabriel's main loop. Checkpoints contain
 online weights only; logging records the latest update loss, not episode mean
 loss. Partial episodes at the training budget boundary are not logged.
@@ -107,5 +111,5 @@ episode from `dqn_model.pth`; `--headless` is for automated evaluation and
 `--video` selects recording automatically.
 
 The single-episode plotting fix from `main` is merged and regression-tested.
-Use a separate `--out_dir` for each run. For repeat experiments, use a fresh
-`--run_id` so previous logs and models remain intact.
+Use a separate `--out_dir` for each run. For a new study, change `RUN_ID` in the
+notebook so previous logs and models remain intact.

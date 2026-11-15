@@ -1,0 +1,45 @@
+Samuel device: mps
+A.L.E: Arcade Learning Environment (version 0.12.1+8a8fafb)
+[Powered by Stella]
+Device: mps | Member: Samuel/notebook_batch_epsilon_01 | Experiment: 10
+Episode   10 | step    8423 | avg reward (10)  -20.2 | epsilon 0.459 | loss 0.0000
+Episode   20 | step   17223 | avg reward (10)  -20.4 | epsilon 0.416 | loss 0.0010
+Episode   30 | step   26264 | avg reward (10)  -20.4 | epsilon 0.371 | loss 0.0020
+Episode   40 | step   35680 | avg reward (10)  -20.2 | epsilon 0.325 | loss 0.0006
+Episode   50 | step   45986 | avg reward (10)  -20.0 | epsilon 0.275 | loss 0.0047
+Episode   60 | step   55261 | avg reward (10)  -20.1 | epsilon 0.229 | loss 0.0026
+Episode   70 | step   65623 | avg reward (10)  -19.9 | epsilon 0.178 | loss 0.0040
+Episode   80 | step   79091 | avg reward (10)  -18.7 | epsilon 0.112 | loss 0.0028
+Episode   90 | step   95043 | avg reward (10)  -19.0 | epsilon 0.034 | loss 0.0025
+Episode  100 | step  111370 | avg reward (10)  -18.8 | epsilon 0.010 | loss 0.0038
+Episode  110 | step  127769 | avg reward (10)  -19.1 | epsilon 0.010 | loss 0.0027
+Episode  120 | step  148627 | avg reward (10)  -17.8 | epsilon 0.010 | loss 0.0022
+Episode  130 | step  172781 | avg reward (10)  -17.1 | epsilon 0.010 | loss 0.0010
+Episode  140 | step  198279 | avg reward (10)  -16.7 | epsilon 0.010 | loss 0.0013
+Episode  150 | step  221206 | avg reward (10)  -16.0 | epsilon 0.010 | loss 0.0002
+Episode  160 | step  249128 | avg reward (10)  -14.3 | epsilon 0.010 | loss 0.0046
+Episode  170 | step  278745 | avg reward (10)  -11.9 | epsilon 0.010 | loss 0.0049
+Episode  180 | step  307281 | avg reward (10)  -12.7 | epsilon 0.010 | loss 0.0010
+Episode  190 | step  330586 | avg reward (10)  -16.0 | epsilon 0.010 | loss 0.0031
+Episode  200 | step  360043 | avg reward (10)  -14.3 | epsilon 0.010 | loss 0.0023
+Episode  210 | step  389945 | avg reward (10)  -13.9 | epsilon 0.010 | loss 0.0007
+Episode  220 | step  424188 | avg reward (10)  -11.7 | epsilon 0.010 | loss 0.0018
+Episode  230 | step  455452 | avg reward (10)  -10.6 | epsilon 0.010 | loss 0.0006
+Episode  240 | step  485210 | avg reward (10)  -11.1 | epsilon 0.010 | loss 0.0028
+Episode  250 | step  512832 | avg reward (10)   -8.2 | epsilon 0.010 | loss 0.0011
+Episode  260 | step  541964 | avg reward (10)   -9.4 | epsilon 0.010 | loss 0.0005
+Episode  270 | step  574628 | avg reward (10)   -7.2 | epsilon 0.010 | loss 0.0010
+Episode  280 | step  605619 | avg reward (10)   -6.1 | epsilon 0.010 | loss 0.0141
+Episode  290 | step  635677 | avg reward (10)   -6.4 | epsilon 0.010 | loss 0.0038
+Episode  300 | step  664145 | avg reward (10)   -8.1 | epsilon 0.010 | loss 0.0020
+Episode  310 | step  695974 | avg reward (10)   -6.1 | epsilon 0.010 | loss 0.0005
+Episode  320 | step  728061 | avg reward (10)   -3.7 | epsilon 0.010 | loss 0.0094
+Episode  330 | step  759603 | avg reward (10)   -5.1 | epsilon 0.010 | loss 0.0003
+Episode  340 | step  793402 | avg reward (10)   -2.2 | epsilon 0.010 | loss 0.0023
+Episode  350 | step  825823 | avg reward (10)   -3.9 | epsilon 0.010 | loss 0.0005
+Episode  360 | step  857423 | avg reward (10)   -4.8 | epsilon 0.010 | loss 0.0009
+Episode  370 | step  887879 | avg reward (10)   -4.6 | epsilon 0.010 | loss 0.0064
+Episode  380 | step  921692 | avg reward (10)   -1.8 | epsilon 0.010 | loss 0.0048
+Episode  390 | step  955126 | avg reward (10)   -2.5 | epsilon 0.010 | loss 0.0024
+Episode  400 | step  986200 | avg reward (10)   -6.2 | epsilon 0.010 | loss 0.0018
+Training finished. Model saved to models/Samuel/notebook_batch_epsilon_01/experiment_10.pth
