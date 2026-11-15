@@ -6,9 +6,13 @@ We built a Deep Q-Network that learns to play Atari Pong from screen images. Div
 
 ## Group Members
 
-- Divine
-- Gabriel
-- Samuel
+- Divine Ifechukwude
+- Tuyisingize Sezibera Gabriel
+- Samuel RURANGAMIRWA
+
+## Team Task Sheet
+
+[Team task sheet](https://docs.google.com/spreadsheets/d/1KJCfRebv9Tr9VVHAMeyppC1BqKLiu-fSy5pUtWtGnsQ/edit?gid=0#gid=0)
 
 ## Selected Atari Environment
 
@@ -83,6 +87,8 @@ Results tables: [Divine](DivineHyperparameter_experiment_results.md), [Gabriel](
 Five greedy CPU games with Samuel experiment 8 scored +13, +16, +16, +18, and +14. The average was +15.40, and all five scores were positive.
 
 <video controls width="480"><source src="plots/gameplay.mp4" type="video/mp4">Pong gameplay video</video>
+
+[Download the gameplay video](plots/gameplay.mp4)
 
 ## How to Run
 

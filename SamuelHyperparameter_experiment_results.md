@@ -31,11 +31,9 @@ configuration, so differences of a few points may be noise.
 
 Chosen by the highest five-game selection score (+15.4). Independent test on 20 new seeds (1000-1019),
 which did not influence the choice: **mean +15.25**, std 2.70, **20/20 wins** (scores +10 to +20), no
-capped or truncated games. Weights: `Samuel_outputs_notebook_batch_epsilon_01/dqn_model.pth`; plots in
-`plots/`; one recorded game (+13) in `gameplay.mp4`.
+capped or truncated games. Weights: `models/Samuel/experiment_8.pth` and root `dqn_model.pth`; plots in
+`plots/`; one recorded game (+13) in `plots/gameplay.mp4`.
 
 These weights are also the submitted root `dqn_model.pth`, which `uv run play.py` loads by default.
 
-Sources: `Samuel_outputs_notebook_batch_epsilon_01/experiment_<n>/record.json`, `summary.json`,
-`experiment_10_selection.json`, `independent_evaluation.json`; training CSVs in
-`logs/Samuel/notebook_batch_epsilon_01/`; models in `models/Samuel/notebook_batch_epsilon_01/`.
+Training CSVs in `logs/Samuel/`; models in `models/Samuel/`.

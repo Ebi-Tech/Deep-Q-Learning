@@ -9,8 +9,11 @@
 #   - All hyperparameters come from get_settings(), for example settings.learning_rate
 
 import argparse
+import csv
 import os
+from pathlib import Path
 import random
+import tempfile
 
 import ale_py
 import gymnasium as gym
@@ -101,7 +104,6 @@ class QNetwork(nn.Module):
     """
 
     def __init__(self, n_actions):
-        # Help identify patterns in the input images, like the ball and paddles, and their movement
         super().__init__()
         self.conv = nn.Sequential(
             nn.Conv2d(4, 32, kernel_size=8, stride=4),
@@ -112,21 +114,18 @@ class QNetwork(nn.Module):
             nn.ReLU(),
             nn.Flatten(),
         )
-        # Helps at decision stage, connecting every input number to every output number, allowing for more complex decision making
         self.fc = nn.Sequential(
             nn.Linear(3136, 512),
             nn.ReLU(),
             nn.Linear(512, n_actions),
-            # No activation here, because we want the raw Q-values for each action. Using Relu here, our agent can't tell bad from very bad
         )
-        # He init added here, to keep our weight from disappearing . For us, it was was diappearing, so this helped us increase the difference between good and bad actions, between two screens, allowing our agent to learn faster
         for layer in self.modules():
             if isinstance(layer, (nn.Conv2d, nn.Linear)):
-                nn.init.kaiming_normal_(layer.weight, nonlinearity="relu") # Tahn works as well, just not better than relu, so we use relu. We can also use leaky relu, but that is more complex and not needed for our case
+                nn.init.kaiming_normal_(layer.weight, nonlinearity="relu")
                 nn.init.zeros_(layer.bias)
 
     def forward(self, obs):
-        x = obs.float() / 255.0 # Our network will train better with samll inputs. This makes it between 0 and 1.
+        x = obs.float() / 255.0
         return self.fc(self.conv(x))
 
 
@@ -141,7 +140,7 @@ def create_networks(n_actions):
     online_net = QNetwork(n_actions).to(DEVICE)
     target_net = QNetwork(n_actions).to(DEVICE)
     target_net.load_state_dict(online_net.state_dict())
-    target_net.eval() 
+    target_net.eval()
     return online_net, target_net
 
 
@@ -209,11 +208,6 @@ def select_action(online_net, state, epsilon, n_actions):
 
 
 # Samuel: learning, target synchronization, logging and checkpoint saving
-import csv
-import tempfile
-from pathlib import Path
-
-
 def train_step(online_net, target_net, optimizer, batch, gamma):
     """Update vanilla DQN from Gabriel's sampled-batch interface.
 
@@ -228,7 +222,7 @@ def train_step(online_net, target_net, optimizer, batch, gamma):
     q = online_net(states).gather(1, actions.unsqueeze(1)).squeeze(1)
     with torch.no_grad():
         next_q = target_net(next_states).max(dim=1).values
-        target = rewards + gamma * next_q * (1.0 - dones) # game ends, agent need to know.
+        target = rewards + gamma * next_q * (1.0 - dones)
     loss = F.smooth_l1_loss(q, target)
     if not torch.isfinite(loss):
         raise FloatingPointError("Non-finite DQN loss; optimizer update skipped")
